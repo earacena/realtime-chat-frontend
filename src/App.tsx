@@ -1,15 +1,18 @@
-import React, { useEffect, useState } from 'react';
-import { io } from 'socket.io-client';
+import React, { useEffect, useState, useRef } from 'react';
+import { io, Socket } from 'socket.io-client';
 
 function App() {
+  const socket = useRef<Socket>();
   const [socketId, setSocketId] = useState('');
-  
+
   useEffect(() => {
-    const socket = io('http://localhost:3001');
-    
-    socket.on("connect", () => {
-      setSocketId(socket.id);
+    socket.current = io('ws://localhost:3001');
+    socket.current.on("connect", () => {
+      if (socket.current) {
+        setSocketId(socket.current.id);
+      }
     });
+    return () => { socket.current?.disconnect(); };
   }, []);
 
 
