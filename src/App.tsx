@@ -8,12 +8,14 @@ type Input = {
 
 function App() {
   const socket = useRef<Socket>();
+
   const [messages, setMessages] = useState<string[]>([]);
   const [socketId, setSocketId] = useState('');
 
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors }
   } = useForm<Input>({
     defaultValues: {
@@ -22,17 +24,31 @@ function App() {
   });
 
   const onSubmit: SubmitHandler<Input> = ({ message }) => {
-    console.log(message);
     setMessages(messages.concat(message));
+    if (socket.current) {
+      socket.current.emit('message', message);
+    }
+
+    reset({
+      message: '',
+    });
   };
 
   useEffect(() => {
+    console.log(socket);
     socket.current = io('ws://localhost:3001');
-    socket.current.on("connect", () => {
+    socket.current.on('connect', () => {
       if (socket.current) {
         setSocketId(socket.current.id);
       }
     });
+    socket.current.on('message', (message) => {
+      setMessages((messages) => messages.concat(message));
+    });
+    socket.current.on('disconnect', () => {
+      console.log("disconnected from socket");
+    });
+
     return () => { socket.current?.disconnect(); };
   }, []);
 
@@ -41,15 +57,15 @@ function App() {
       <div>
         {`Connected: ${socketId}`}
         <ul>
-          {messages.map((m) => (
-            <li className="p-1 odd:bg-white even:bg-slate-100">
+          {messages.map((m, i) => (
+            <li key={i} className="p-1 odd:bg-white even:bg-slate-100">
               {m}
             </li>
           ))}
         </ul>
-        <form className="flex-1 bottom-0 left-0 right-0 h-12" onSubmit={handleSubmit(onSubmit)}>
-          <input className="flex-1 p-1 grow-1 rounded-lg bg-black text-white" {...register('message')} />
-          <button className="rounded-full ml-1 text-white bg-black p-1" type="submit">Send</button>
+        <form className="flex fixed bottom-0 left-0 right-0 h-12 mx-3 my-4" onSubmit={handleSubmit(onSubmit)}>
+          <input className="grow p-1 center shadow-lg rounded-lg outline outline-1 hover:outline-2" {...register('message')} />
+          <button className="rounded-lg shadow-lg ml-1 p-1 outline outline-1 hover:outline-2" type="submit">Send</button>
         </form>
       </div>
     );
