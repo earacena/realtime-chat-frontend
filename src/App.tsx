@@ -26,7 +26,7 @@ function App() {
   const onSubmit: SubmitHandler<Input> = ({ message }) => {
     setMessages(messages.concat(message));
     if (socket.current) {
-      socket.current.emit('message', message);
+      socket.current.emit('message', JSON.stringify({ message }));
     }
 
     reset({
@@ -42,7 +42,8 @@ function App() {
         setSocketId(socket.current.id);
       }
     });
-    socket.current.on('message', (message) => {
+    socket.current.on('message', (messageJSON) => {
+      const { message } = JSON.parse(messageJSON);
       setMessages((messages) => messages.concat(message));
     });
     socket.current.on('disconnect', () => {
