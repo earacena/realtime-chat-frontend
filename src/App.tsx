@@ -1,6 +1,15 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { io, Socket } from 'socket.io-client';
 import { useForm, SubmitHandler } from 'react-hook-form';
+import {
+  Record as RtRecord,
+  String as RtString,
+} from 'runtypes';
+
+const ChatMessageType = RtRecord({
+  message: RtString,
+  timestamp: RtString,
+});
 
 type Input = {
   message: string;
@@ -24,9 +33,10 @@ function App() {
   });
 
   const onSubmit: SubmitHandler<Input> = ({ message }) => {
-    setMessages(messages.concat(message));
+    const timestamp = new Date().toUTCString();
+    setMessages(messages.concat(`${timestamp} | ${message}`));
     if (socket.current) {
-      socket.current.emit('message', JSON.stringify({ message }));
+      socket.current.emit('message', JSON.stringify({ message, timestamp }));
     }
 
     reset({
@@ -43,8 +53,8 @@ function App() {
       }
     });
     socket.current.on('message', (messageJSON) => {
-      const { message } = JSON.parse(messageJSON);
-      setMessages((messages) => messages.concat(message));
+      const { timestamp, message } = ChatMessageType.check(JSON.parse(messageJSON));
+      setMessages((messages) => messages.concat(`${timestamp} | ${message}`));
     });
     socket.current.on('disconnect', () => {
       console.log("disconnected from socket");
