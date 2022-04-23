@@ -65,19 +65,24 @@ function App() {
 
 
   return (
-      <div>
-        {`Connected: ${socketId}`}
-        <ul>
-          {messages.map((m, i) => (
-            <li key={i} className="p-1 odd:bg-white even:bg-slate-100">
-              {m}
-            </li>
-          ))}
-        </ul>
-        <form className="flex fixed bottom-0 left-0 right-0 h-12 mx-3 my-4" onSubmit={handleSubmit(onSubmit)}>
-          <input className="grow p-1 center shadow-lg rounded-lg outline outline-1 hover:outline-2" {...register('message')} />
-          <button className="rounded-lg shadow-lg ml-1 p-1 outline outline-1 hover:outline-2" type="submit">Send</button>
-        </form>
+      <div className="flex flex-row">
+        <div className="outline outline-1 h-screen p-1">
+          test
+        </div>
+        <div className="flex flex-col p-3 w-full">
+          {`Connected: ${socketId}`}
+          <ul>
+            {messages.map((m, i) => (
+              <li key={i} className="p-1 odd:bg-white even:bg-slate-100">
+                {m}
+              </li>
+            ))}
+          </ul>
+          <form className="flex h-12 mt-auto" onSubmit={handleSubmit(onSubmit)}>
+            <input className="grow p-1 center shadow-lg rounded-lg outline outline-1 hover:outline-2" {...register('message')} />
+            <button className="rounded-lg shadow-lg ml-1 p-1 outline outline-1 hover:outline-2" type="submit">Send</button>
+          </form>
+        </div>
       </div>
     );
 }
