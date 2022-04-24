@@ -4,6 +4,7 @@ import { useForm, SubmitHandler } from 'react-hook-form';
 import {
   Record as RtRecord,
   String as RtString,
+  Array as RtArray,
 } from 'runtypes';
 
 const ChatMessageType = RtRecord({
@@ -15,13 +16,21 @@ type Input = {
   message: string;
 };
 
+type Message = {
+  senderId: string,
+  message: string,
+};
+
+const OnlineUsersStatus = RtRecord({
+  userIds: RtArray(RtString),
+});
+
 function App() {
   const socket = useRef<Socket>();
 
-  const [messages, setMessages] = useState<string[]>([]);
+  const [messages, setMessages] = useState<Message[]>([]);
   const [socketId, setSocketId] = useState('');
-  const [socketIds, setSocketIds] = useState<string[]>([])
-  const [receiverSocketId, setReceiverSocketId] = useState('');
+  const [userSocketIds, setUserSocketIds] = useState<string[]>([])
 
   const {
     register,
@@ -35,12 +44,14 @@ function App() {
   });
 
   const onSubmit: SubmitHandler<Input> = ({ message }) => {
-    const timestamp = new Date().toUTCString();
-    setMessages(messages.concat(`${timestamp} | ${message}`));
     if (socket.current) {
-      socket
-        .current
-        .emit('private message', JSON.stringify({ message, timestamp }), receiverSocketId);
+      setMessages(
+        messages.concat({
+          senderId: socketId,
+          message
+        })
+      );
+      socket.current.emit('message', socketId, message);
     }
 
     reset({
@@ -49,26 +60,37 @@ function App() {
   };
 
   useEffect(() => {
-    console.log(socket);
+    // Initialize socket connection
     socket.current = io('ws://localhost:3001');
     socket.current.on('connect', () => {
       if (socket.current) {
         setSocketId(socket.current.id);
       }
     });
-    socket.current.emit('new user', socket.current.id);
-    socket.current.on('new user', (newSocketId) => {
+
+    // Event handling
+    socket.current.on('user connected', (userSocketId) => {
+      setUserSocketIds((userSocketIds) => userSocketIds.concat(userSocketId));
+    });
+
+    socket.current.on('user disconnected', (userSocketId) => {
+      setUserSocketIds((userSocketIds) => userSocketIds.filter((id) => id !== userSocketId));
+    });
+
+    socket.current.on('all connected users', (allUserSocketIds) => {
+      setUserSocketIds(allUserSocketIds);
+    });
+
+    socket.current.on('message', (userSocketId, message) => {
       if (socket.current) {
-        setSocketIds((socketIds) => socketIds.concat(newSocketId));
+        const payload: Message = {
+          senderId: userSocketId,
+          message,
+        };
+        setMessages((messages) => messages.concat(payload));
       }
-    });
-    socket.current.on('message', (messageJSON) => {
-      const { timestamp, message } = ChatMessageType.check(JSON.parse(messageJSON));
-      setMessages((messages) => messages.concat(`${timestamp} | ${message}`));
-    });
-    socket.current.on('private message', (message, senderSocketId) => {
-      setMessages((messages) => messages.concat(`from ${senderSocketId}: ${message}`));
     })
+
     socket.current.on('disconnect', () => {
       console.log("disconnected from socket");
     });
@@ -76,18 +98,18 @@ function App() {
     return () => { socket.current?.disconnect(); };
   }, []);
 
-  const handleReceiverChange = (id: string) => {
-    setReceiverSocketId(id);
-    setMessages((messages) => messages.concat(`Now talking to: ${receiverSocketId}`));
-  }
+  // const handleReceiverChange = (id: string) => {
+  //   setCurrentRoomId(id);
+  //   console.log(`Now talking to ${id}`);
+  // }
 
   return (
       <div className="flex flex-row">
         <div className="outline outline-1 h-screen p-1">
           <ul>
-            {socketIds.map((id, i) => (
-              <li key={i}>
-                <button type="button" onClick={() => handleReceiverChange(id)}>{id}</button>
+            {userSocketIds.map((id, i) => ( 
+              <li key={i} className="odd:bg-white even:bg-slate-200">
+                <button type="button">{id}</button>
               </li>
             ))}
           </ul>
@@ -99,7 +121,7 @@ function App() {
           <ul>
             {messages.map((m, i) => (
               <li key={i} className="p-1 odd:bg-white even:bg-slate-100">
-                {m}
+                {`${m.senderId} | ${m.message}`}
               </li>
             ))}
           </ul>
