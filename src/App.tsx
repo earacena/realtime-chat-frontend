@@ -124,13 +124,13 @@ function App() {
     });
 
     socket.current.on('friend request', (userSocketId, roomId) => {
-      setRooms((rooms) => rooms.concat(roomId));
+      setRooms((rooms) => rooms.concat(`${userSocketId} [${roomId}]`));
 
       console.log(`new room [${roomId}] initialized with ${userSocketId}`);
     });
 
-    socket.current.on('add room', (roomId) => {
-      setRooms((rooms) => rooms.concat(roomId));
+    socket.current.on('add private room', (userSocketId, roomId) => {
+      setRooms((rooms) => rooms.concat(`${userSocketId} [${roomId}]`));
       socket.current?.emit('join room', roomId);
     });
 
