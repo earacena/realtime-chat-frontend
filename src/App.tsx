@@ -1,20 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { io, Socket } from 'socket.io-client';
-import { useForm, SubmitHandler } from 'react-hook-form';
-import {
-  Record as RtRecord,
-  String as RtString,
-  Array as RtArray,
-} from 'runtypes';
-
-const ChatMessageType = RtRecord({
-  message: RtString,
-  timestamp: RtString,
-});
-
-type Input = {
-  message: string;
-};
+import Chat from './Chat';
 
 type Message = {
   senderId: string,
@@ -27,10 +13,6 @@ type PrivateMessage = {
   message: string,
 };
 
-const OnlineUsersStatus = RtRecord({
-  userIds: RtArray(RtString),
-});
-
 function App() {
   const socket = useRef<Socket>();
   const [viewingPrivateMessages, setViewingPrivateMessages] = useState(false);
@@ -40,44 +22,6 @@ function App() {
   const [socketId, setSocketId] = useState('');
   const [userSocketIds, setUserSocketIds] = useState<string[]>([])
   const [currentRoom, setCurrentRoom] = useState<string>('');
-
-  const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { errors }
-  } = useForm<Input>({
-    defaultValues: {
-      message: '',
-    }
-  });
-
-  const onSubmit: SubmitHandler<Input> = ({ message }) => {
-    if (socket.current) {
-      if (!currentRoom) {
-        setMessages(
-          messages.concat({
-            senderId: socketId,
-            message
-          })
-        );
-        socket.current.emit('message', socketId, message);
-      } else {
-        setPrivateMessages(
-          privateMessages.concat({
-            roomId: currentRoom,
-            senderId: socketId,
-            message
-          })
-        );
-        socket.current.emit('private message', currentRoom, message);
-      }
-    }
-
-    reset({
-      message: '',
-    });
-  };
 
   useEffect(() => {
     // Initialize socket connection
@@ -124,13 +68,13 @@ function App() {
     });
 
     socket.current.on('friend request', (userSocketId, roomId) => {
-      setRooms((rooms) => rooms.concat(`${userSocketId} [${roomId}]`));
+      setRooms((rooms) => rooms.concat(roomId));
 
       console.log(`new room [${roomId}] initialized with ${userSocketId}`);
     });
 
     socket.current.on('add private room', (userSocketId, roomId) => {
-      setRooms((rooms) => rooms.concat(`${userSocketId} [${roomId}]`));
+      setRooms((rooms) => rooms.concat(roomId));
       socket.current?.emit('join room', roomId);
     });
 
@@ -170,33 +114,16 @@ function App() {
             ))}
           </ul>
         </div>
-        <div className="flex flex-col p-3 w-full">
-          <p className="bg-slate-100">
-            {`Connected as: ${socketId}`}
-          </p>
-          <p className="bg-slate-100">
-            {`Room: ${currentRoom}`}
-          </p>
-          {!viewingPrivateMessages && <ul>
-            {messages.map((m, i) => (
-              <li key={i} className="p-1 odd:bg-white even:bg-slate-100">
-                {`${m.senderId} | ${m.message}`}
-              </li>
-            ))}
-          </ul>}
-          {viewingPrivateMessages && <ul>
-            {privateMessages.map((m, i) => (
-              currentRoom === m.roomId &&
-              <li key={i} className="p-1 odd:bg-white even:bg-slate-100">
-                {`${m.roomId} | ${m.senderId} | ${m.message}`}
-              </li>
-            ))}
-          </ul>}
-          <form className="flex h-12 mt-auto" onSubmit={handleSubmit(onSubmit)}>
-            <input className="grow p-1 center shadow-lg rounded-lg outline outline-1 hover:outline-2" {...register('message')} />
-            <button className="rounded-lg shadow-lg ml-1 p-1 outline outline-1 hover:outline-2" type="submit">Send</button>
-          </form>
-        </div>
+        <Chat
+          socket={socket.current}
+          messages={messages}
+          setMessages={setMessages}
+          privateMessages={privateMessages}
+          setPrivateMessages={setPrivateMessages}
+          viewingPrivateMessages={viewingPrivateMessages}
+          currentRoom={currentRoom}
+          socketId={socketId}
+        />
       </div>
     );
 }
