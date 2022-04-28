@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { io, Socket } from 'socket.io-client';
 import Chat from './Chat';
+import Rooms from './Rooms';
 
 type Message = {
   senderId: string,
@@ -106,13 +107,7 @@ function App() {
             ))}
           </ul>
           <span className="outline">Rooms</span>
-          <ul>
-            {rooms.map((room, i) => (
-              <li key={i}>
-                <button type="button" onClick={() => handleRoomChange(room)}>{room}</button>
-              </li>
-            ))}
-          </ul>
+          <Rooms rooms={rooms} handleRoomChange={handleRoomChange}/>
         </div>
         <Chat
           socket={socket.current}
