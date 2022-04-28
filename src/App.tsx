@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { io, Socket } from 'socket.io-client';
 import Chat from './Chat';
 import Rooms from './Rooms';
+import UserList from './UserList';
 
 type Message = {
   senderId: string,
@@ -92,20 +93,10 @@ function App() {
     setViewingPrivateMessages(true);
   };
 
-  const handleFriendRequest = (userId: string) => {
-    socket.current?.emit('friend request', userId);
-  };
-
   return (
       <div className="flex flex-row">
         <div className="outline outline-1 h-screen p-1 min-w-fit">
-          <ul>
-            {userSocketIds.map((id, i) => ( 
-              <li key={i} className="odd:bg-white even:bg-slate-200">
-                <button type="button" onClick={() => handleFriendRequest(id)}>{id}</button>
-              </li>
-            ))}
-          </ul>
+          <UserList socket={socket.current} userSocketIds={userSocketIds} />
           <span className="outline">Rooms</span>
           <Rooms rooms={rooms} handleRoomChange={handleRoomChange}/>
         </div>
