@@ -1,8 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { io, Socket } from 'socket.io-client';
 import Chat from './Chat';
-import Rooms from './Rooms';
-import UserList from './UserList';
+import SideBar from './Sidebar';
 
 type Message = {
   senderId: string,
@@ -87,19 +86,15 @@ function App() {
     return () => { socket.current?.disconnect(); };
   }, []);
 
-  const handleRoomChange = (roomId: string) => {
-    setCurrentRoom(roomId);
-    console.log(`Now talking in room ${roomId}`);
-    setViewingPrivateMessages(true);
-  };
-
   return (
       <div className="flex flex-row">
-        <div className="outline outline-1 h-screen p-1 min-w-fit">
-          <UserList socket={socket.current} userSocketIds={userSocketIds} />
-          <span className="outline">Rooms</span>
-          <Rooms rooms={rooms} handleRoomChange={handleRoomChange}/>
-        </div>
+        <SideBar
+          socket={socket.current}
+          userSocketIds={userSocketIds}
+          rooms={rooms}
+          setCurrentRoom={setCurrentRoom}
+          setViewingPrivateMessages={setViewingPrivateMessages}
+        />
         <Chat
           socket={socket.current}
           messages={messages}
