@@ -30,3 +30,10 @@ export const RoomType = RtRecord({
 export type Room = RtStatic<typeof RoomType>;
 export const RoomArray = RtArray(RoomType);
 export type Rooms = RtStatic<typeof RoomArray>;
+
+export const UserType = RtRecord({
+  socketId: RtString,
+});
+export type User = RtStatic<typeof UserType>;
+export const UserArray = RtArray(UserType);
+export type Users = RtStatic<typeof UserArray>;
