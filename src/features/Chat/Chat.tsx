@@ -1,7 +1,7 @@
 import React from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { Socket } from 'socket.io-client';
-import type { Messages, Room } from '../../app.types';
+import type { Messages, Room } from '@/app.types';
 
 type Input = {
   message: string;
