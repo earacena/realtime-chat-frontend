@@ -6,9 +6,7 @@ import SideBar from './Sidebar';
 
 function App() {
   const socket = useRef<Socket>();
-  const [viewingPrivateMessages, setViewingPrivateMessages] = useState(false);
   const [messages, setMessages] = useState<Messages>([]);
-  const [privateMessages, setPrivateMessages] = useState<PrivateMessages>([]);
   const [rooms, setRooms] = useState<Rooms>([]);
   const [socketId, setSocketId] = useState<string>('');
   const [userSocketIds, setUserSocketIds] = useState<string[]>([])
@@ -47,18 +45,6 @@ function App() {
       }
     })
 
-    socket.current.on('private message', (roomId, userSocketId, message) => {
-      if (socket.current) {
-        const payload: PrivateMessage = {
-          roomId: roomId,
-          senderId: userSocketId,
-          message,
-        };
-        setPrivateMessages((privateMessages) => privateMessages.concat(payload));
-      }
-
-    });
-
     socket.current.on('friend request', (userSocketId, roomId) => {
       setRooms((rooms) => rooms.concat({ roomId, roomName: `chat with ${userSocketId}` }));
 
@@ -84,15 +70,11 @@ function App() {
         userSocketIds={userSocketIds}
         rooms={rooms}
         setCurrentRoom={setCurrentRoom}
-        setViewingPrivateMessages={setViewingPrivateMessages}
       />
       <Chat
         socket={socket.current}
         messages={messages}
         setMessages={setMessages}
-        privateMessages={privateMessages}
-        setPrivateMessages={setPrivateMessages}
-        viewingPrivateMessages={viewingPrivateMessages}
         currentRoom={currentRoom}
         socketId={socketId}
       />
