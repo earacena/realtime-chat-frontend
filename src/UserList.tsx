@@ -9,7 +9,7 @@ interface UserListProps {
 function UserList({ socket, userSocketIds }: UserListProps) {
 
   const handleFriendRequest = (userId: string) => {
-    socket?.emit('friend request', userId);
+    socket?.emit('private room request', userId);
   };
 
   return (

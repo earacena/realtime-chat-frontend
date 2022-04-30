@@ -45,17 +45,10 @@ function App() {
       }
     })
 
-    socket.current.on('friend request', (userSocketId, roomId) => {
+    socket.current.on('private room request', (userSocketId, roomId) => {
       setRooms((rooms) => rooms.concat({ roomId, roomName: `chat with ${userSocketId}` }));
       socket.current?.emit('join room', roomId);
 
-      console.log(`new room [${roomId}] initialized with ${userSocketId}`);
-    });
-
-    socket.current.on('add private room', (userSocketId, roomId) => {
-      setRooms((rooms) => rooms.concat({ roomId, roomName: `chat with ${userSocketId}` }));
-      socket.current?.emit('join room', roomId);
-      
       console.log(`new room [${roomId}] initialized with ${userSocketId}`);
     });
 
