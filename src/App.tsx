@@ -34,11 +34,11 @@ function App() {
       setUserSocketIds(allUserSocketIds);
     });
 
-    socket.current.on('message', (userSocketId, message) => {
+    socket.current.on('message', (userSocketId, roomId, message) => {
       if (socket.current) {
         const payload: Message = {
-          roomId: currentRoom.roomId,
           senderId: userSocketId,
+          roomId,
           message,
         };
         setMessages((messages) => messages.concat(payload));
@@ -47,6 +47,7 @@ function App() {
 
     socket.current.on('friend request', (userSocketId, roomId) => {
       setRooms((rooms) => rooms.concat({ roomId, roomName: `chat with ${userSocketId}` }));
+      socket.current?.emit('join room', roomId);
 
       console.log(`new room [${roomId}] initialized with ${userSocketId}`);
     });
@@ -54,6 +55,8 @@ function App() {
     socket.current.on('add private room', (userSocketId, roomId) => {
       setRooms((rooms) => rooms.concat({ roomId, roomName: `chat with ${userSocketId}` }));
       socket.current?.emit('join room', roomId);
+      
+      console.log(`new room [${roomId}] initialized with ${userSocketId}`);
     });
 
     socket.current.on('disconnect', () => {

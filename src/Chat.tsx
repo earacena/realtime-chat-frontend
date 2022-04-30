@@ -42,8 +42,8 @@ function Chat({
         roomId,
         message,
       }));
-
-      socket.emit('message', roomId, socket.id, message);
+      console.log(`sending: ${roomId} | ${message}`);
+      socket.emit('message', roomId, message);
     }
 
     reset({
