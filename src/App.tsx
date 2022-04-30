@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { io, Socket } from 'socket.io-client';
-import type { Message, Messages, PrivateMessage, PrivateMessages, Rooms, Room } from './app.types';
+import type { Message, Messages, Rooms, Room } from './app.types';
 import Chat from './Chat';
 import SideBar from './Sidebar';
 
@@ -11,6 +11,7 @@ function App() {
   const [socketId, setSocketId] = useState<string>('');
   const [userSocketIds, setUserSocketIds] = useState<string[]>([])
   const [currentRoom, setCurrentRoom] = useState<Room>({ roomId: '', roomName: '' });
+  const [inPrivateRoom, setInPrivateRoom] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     // Initialize socket connection
@@ -50,6 +51,7 @@ function App() {
       socket.current?.emit('join room', roomId);
 
       console.log(`new room [${roomId}] initialized with ${userSocketId}`);
+      setInPrivateRoom((inPrivateRoom) => inPrivateRoom.add(userSocketId));
     });
 
     socket.current.on('disconnect', () => {
@@ -66,6 +68,8 @@ function App() {
         userSocketIds={userSocketIds}
         rooms={rooms}
         setCurrentRoom={setCurrentRoom}
+        inPrivateRoom={inPrivateRoom}
+        setInPrivateRoom={setInPrivateRoom}
       />
       <Chat
         socket={socket.current}
