@@ -1,22 +1,21 @@
 import React from 'react';
 import { Socket } from 'socket.io-client';
 import UserList from './UserList';
+import type { Room, Rooms as RoomArray } from './app.types';
 import Rooms from './Rooms';
 
 interface SideBarProps {
   socket: Socket | undefined;
   userSocketIds: string[];
-  rooms: string[];
-  setCurrentRoom: (value: React.SetStateAction<string>) => void;
-  setViewingPrivateMessages: (value: React.SetStateAction<boolean>) => void;
+  rooms: RoomArray;
+  setCurrentRoom: (value: React.SetStateAction<Room>) => void;
 };
 
-function SideBar({ socket, userSocketIds, rooms, setCurrentRoom, setViewingPrivateMessages }: SideBarProps) {
+function SideBar({ socket, userSocketIds, rooms, setCurrentRoom }: SideBarProps) {
 
-  const handleRoomChange = (roomId: string) => {
-    setCurrentRoom(roomId);
-    console.log(`Now talking in room ${roomId}`);
-    setViewingPrivateMessages(true);
+  const handleRoomChange = (room: Room) => {
+    setCurrentRoom(room);
+    console.log(`Now talking in room ${room.roomId}`);
   };
 
   return (
