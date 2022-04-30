@@ -1,28 +1,18 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { io, Socket } from 'socket.io-client';
+import type { Message, Messages, PrivateMessage, PrivateMessages, Rooms, Room } from './app.types';
 import Chat from './Chat';
 import SideBar from './Sidebar';
-
-type Message = {
-  senderId: string,
-  message: string,
-};
-
-type PrivateMessage = {
-  roomId: string,
-  senderId: string,
-  message: string,
-};
 
 function App() {
   const socket = useRef<Socket>();
   const [viewingPrivateMessages, setViewingPrivateMessages] = useState(false);
-  const [messages, setMessages] = useState<Message[]>([]);
-  const [privateMessages, setPrivateMessages] = useState<PrivateMessage[]>([]);
-  const [rooms, setRooms] = useState<string[]>([]);
-  const [socketId, setSocketId] = useState('');
+  const [messages, setMessages] = useState<Messages>([]);
+  const [privateMessages, setPrivateMessages] = useState<PrivateMessages>([]);
+  const [rooms, setRooms] = useState<Rooms>([]);
+  const [socketId, setSocketId] = useState<string>('');
   const [userSocketIds, setUserSocketIds] = useState<string[]>([])
-  const [currentRoom, setCurrentRoom] = useState<string>('');
+  const [currentRoom, setCurrentRoom] = useState<Room>({ roomId: '', roomName: '' });
 
   useEffect(() => {
     // Initialize socket connection
@@ -49,6 +39,7 @@ function App() {
     socket.current.on('message', (userSocketId, message) => {
       if (socket.current) {
         const payload: Message = {
+          roomId: currentRoom.roomId,
           senderId: userSocketId,
           message,
         };
@@ -69,13 +60,13 @@ function App() {
     });
 
     socket.current.on('friend request', (userSocketId, roomId) => {
-      setRooms((rooms) => rooms.concat(roomId));
+      setRooms((rooms) => rooms.concat({ roomId, roomName: `chat with ${userSocketId}` }));
 
       console.log(`new room [${roomId}] initialized with ${userSocketId}`);
     });
 
     socket.current.on('add private room', (userSocketId, roomId) => {
-      setRooms((rooms) => rooms.concat(roomId));
+      setRooms((rooms) => rooms.concat({ roomId, roomName: `chat with ${userSocketId}` }));
       socket.current?.emit('join room', roomId);
     });
 
@@ -87,26 +78,26 @@ function App() {
   }, []);
 
   return (
-      <div className="flex flex-row">
-        <SideBar
-          socket={socket.current}
-          userSocketIds={userSocketIds}
-          rooms={rooms}
-          setCurrentRoom={setCurrentRoom}
-          setViewingPrivateMessages={setViewingPrivateMessages}
-        />
-        <Chat
-          socket={socket.current}
-          messages={messages}
-          setMessages={setMessages}
-          privateMessages={privateMessages}
-          setPrivateMessages={setPrivateMessages}
-          viewingPrivateMessages={viewingPrivateMessages}
-          currentRoom={currentRoom}
-          socketId={socketId}
-        />
-      </div>
-    );
+    <div className="flex flex-row">
+      <SideBar
+        socket={socket.current}
+        userSocketIds={userSocketIds}
+        rooms={rooms}
+        setCurrentRoom={setCurrentRoom}
+        setViewingPrivateMessages={setViewingPrivateMessages}
+      />
+      <Chat
+        socket={socket.current}
+        messages={messages}
+        setMessages={setMessages}
+        privateMessages={privateMessages}
+        setPrivateMessages={setPrivateMessages}
+        viewingPrivateMessages={viewingPrivateMessages}
+        currentRoom={currentRoom}
+        socketId={socketId}
+      />
+    </div>
+  );
 }
 
 export default App;
