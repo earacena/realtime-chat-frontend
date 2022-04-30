@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Socket } from 'socket.io-client';
-import type { Users } from '../../app.types';
+import type { Users } from '@/app.types';
 
 interface UserListProps {
   socket: Socket | undefined;

@@ -1,5 +1,5 @@
 import React from 'react';
-import type { Room, Rooms as RoomArray } from '../../app.types';
+import type { Room, Rooms as RoomArray } from '@/app.types';
 
 interface RoomsProps {
   rooms: RoomArray;

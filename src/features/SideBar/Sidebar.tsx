@@ -1,8 +1,8 @@
 import React from 'react';
 import { Socket } from 'socket.io-client';
-import UserList from '../UserList/UserList';
-import type { Room, Rooms as RoomArray } from '../../app.types';
-import Rooms from '../Room/Rooms';
+import UserList from '@/features/UserList/UserList';
+import type { Room, Rooms as RoomArray } from '@/app.types';
+import Rooms from '@/features/Room/Rooms';
 
 interface SideBarProps {
   socket: Socket | undefined;
