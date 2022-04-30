@@ -1,16 +1,17 @@
 import React from 'react';
+import type { Room, Rooms as RoomArray } from './app.types';
 
 interface RoomsProps {
-  rooms: string[];
-  handleRoomChange: (roomId: string) => void;
+  rooms: RoomArray;
+  handleRoomChange: (roomId: Room) => void;
 }
 
 function Rooms({ rooms, handleRoomChange }: RoomsProps) {
   return (
     <ul>
       {rooms.map((room, i) => (
-        <li key={i}>
-          <button type="button" onClick={() => handleRoomChange(room)}>{room}</button>
+        <li key={room.roomId}>
+          <button type="button" onClick={() => handleRoomChange(room)}>{room.roomName}</button>
         </li>
       ))}
     </ul>
