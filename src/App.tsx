@@ -1,8 +1,8 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { io, Socket } from 'socket.io-client';
 import type { Message, Messages, Rooms, Room } from './app.types';
-import Chat from './Chat';
-import SideBar from './Sidebar';
+import Chat from './features/Chat/Chat';
+import SideBar from './features/SideBar/Sidebar';
 
 function App() {
   const socket = useRef<Socket>();
