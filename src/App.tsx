@@ -1,62 +1,76 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { io, Socket } from 'socket.io-client';
-import type { Message, Messages, Rooms, Room } from './app.types';
+import type { Message }  from './app.types';
 import { Chat } from './features/Chat';
 import { SideBar } from './features/SideBar';
+import { setSocket } from './features/Socket';
+import { setConnectedUserIds } from './features/UserList';
+import { useAppDispatch, useAppSelector } from './hooks';
+
 
 function App() {
-  const socket = useRef<Socket>();
-  const [messages, setMessages] = useState<Messages>([]);
-  const [rooms, setRooms] = useState<Rooms>([]);
-  const [socketId, setSocketId] = useState<string>('');
-  const [userSocketIds, setUserSocketIds] = useState<string[]>([])
-  const [currentRoom, setCurrentRoom] = useState<Room>({ roomId: '', roomName: '' });
-  const [inPrivateRoom, setInPrivateRoom] = useState<Set<string>>(new Set());
+  const dispatch = useAppDispatch();
+  const socket = useAppSelector((state) => state.socket);
+  const messages = useAppSelector((state) => state.messages);
+  const rooms = useAppSelector((state) => state.rooms);
+
+  const userConnectionHandler = (userSocketId: string) => {
+    dispatch(setConnectedUserIds({ userId: userSocketId }));
+  };
+
+  const userDisconnectionHandler = (payload) => {
+    const { userSocketId } = payload;
+    setUserSocketIds((userSocketIds) => userSocketIds.filter((id) => id !== userSocketId));
+  };
+
+  const connectedUserListHandler = (payload) => {
+    const { allUserSocketIds } = payload;
+    setUserSocketIds(allUserSocketIds);
+  };
+
+  const messageHandler = (payload) => {
+    const { userSocketId, roomId, message } = payload;
+    if (socket.current) {
+      const payload: Message = {
+        senderId: userSocketId,
+        roomId,
+        message,
+      };
+      setMessages((messages) => messages.concat(payload));
+    }
+  };
+
+  const privateRoomRequestHandler = (payload) => {
+    const { userSocketId, roomId } = payload;
+    setRooms((rooms) => rooms.concat({ roomId, roomName: `chat with ${userSocketId}` }));
+    socket.current?.emit('join room', roomId);
+
+    console.log(`new room [${roomId}] initialized with ${userSocketId}`);
+    setInPrivateRoom((inPrivateRoom) => inPrivateRoom.add(userSocketId));
+  };
+
+  const connectionHandler = () => {
+    if (socket.current) {
+      setSocketId(socket.current.id);
+    }
+  };
+
+  const disconnectionHandler = (payload) => {
+    console.log("disconnected from socket");
+  };
 
   useEffect(() => {
     // Initialize socket connection
-    socket.current = io('ws://localhost:3001');
-    socket.current.on('connect', () => {
-      if (socket.current) {
-        setSocketId(socket.current.id);
-      }
-    });
+    dispatch(setSocket({ socket: io('ws://localhost:3001') }));
+    socket.on('connect', connectionHandler);
 
-    // Event handling
-    socket.current.on('user connected', (userSocketId) => {
-      setUserSocketIds((userSocketIds) => userSocketIds.concat(userSocketId));
-    });
-
-    socket.current.on('user disconnected', (userSocketId) => {
-      setUserSocketIds((userSocketIds) => userSocketIds.filter((id) => id !== userSocketId));
-    });
-
-    socket.current.on('all connected users', (allUserSocketIds) => {
-      setUserSocketIds(allUserSocketIds);
-    });
-
-    socket.current.on('message', (userSocketId, roomId, message) => {
-      if (socket.current) {
-        const payload: Message = {
-          senderId: userSocketId,
-          roomId,
-          message,
-        };
-        setMessages((messages) => messages.concat(payload));
-      }
-    })
-
-    socket.current.on('private room request', (userSocketId, roomId) => {
-      setRooms((rooms) => rooms.concat({ roomId, roomName: `chat with ${userSocketId}` }));
-      socket.current?.emit('join room', roomId);
-
-      console.log(`new room [${roomId}] initialized with ${userSocketId}`);
-      setInPrivateRoom((inPrivateRoom) => inPrivateRoom.add(userSocketId));
-    });
-
-    socket.current.on('disconnect', () => {
-      console.log("disconnected from socket");
-    });
+    // Eveing
+    socket.on('user connected', userConnectionHandler);
+    socket.on('user disconnected', userDisconnectionHandler); 
+    socket.on('all connected users', connectedUserListHandler);
+    socket.on('message', messageHandler);
+    socket.on('private room request', privateRoomRequestHandler); 
+    socket.on('disconnect', disconnectionHandler);
 
     return () => { socket.current?.disconnect(); };
   }, []);
