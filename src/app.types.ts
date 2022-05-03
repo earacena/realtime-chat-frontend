@@ -3,7 +3,9 @@ import {
   Array as RtArray,
   String as RtString,
   Static as RtStatic,
+  InstanceOf as RtInstanceOf,
 } from 'runtypes';
+import { Socket } from 'socket.io-client';
 
 export const MessageType = RtRecord({
   roomId: RtString,
@@ -37,3 +39,5 @@ export const UserType = RtRecord({
 export type User = RtStatic<typeof UserType>;
 export const UserArray = RtArray(UserType);
 export type Users = RtStatic<typeof UserArray>;
+
+export const SocketType = RtInstanceOf(Socket);
