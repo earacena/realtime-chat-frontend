@@ -4,13 +4,13 @@ import type { Room, Rooms } from "../../../app.types";
 interface RoomsState {
   allRooms: Rooms;
   currentRoom: Room | undefined;
-  userIdsInPrivateRoom: Set<string> | undefined;
+  userIdsInPrivateRoom: Set<string>;
 }
 
 const initialState: RoomsState = {
   allRooms: [],
   currentRoom: undefined, 
-  userIdsInPrivateRoom: undefined,
+  userIdsInPrivateRoom: new Set<string>(),
 };
 
 const roomsSlice = createSlice({
