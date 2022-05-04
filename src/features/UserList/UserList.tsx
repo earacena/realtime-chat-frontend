@@ -1,25 +1,30 @@
 import React from 'react';
-import { Socket } from 'socket.io-client';
+import { SocketType } from '../../app.types';
+import { useAppDispatch, useAppSelector } from '../../hooks';
+import { setUserIdsInPrivateRoom } from '../Room';
 
-interface UserListProps {
-  socket: Socket | undefined;
-  userSocketIds: string[];
-  inPrivateRoom: Set<string>;
-  setInPrivateRoom: (value: React.SetStateAction<Set<string>>) => void;
-};
-
-function UserList({ socket, userSocketIds, inPrivateRoom, setInPrivateRoom }: UserListProps) {
+function UserList() {
+  const dispatch = useAppDispatch();
+  const socket = useAppSelector((state) => state.socket);
+  const connectedUserIds = useAppSelector((state) => state.users.connectedUserIds);
+  const userIdsInPrivateRoom = useAppSelector((state) => state.rooms.userIdsInPrivateRoom);
 
   const handleFriendRequest = (userId: string) => {
-    setInPrivateRoom((inPrivateRoom) => inPrivateRoom.add(userId));
-    socket?.emit('private room request', userId);
+    const s = SocketType.check(socket);
+    dispatch(setUserIdsInPrivateRoom({ usersIdsInPrivateRoom: userIdsInPrivateRoom.add(userId) }));
+    s.emit('private room request', userId);
   };
+
+  const isCurrentUserId = (id: string) => {
+    const s = SocketType.check(socket);
+    return s.id !== id; 
+  }
 
   return (
     <ul>
-      {userSocketIds.map((id, i) => ( 
+      {connectedUserIds.map((id, i) => ( 
         <li key={i} className="odd:bg-white even:bg-slate-200">
-          { !inPrivateRoom.has(id) && id !== socket?.id && <button type="button" onClick={() => handleFriendRequest(id)}>{id}</button> }
+          { !userIdsInPrivateRoom.has(id) && isCurrentUserId(id) && <button type="button" onClick={() => handleFriendRequest(id)}>{id}</button> }
         </li>
       ))}
     </ul>
