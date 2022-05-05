@@ -3,13 +3,13 @@ import type { Room, Rooms } from "../../../app.types";
 
 interface RoomsState {
   allRooms: Rooms;
-  currentRoom: Room | undefined;
+  currentRoom: Room;
   userIdsInPrivateRoom: Set<string>;
 }
 
 const initialState: RoomsState = {
   allRooms: [],
-  currentRoom: undefined, 
+  currentRoom: { roomId: 'default', roomName: 'default' },
   userIdsInPrivateRoom: new Set<string>(),
 };
 
