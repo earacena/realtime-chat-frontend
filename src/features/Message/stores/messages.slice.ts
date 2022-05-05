@@ -7,13 +7,15 @@ const messagesSlice = createSlice({
   name: 'messages',
   initialState,
   reducers: {
-    setMessages: (_state, action) => action.payload,
+    setMessages: (_state, action) => action.payload.messages,
+    addMessage: (state, action) => state.concat(action.payload.message),
     resetMessages: () => initialState,
   },
 });
 
 export const {
   setMessages,
+  addMessage,
   resetMessages,
 } = messagesSlice.actions;
 
