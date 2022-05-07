@@ -21,6 +21,10 @@ const roomsSlice = createSlice({
       ...state,
       allRooms: action.payload.allRooms,
     }),
+    addRoom: (state, action) => ({
+      ...state,
+      allRooms: state.allRooms.concat(action.payload.room),
+    }),
     resetAllRooms: (state, action) => ({ 
       ...state,
       allRooms: initialState.allRooms,
@@ -46,6 +50,7 @@ const roomsSlice = createSlice({
 
 export const {
   setAllRooms,
+  addRoom,
   resetAllRooms,
   setCurrentRoom,
   resetCurrentRoom,
