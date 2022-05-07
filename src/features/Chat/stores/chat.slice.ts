@@ -17,8 +17,8 @@ const chatSlice = createSlice({
   name: 'chat',
   initialState,
   reducers: {
-    setIsConnecting: (state) => ({ ...state, isConnecting: true }),
-    setIsConnected: (state) => ({ ...state, isConnecting: false, isConnected: true }),
+    startConnecting: (state) => ({ ...state, isConnecting: true }),
+    establishedConnection: (state) => ({ ...state, isConnecting: false, isConnected: true }),
     setMessages: (state, action) => ({ ...state, messages:  action.payload.messages}),
     addMessage: (state, action) => ({ ...state, messages: state.messages.concat(action.payload.message)}),
     sendMessage: (state, action) => { return; },
