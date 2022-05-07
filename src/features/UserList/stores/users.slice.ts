@@ -20,6 +20,10 @@ const usersSlice = createSlice({
       ...state,
       connectedUserIds: state.connectedUserIds.concat(action.payload.userId),
     }),
+    removeConnectedUserId: (state, action) => ({
+      ...state,
+      connectedUserIds: state.connectedUserIds.filter((id) => id !== action.payload.id),
+    }),
     resetConnectedUserIds: (state, action) => ({
       ...state,
       connectedUserIds: initialState.connectedUserIds,
@@ -30,6 +34,7 @@ const usersSlice = createSlice({
 export const {
   setConnectedUserIds,
   addConnectedUserId,
+  removeConnectedUserId,
   resetConnectedUserIds,
 } = usersSlice.actions;
 
