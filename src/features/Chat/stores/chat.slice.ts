@@ -18,13 +18,21 @@ const chatSlice = createSlice({
   initialState,
   reducers: {
     startConnecting: (state) => ({ ...state, isConnecting: true }),
-    establishedConnection: (state) => ({ ...state, isConnecting: false, isConnected: true }),
+    connectionEstablished: (state) => ({ ...state, isConnecting: false, isConnected: true }),
+    disconnected: (state) => ({ ...state, isConnected: false }),
     setMessages: (state, action) => ({ ...state, messages:  action.payload.messages}),
     addMessage: (state, action) => ({ ...state, messages: state.messages.concat(action.payload.message)}),
     sendMessage: (state, action) => { return; },
   }
 });
 
-export const chatActions = chatSlice.actions;
+export const {
+  startConnecting,
+  connectionEstablished,
+  disconnected,
+  setMessages,
+  addMessage,
+  sendMessage,
+} = chatSlice.actions;
 
 export default chatSlice.reducer;
