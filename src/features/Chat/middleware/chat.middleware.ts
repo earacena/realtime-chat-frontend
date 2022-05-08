@@ -1,5 +1,5 @@
 import { Middleware } from '@reduxjs/toolkit';
-import { setSocketId, setMessages, sendMessage, addMessage, startConnecting, connectionEstablished } from '../stores/chat.slice';
+import { disconnected, setSocketId, setMessages, sendMessage, addMessage, startConnecting, connectionEstablished } from '../stores/chat.slice';
 import { io, Socket } from 'socket.io-client';
 import { removeConnectedUserId, setConnectedUserIds } from '../../UserList';
 import { addRoom, setUserIdsInPrivateRoom } from '../../Room';
@@ -32,11 +32,11 @@ const chatMiddleware: Middleware = store => {
       };
 
       const receiveMessageHandler = (message: Message) => {
-        store.dispatch(addMessage(message));
+        store.dispatch(addMessage({ message }));
       };
       
       const receiveAllMessagesHandler = (messages: Messages) => {
-        store.dispatch(setMessages (messages));
+        store.dispatch(setMessages({ messages }));
       };
 
       const privateRoomRequestHandler = (userSocketId: string, roomId: string) => {
@@ -52,6 +52,7 @@ const chatMiddleware: Middleware = store => {
       };   
 
       const disconnectionHandler = () => {
+        store.dispatch(disconnected());
         console.log("disconnected from socket");
       };
 
