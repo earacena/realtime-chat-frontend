@@ -4,13 +4,13 @@ import type { Room, Rooms } from "../../../app.types";
 interface RoomsState {
   allRooms: Rooms;
   currentRoom: Room;
-  userIdsInPrivateRoom: Set<string>;
+  userIdsInPrivateRoom: string[];
 }
 
 const initialState: RoomsState = {
   allRooms: [],
   currentRoom: { roomId: 'default', roomName: 'default' },
-  userIdsInPrivateRoom: new Set<string>(),
+  userIdsInPrivateRoom: [],
 };
 
 const roomsSlice = createSlice({
@@ -40,6 +40,10 @@ const roomsSlice = createSlice({
     setUserIdsInPrivateRoom: (state, action) => ({
       ...state,
       userIdsInPrivateRoom: action.payload.userIdsInPrivateRoom,
+    }),
+    addUserIdToPrivateRoom: (state, action) => ({
+      ...state,
+      userIdsInPrivateRoom: state.userIdsInPrivateRoom.concat(action.payload.userId),
     }),
     resetUserIdsInPrivateRoom: (state, action) => ({
       ...state,
