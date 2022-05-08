@@ -1,5 +1,5 @@
 import { Middleware } from '@reduxjs/toolkit';
-import { setMessages, addMessage, startConnecting, connectionEstablished } from '../stores/chat.slice';
+import { setMessages, sendMessage, addMessage, startConnecting, connectionEstablished } from '../stores/chat.slice';
 import { io, Socket } from 'socket.io-client';
 import { removeConnectedUserId, setConnectedUserIds } from '../../UserList';
 import { addRoom, setUserIdsInPrivateRoom } from '../../Room';
@@ -63,5 +63,13 @@ const chatMiddleware: Middleware = store => {
       socket.on('private room request', privateRoomRequestHandler); 
       socket.on('disconnect', disconnectionHandler);
     }
+
+    if (sendMessage.match(action) && isConnectionEstablished) {
+      socket.emit('send message', action.payload.message);
+    }
+
+    next(action);
   }
 }
+
+export default chatMiddleware;
