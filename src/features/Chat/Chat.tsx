@@ -1,27 +1,18 @@
 import React from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
-import { Socket } from 'socket.io-client';
-import type { Messages, Room } from '../../app.types';
+import { sendMessage } from './stores/chat.slice';
+import { useAppDispatch, useAppSelector } from '../../hooks';
 
 type Input = {
   message: string;
 };
 
-interface ChatProps {
-  socket: Socket | undefined,
-  messages: Messages,
-  setMessages: (value: React.SetStateAction<Messages>) => void,
-  currentRoom: Room,
-  socketId: string,
-};
+function Chat() {
+  const dispatch = useAppDispatch();
+  const socketId = useAppSelector((state) => state.chat.socketId);
+  const messages = useAppSelector((state) => state.chat.messages);
+  const currentRoom = useAppSelector((state) => state.rooms.currentRoom);
 
-function Chat({
-  socket,
-  messages,
-  setMessages,
-  currentRoom,
-  socketId
-}: ChatProps) {
   const {
     register,
     handleSubmit,
@@ -33,16 +24,16 @@ function Chat({
   });
 
   const onSubmit: SubmitHandler<Input> = ({ message }) => {
+    // Prepare and send message
     const roomId = currentRoom ? currentRoom.roomId : 'default';
-    if (socket) {
-      setMessages(messages.concat({
-        senderId: socket?.id,
-        roomId,
-        message,
-      }));
-      console.log(`sending: ${roomId} | ${message}`);
-      socket.emit('message', roomId, message);
+    const newMessage = {
+      roomId,
+      senderId: socketId,
+      content: message,
     }
+
+    dispatch(sendMessage({ newMessage }));
+    console.log(`sending: ${roomId} | ${newMessage}`);
 
     reset({
       message: '',
@@ -61,7 +52,7 @@ function Chat({
         {messages.map((m, i) => (
           currentRoom.roomId === m.roomId && 
           <li key={i} className="p-1 odd:bg-white even:bg-slate-100">
-            {`${m.roomId} | ${m.senderId} | ${m.message}`}
+            {`${m.roomId} | ${m.senderId} | ${m.content}`}
           </li>
         ))}
       </ul>
