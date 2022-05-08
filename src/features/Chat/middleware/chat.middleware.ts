@@ -1,5 +1,5 @@
 import { Middleware } from '@reduxjs/toolkit';
-import { setMessages, sendMessage, addMessage, startConnecting, connectionEstablished } from '../stores/chat.slice';
+import { setSocketId, setMessages, sendMessage, addMessage, startConnecting, connectionEstablished } from '../stores/chat.slice';
 import { io, Socket } from 'socket.io-client';
 import { removeConnectedUserId, setConnectedUserIds } from '../../UserList';
 import { addRoom, setUserIdsInPrivateRoom } from '../../Room';
@@ -17,6 +17,7 @@ const chatMiddleware: Middleware = store => {
     if (startConnecting.match(action)) {
       // Initialize socket connection if appropriate action received
       socket = io(url);
+      store.dispatch(setSocketId({ socketId: socket.id }));
 
       const userConnectionHandler = (userSocketId: string) => {
         store.dispatch(setConnectedUserIds({ userId: userSocketId }));
