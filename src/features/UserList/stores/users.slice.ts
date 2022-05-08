@@ -27,7 +27,8 @@ const usersSlice = createSlice({
     resetConnectedUserIds: (state, action) => ({
       ...state,
       connectedUserIds: initialState.connectedUserIds,
-    })
+    }),
+    requestPrivateRoomWithUser: (state, action) => { return; },
   }
 });
 
@@ -36,6 +37,7 @@ export const {
   addConnectedUserId,
   removeConnectedUserId,
   resetConnectedUserIds,
+  requestPrivateRoomWithUser,
 } = usersSlice.actions;
 
 export default usersSlice.reducer;
