@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
-import { sendMessage } from './stores/chat.slice';
+import { sendMessage, startConnecting } from './stores/chat.slice';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 
 type Input = {
@@ -12,6 +12,8 @@ function Chat() {
   const socketId = useAppSelector((state) => state.chat.socketId);
   const messages = useAppSelector((state) => state.chat.messages);
   const currentRoom = useAppSelector((state) => state.rooms.currentRoom);
+  const isConnected = useAppSelector((state) => state.chat.isConnected);
+  const isConnecting = useAppSelector((state) => state.chat.isConnecting);
 
   const {
     register,
@@ -22,6 +24,12 @@ function Chat() {
       message: '',
     }
   });
+
+  useEffect(() => {
+    if (!isConnected && !isConnecting) {
+      dispatch(startConnecting());
+    }
+  }, []);
 
   const onSubmit: SubmitHandler<Input> = ({ message }) => {
     // Prepare and send message
