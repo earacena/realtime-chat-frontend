@@ -17,7 +17,6 @@ const chatMiddleware: Middleware = store => {
     if (startConnecting.match(action)) {
       // Initialize socket connection if appropriate action received
       socket = io(url);
-      store.dispatch(setSocketId({ socketId: socket.id }));
 
       const userConnectionHandler = (userSocketId: string) => {
         store.dispatch(addConnectedUserId({ userId: userSocketId }));
@@ -49,6 +48,7 @@ const chatMiddleware: Middleware = store => {
 
       const connectionHandler = () => {
         store.dispatch(connectionEstablished());
+        store.dispatch(setSocketId({ socketId: socket.id }));
       };   
 
       const disconnectionHandler = () => {
