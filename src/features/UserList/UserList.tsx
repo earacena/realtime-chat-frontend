@@ -1,5 +1,5 @@
 import React from 'react';
-import { addConnectedUserId, requestPrivateRoomWithUser } from '.';
+import { addConnectedUserId, addUserIdToPrivateRoom, requestPrivateRoomWithUser } from '.';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 
 function UserList() {
@@ -11,15 +11,27 @@ function UserList() {
   const handleFriendRequest = (userId: string) => {
     dispatch(requestPrivateRoomWithUser({ userId }));
     dispatch(addConnectedUserId({ userId }));
+    dispatch(addUserIdToPrivateRoom({ userId }));
   };
 
-  const isCurrentUserId = (id: string) => socketId !== id;
+  const isCurrentUserId = (id: string) => socketId === id;
+  const privateRoomExists = (id: string) => {
+    if (userIdsInPrivateRoom) {
+      return userIdsInPrivateRoom.includes(id);
+    }
+  }
+
+  if (!connectedUserIds) {
+    return null;
+  }
+
+  
 
   return (
     <ul>
       {connectedUserIds.map((id, i) => ( 
         <li key={i} className="odd:bg-white even:bg-slate-200">
-          { !userIdsInPrivateRoom.includes(id) && isCurrentUserId(id) && <button type="button" onClick={() => handleFriendRequest(id)}>{id}</button> }
+          { !privateRoomExists(id) && !isCurrentUserId(id) && <button type="button" onClick={() => handleFriendRequest(id)}>{id}</button> }
         </li>
       ))}
     </ul>
