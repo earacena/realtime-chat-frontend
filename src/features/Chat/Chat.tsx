@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
-import { sendMessage, startConnecting } from './stores/chat.slice';
+import { addMessage, sendMessage, startConnecting } from './stores/chat.slice';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 
 type Input = {
@@ -40,7 +40,8 @@ function Chat() {
       content: message,
     }
 
-    dispatch(sendMessage({ newMessage }));
+    dispatch(sendMessage({ message: newMessage }));
+    dispatch(addMessage({ message: newMessage }));
     console.log(`sending: ${roomId} | ${newMessage}`);
 
     reset({
@@ -54,7 +55,7 @@ function Chat() {
         {`Connected as: ${socketId}`}
       </p>
       <p className="bg-slate-100">
-        {`Room: ${currentRoom.roomName}`}
+        {`Room: ${currentRoom ? currentRoom.roomName : 'not in a room'}`}
       </p>
       <ul>
         {messages.map((m, i) => (
