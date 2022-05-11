@@ -8,11 +8,7 @@ function UserList() {
   const connectedUserIds = useAppSelector((state) => state.users.connectedUserIds);
   const userIdsInPrivateRoom = useAppSelector((state) => state.rooms.userIdsInPrivateRoom);
 
-  const handleFriendRequest = (userId: string) => {
-    dispatch(requestPrivateRoomWithUser({ userId }));
-    dispatch(addConnectedUserId({ userId }));
-    dispatch(addUserIdToPrivateRoom({ userId }));
-  };
+  const handleFriendRequest = (userId: string) => dispatch(requestPrivateRoomWithUser({ userId }));
 
   const isCurrentUserId = (id: string) => socketId === id;
   const privateRoomExists = (id: string) => {
@@ -25,7 +21,6 @@ function UserList() {
     return null;
   }
 
-  
 
   return (
     <ul>
