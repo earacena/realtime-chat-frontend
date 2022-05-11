@@ -14,7 +14,7 @@ function Rooms() {
       <ul>
         {rooms.map((room, i) => (
           <li key={room.roomId}>
-            <button type="button" onClick={() => dispatch(setCurrentRoom({ room }))}>{room.roomName}</button>
+            <button type="button" onClick={() => dispatch(setCurrentRoom({ currentRoom: room }))}>{room.roomName}</button>
           </li>
         ))}
       </ul>
