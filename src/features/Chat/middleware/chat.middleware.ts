@@ -3,7 +3,10 @@ import { disconnected, setSocketId, setMessages, sendMessage, addMessage, startC
 import { io, Socket } from 'socket.io-client';
 import { addConnectedUserId, addUserIdToPrivateRoom, removeConnectedUserId, requestPrivateRoomWithUser, setConnectedUserIds } from '../../UserList';
 import { addRoom, setUserIdsInPrivateRoom } from '../../Room';
+import chatEventType from '../types/chatEvents.types';
+import { String as RtString } from 'runtypes';
 import type { Message, Messages } from '../types/chat.types';
+
 
 const url = 'http://localhost:3001/';
 
@@ -18,27 +21,40 @@ const chatMiddleware: Middleware = store => {
       // Initialize socket connection if appropriate action received
       socket = io(url);
 
-      const userConnectionHandler = (userSocketId: string) => {
+      const userConnectionHandler = (payloadJSON: unknown) => {
+        const payload: unknown = JSON.parse(RtString.check(payloadJSON));
+        const { userSocketId } = chatEventType.UserConnectedEventPayload.check(payload);
         store.dispatch(addConnectedUserId({ userId: userSocketId }));
       };
 
-      const userDisconnectionHandler = (userSocketId: string) => {
+      const userDisconnectionHandler = (payloadJSON: unknown) => {
+        const payload: unknown = JSON.parse(RtString.check(payloadJSON));
+        const { userSocketId } = chatEventType.UserDisconnectedEventPayload.check(payload);
         store.dispatch(removeConnectedUserId({ id: userSocketId }));
       };
 
-      const connectedUserListHandler = (allUserSocketIds: string[]) => {
+      const connectedUserListHandler = (payloadJSON: unknown) => {
+        const payload: unknown = JSON.parse(RtString.check(payloadJSON));
+        const { allUserSocketIds } = chatEventType.ConnectedUserListPayload.check(payload);
         store.dispatch(setConnectedUserIds({ connectedUserIds: allUserSocketIds }));
       };
 
-      const receiveMessageHandler = (message: Message) => {
+      const receiveMessageHandler = (payloadJSON: unknown) => {
+        const payload: unknown = JSON.parse(RtString.check(payloadJSON));
+        const { message } = chatEventType.MessagePayload.check(payload);
         store.dispatch(addMessage({ message }));
       };
       
-      const receiveAllMessagesHandler = (messages: Messages) => {
+      const receiveAllMessagesHandler = (payloadJSON: unknown) => {
+        const payload: unknown = JSON.parse(RtString.check(payloadJSON));
+        const { messages } = chatEventType.MessagesPayload.check(payload);
         store.dispatch(setMessages({ messages }));
       };
 
-      const privateRoomRequestHandler = (userSocketId: string, roomId: string) => {
+      const privateRoomRequestHandler = (payloadJSON: unknown) => {
+        const payload: unknown = JSON.parse(RtString.check(payloadJSON));
+        const { userSocketId, roomId } = chatEventType.PrivateRoomRequestPayload.check(payload);
+
         store.dispatch(addRoom({ room: { roomId, roomName: `chat with ${userSocketId}` } }));
         socket.emit('join room', roomId);
     
