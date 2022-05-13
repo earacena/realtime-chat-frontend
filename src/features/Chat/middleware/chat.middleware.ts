@@ -56,7 +56,9 @@ const chatMiddleware: Middleware = store => {
         const { userSocketId, roomId } = chatEventType.PrivateRoomRequestPayload.check(payload);
 
         store.dispatch(addRoom({ room: { roomId, roomName: `chat with ${userSocketId}` } }));
-        socket.emit('join room', roomId);
+
+        const joinRoomEventPayload = JSON.stringify({ roomId });
+        socket.emit('join room', joinRoomEventPayload);
     
         console.log(`new room [${roomId}] initialized with ${userSocketId}`);
         store.dispatch(addUserIdToPrivateRoom({ userId: userSocketId }));
