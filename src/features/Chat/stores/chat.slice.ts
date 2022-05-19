@@ -26,6 +26,7 @@ const chatSlice = createSlice({
     setMessages: (state, action) => ({ ...state, messages:  action.payload.messages}),
     addMessage: (state, action) => ({ ...state, messages: state.messages.concat(action.payload.message)}),
     sendMessage: (state, action) => { return; },
+    retrieveAllMessages: (state, action) => { return; },
   }
 });
 
@@ -37,6 +38,7 @@ export const {
   setMessages,
   addMessage,
   sendMessage,
+  retrieveAllMessages,
 } = chatSlice.actions;
 
 export default chatSlice.reducer;
