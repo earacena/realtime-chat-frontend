@@ -3,9 +3,11 @@ import {
   Array as RtArray,
   String as RtString,
   Static as RtStatic,
+  Number as RtNumber,
 } from 'runtypes';
 
 export const MessageType = RtRecord({
+  id: RtNumber,
   roomId: RtString,
   senderId: RtString,
   content: RtString,
