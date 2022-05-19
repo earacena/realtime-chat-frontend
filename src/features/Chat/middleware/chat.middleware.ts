@@ -2,10 +2,9 @@ import { Middleware } from '@reduxjs/toolkit';
 import { disconnected, setSocketId, setMessages, sendMessage, addMessage, startConnecting, connectionEstablished } from '../stores/chat.slice';
 import { io, Socket } from 'socket.io-client';
 import { addConnectedUserId, addUserIdToPrivateRoom, removeConnectedUserId, requestPrivateRoomWithUser, setConnectedUserIds } from '../../UserList';
-import { addRoom, setUserIdsInPrivateRoom } from '../../Room';
+import { addRoom } from '../../Room';
 import chatEventType from '../types/chatEvents.types';
 import { String as RtString } from 'runtypes';
-import type { Message, Messages } from '../types/chat.types';
 
 
 const url = 'http://localhost:3001/';
@@ -79,7 +78,7 @@ const chatMiddleware: Middleware = store => {
       socket.on('user disconnected', userDisconnectionHandler); 
       socket.on('all connected users', connectedUserListHandler);
       socket.on('receive message', receiveMessageHandler);
-      socket.on('receive all messages', receiveAllMessagesHandler);
+      socket.on('receive all room messages', receiveAllMessagesHandler);
       socket.on('private room request', privateRoomRequestHandler); 
       socket.on('disconnect', disconnectionHandler);
     }
