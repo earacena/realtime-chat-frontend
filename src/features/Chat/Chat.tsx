@@ -1,7 +1,8 @@
 import React, { useEffect } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
-import { addMessage, sendMessage, startConnecting } from './stores/chat.slice';
+import { addMessage, retrieveAllMessages, sendMessage, startConnecting } from './stores/chat.slice';
 import { useAppDispatch, useAppSelector } from '../../hooks';
+import { current } from '@reduxjs/toolkit';
 
 type Input = {
   message: string;
@@ -28,6 +29,12 @@ function Chat() {
   useEffect(() => {
     if (!isConnected && !isConnecting) {
       dispatch(startConnecting());
+    }
+  }, []);
+
+  useEffect(() => {
+    if (isConnected) {
+      dispatch(retrieveAllMessages({ roomId: currentRoom.roomId }));
     }
   }, []);
 
