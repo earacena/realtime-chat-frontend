@@ -84,11 +84,13 @@ const chatMiddleware: Middleware = store => {
     }
 
     if (sendMessage.match(action) && isConnectionEstablished) {
-      socket.emit('send message', action.payload.message);
+      const messagePayload: string = JSON.stringify({ message: action.payload.message });
+      socket.emit('send message', messagePayload);
     }
 
     if (requestPrivateRoomWithUser.match(action) && isConnectionEstablished) {
-      socket.emit('private room request', action.payload.userId)
+      const privateRoomRequestPayload = JSON.stringify({ userId: action.payload.userId });
+      socket.emit('private room request', privateRoomRequestPayload);
     }
 
     next(action);
