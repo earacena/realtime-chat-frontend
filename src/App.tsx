@@ -7,7 +7,7 @@ function App() {
   const [loggedIn, setLoggedIn] = useState(false);
 
   return (
-    <div className="flex flex-row">
+    <div className="flex flex-col items-center justify-center h-screen">
       <LoginForm />
       {loggedIn && <SideBar />}
       {loggedIn && <Chat />}
