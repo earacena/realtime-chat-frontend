@@ -8,7 +8,7 @@ function App() {
 
   return (
     <div className="flex flex-col items-center justify-center h-screen">
-      <LoginForm />
+      {!loggedIn && <LoginForm />}
       {loggedIn && <SideBar />}
       {loggedIn && <Chat />}
     </div>
