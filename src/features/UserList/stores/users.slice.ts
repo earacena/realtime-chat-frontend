@@ -1,9 +1,5 @@
-import { createSlice } from "@reduxjs/toolkit";
-
-interface UsersState {
-  connectedUserIds: string[];
-  userIdsInPrivateRoom: string[];
-};
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { UsersState, ConnectedUserIdsPayload, UserIdPayload } from '../types/users.types';
 
 const initialState: UsersState = {
   connectedUserIds: [],
@@ -14,27 +10,27 @@ const usersSlice = createSlice({
   name: 'users',
   initialState,
   reducers: {
-    setConnectedUserIds: (state, action) => ({
+    setConnectedUserIds: (state: UsersState, action: PayloadAction<ConnectedUserIdsPayload>) => ({
       ...state,
       connectedUserIds: action.payload.connectedUserIds,
     }),
-    addConnectedUserId: (state, action) => ({
+    addConnectedUserId: (state: UsersState, action: PayloadAction<UserIdPayload>) => ({
       ...state,
       connectedUserIds: state.connectedUserIds.concat(action.payload.userId),
     }),
-    removeConnectedUserId: (state, action) => ({
+    removeConnectedUserId: (state: UsersState, action: PayloadAction<UserIdPayload>) => ({
       ...state,
-      connectedUserIds: state.connectedUserIds.filter((id) => id !== action.payload.id),
+      connectedUserIds: state.connectedUserIds.filter((id) => id !== action.payload.userId),
     }),
-    addUserIdToPrivateRoom: (state, action) => ({
+    addUserIdToPrivateRoom: (state: UsersState, action: PayloadAction<UserIdPayload>) => ({
       ...state,
       userIdsInPrivateRoom: state.userIdsInPrivateRoom.concat(action.payload.userId),
     }),
-    resetConnectedUserIds: (state, action) => ({
+    resetConnectedUserIds: (state: UsersState) => ({
       ...state,
       connectedUserIds: initialState.connectedUserIds,
     }),
-    requestPrivateRoomWithUser: (state, action) => { return; },
+    requestPrivateRoomWithUser: (state: UsersState, action: PayloadAction<UserIdPayload>) => { return; },
   }
 });
 
