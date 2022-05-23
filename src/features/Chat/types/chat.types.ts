@@ -15,3 +15,34 @@ export const MessageType = RtRecord({
 export type Message = RtStatic<typeof MessageType>;
 export const MessageArray = RtArray(MessageType);
 export type Messages = RtStatic<typeof MessageArray>;
+
+export interface ChatState {
+  socketId: string;
+  messages: Messages;
+  isConnecting: boolean;
+  isConnected: boolean;
+};
+
+export type SocketIdPayload = {
+  socketId: string;
+};
+
+export type NewMessagePayload = {
+  newMessage: {
+    roomId: string,
+    senderId: string,
+    content: string,
+  }
+};
+
+export type MessagePayload = {
+  message: Message,
+};
+
+export type MessagesPayload = {
+  messages: Messages;
+};
+
+export type RoomIdPayload = {
+  roomId: string,
+};
