@@ -1,12 +1,12 @@
-import { createSlice } from '@reduxjs/toolkit';
-import { Messages } from '../types/chat.types';
-
-interface ChatState {
-  socketId: string;
-  messages: Messages;
-  isConnecting: boolean;
-  isConnected: boolean;
-};
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import {
+  ChatState,
+  SocketIdPayload,
+  NewMessagePayload,
+  MessagePayload,
+  MessagesPayload,
+  RoomIdPayload,
+} from "../types/chat.types";
 
 const initialState: ChatState = {
   socketId: '',
@@ -16,18 +16,35 @@ const initialState: ChatState = {
 };
 
 const chatSlice = createSlice({
-  name: 'chat',
+  name: "chat",
   initialState,
   reducers: {
-    startConnecting: (state) => ({ ...state, isConnecting: true }),
-    connectionEstablished: (state) => ({ ...state, isConnecting: false, isConnected: true }),
-    disconnected: (state) => ({ ...state, isConnected: false }),
-    setSocketId: (state, action) => ({ ...state, socketId: action.payload.socketId}),
-    setMessages: (state, action) => ({ ...state, messages:  action.payload.messages}),
-    addMessage: (state, action) => ({ ...state, messages: state.messages.concat(action.payload.message)}),
-    sendMessage: (state, action) => { return; },
-    retrieveAllMessages: (state, action) => { return; },
-  }
+    startConnecting: (state: ChatState) => ({ ...state, isConnecting: true }),
+    connectionEstablished: (state: ChatState) => ({
+      ...state,
+      isConnecting: false,
+      isConnected: true,
+    }),
+    disconnected: (state: ChatState) => ({ ...state, isConnected: false }),
+    setSocketId: (
+      state: ChatState,
+      action: PayloadAction<SocketIdPayload>
+    ) => ({ ...state, socketId: action.payload.socketId }),
+    setMessages: (
+      state: ChatState,
+      action: PayloadAction<MessagesPayload>
+    ) => ({ ...state, messages: action.payload.messages }),
+    addMessage: (state: ChatState, action: PayloadAction<MessagePayload>) => ({
+      ...state,
+      messages: state.messages.concat(action.payload.message),
+    }),
+    sendMessage: (state: ChatState, action: PayloadAction<NewMessagePayload>) => {
+      return;
+    },
+    retrieveAllMessages: (state: ChatState, action: PayloadAction<RoomIdPayload>) => {
+      return;
+    },
+  },
 });
 
 export const {
