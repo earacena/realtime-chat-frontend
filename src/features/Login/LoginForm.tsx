@@ -29,7 +29,6 @@ function LoginForm() {
     });
   };
 
-
   return (
     <FormWrapper>
       <form className="flex flex-col" onSubmit={handleSubmit(onSubmit)}>
@@ -57,8 +56,18 @@ function LoginForm() {
           id="login-button"
           className="rounded-md p-3 bg-slate-500 text-white w-full mt-auto hover:bg-slate-400"
           type="submit"
-          aria-label="login">
+          aria-label="login"
+        >
           Login
+        </button>
+        <p className="mt-auto text-sm self-center text-slate-600">Don't have an account?</p>
+        <button
+          id="register-button"
+          className="rounded-md p-3 outline outline-2 text-slate-600 w-full mt-1 hover:bg-slate-200"
+          type="button"
+          aria-label="login"
+        >
+          Create New Account
         </button>
       </form>
     </FormWrapper>
