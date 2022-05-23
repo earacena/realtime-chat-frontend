@@ -29,7 +29,7 @@ const chatMiddleware: Middleware = store => {
       const userDisconnectionHandler = (payloadJSON: unknown) => {
         const payload: unknown = JSON.parse(RtString.check(payloadJSON));
         const { userSocketId } = chatEventType.UserDisconnectedEventPayload.check(payload);
-        store.dispatch(removeConnectedUserId({ id: userSocketId }));
+        store.dispatch(removeConnectedUserId({ userId: userSocketId }));
       };
 
       const connectedUserListHandler = (payloadJSON: unknown) => {
@@ -84,7 +84,7 @@ const chatMiddleware: Middleware = store => {
     }
 
     if (sendMessage.match(action) && isConnectionEstablished) {
-      const messagePayload: string = JSON.stringify({ message: action.payload.message });
+      const messagePayload: string = JSON.stringify({ message: action.payload.newMessage });
       socket.emit('send message', messagePayload);
     }
 
