@@ -47,8 +47,7 @@ function Chat() {
       content: message,
     }
 
-    dispatch(sendMessage({ message: newMessage }));
-    dispatch(addMessage({ message: newMessage }));
+    dispatch(sendMessage({ newMessage }));
     console.log(`sending: ${roomId} | ${newMessage}`);
 
     reset({
