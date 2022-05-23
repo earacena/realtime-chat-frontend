@@ -1,11 +1,12 @@
-import { createSlice } from "@reduxjs/toolkit";
-import type { Room, Rooms } from "../../../app.types";
-
-interface RoomsState {
-  allRooms: Rooms;
-  currentRoom: Room;
-  userIdsInPrivateRoom: string[];
-}
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import {
+  RoomsState,
+  allRoomsPayload,
+  RoomPayload,
+  CurrentRoomPayload,
+  UserIdsInPrivateRoomPayload,
+  UserIdPayload,
+} from "../types/rooms.types";
 
 const initialState: RoomsState = {
   allRooms: [],
@@ -17,35 +18,35 @@ const roomsSlice = createSlice({
   name: 'rooms',
   initialState,
   reducers: {
-    setAllRooms: (state, action) => ({
+    setAllRooms: (state: RoomsState, action: PayloadAction<allRoomsPayload>) => ({
       ...state,
       allRooms: action.payload.allRooms,
     }),
-    addRoom: (state, action) => ({
+    addRoom: (state: RoomsState, action: PayloadAction<RoomPayload>) => ({
       ...state,
       allRooms: state.allRooms.concat(action.payload.room),
     }),
-    resetAllRooms: (state, action) => ({ 
+    resetAllRooms: (state: RoomsState) => ({ 
       ...state,
       allRooms: initialState.allRooms,
     }),
-    setCurrentRoom: (state, action) => ({
+    setCurrentRoom: (state: RoomsState, action: PayloadAction<CurrentRoomPayload>) => ({
       ...state,
       currentRoom: action.payload.currentRoom
     }),
-    resetCurrentRoom: (state, action) => ({
+    resetCurrentRoom: (state: RoomsState, action: PayloadAction<CurrentRoomPayload>) => ({
       ...state,
       currentRoom: initialState.currentRoom,
     }),
-    setUserIdsInPrivateRoom: (state, action) => ({
+    setUserIdsInPrivateRoom: (state: RoomsState, action: PayloadAction<UserIdsInPrivateRoomPayload>) => ({
       ...state,
       userIdsInPrivateRoom: action.payload.userIdsInPrivateRoom,
     }),
-    addUserIdToPrivateRoom: (state, action) => ({
+    addUserIdToPrivateRoom: (state: RoomsState, action: PayloadAction<UserIdPayload>) => ({
       ...state,
       userIdsInPrivateRoom: state.userIdsInPrivateRoom.concat(action.payload.userId),
     }),
-    resetUserIdsInPrivateRoom: (state, action) => ({
+    resetUserIdsInPrivateRoom: (state: RoomsState) => ({
       ...state,
       userIdsInPrivateRoom: initialState.userIdsInPrivateRoom,
     }),
