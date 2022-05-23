@@ -1,6 +1,6 @@
 import React from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { FormWrapper } from '../../components';
+import { FormWrapper, LabelErrorMessage } from '../../components';
 
 type Input = {
   username: string;
@@ -32,8 +32,8 @@ function LoginForm() {
   return (
     <FormWrapper>
       <form className="flex flex-col" onSubmit={handleSubmit(onSubmit)}>
-        <label className="mt-7" htmlFor="username-input">Username</label>
-        {errors.username && <span className="text-red-400">Required</span>}
+        <label className="mt-3" htmlFor="username-input">Username</label>
+        {errors.username && <LabelErrorMessage content="Required" />}
         <input
           id="username-input"
           aria-label="username"
@@ -43,7 +43,7 @@ function LoginForm() {
           {...register('username', { required: true })}
         />
         <label htmlFor="password-input">Password</label>
-        {errors.password && <span className="text-red-400">Required</span>}
+        {errors.password && <LabelErrorMessage content="Required" />}
         <input
           id="password-input"
           aria-label="password"
