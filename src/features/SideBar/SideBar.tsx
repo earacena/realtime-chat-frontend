@@ -1,6 +1,6 @@
 import React from 'react';
-import { UserList } from '../../features/UserList/';
-import { Rooms } from '../../features/Room/';
+import { UserList } from '../../features/Users/';
+import { Rooms } from '../../features/Rooms/';
 
 function SideBar() {
   return (
