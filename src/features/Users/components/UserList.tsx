@@ -1,6 +1,6 @@
 import React from 'react';
-import { addConnectedUserId, addUserIdToPrivateRoom, requestPrivateRoomWithUser } from '.';
-import { useAppDispatch, useAppSelector } from '../../hooks';
+import { addConnectedUserId, addUserIdToPrivateRoom, requestPrivateRoomWithUser } from '..';
+import { useAppDispatch, useAppSelector } from '../../../hooks';
 
 function UserList() {
   const dispatch = useAppDispatch();
