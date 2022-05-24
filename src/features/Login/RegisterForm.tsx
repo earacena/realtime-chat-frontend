@@ -1,5 +1,6 @@
 import React from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
 import { FormWrapper, LabelErrorMessage } from '../../components';
 
 type Input = {
@@ -9,6 +10,8 @@ type Input = {
 };
 
 function RegisterForm() {
+  const navigate = useNavigate();
+
   const {
     register,
     handleSubmit,
@@ -32,10 +35,13 @@ function RegisterForm() {
     });
   };
 
+  const loginButtonClicked = () => navigate("/login");
+
   return (
     <FormWrapper>
       <form className="flex flex-col" onSubmit={handleSubmit(onSubmit)}>
-        <label className="mt-3" htmlFor="name-input">name</label>
+        <p className="text-2xl self-center">Create an account</p>
+        <label className="mt-3" htmlFor="name-input">Name</label>
         {errors.name && <LabelErrorMessage content="Required" />}
         <input
           id="name-input"
@@ -66,10 +72,20 @@ function RegisterForm() {
           {...register('password', { required: true })}
         />
         <button 
-          id="login-button"
-          className="rounded-md p-3 bg-slate-500 text-white w-full mt-auto hover:bg-slate-400"
+          id="create-button"
+          className="rounded-md p-3 bg-slate-500 text-white w-full mt-3 hover:bg-slate-400"
           type="submit"
-          aria-label="login">
+          aria-label="create">
+          Create Account
+        </button>
+        <p className="mt-4 text-sm self-center text-slate-600">Have an account?</p>
+        <button 
+          id="login-button"
+          className="rounded-md p-3 outline outline-2 text-slate-600 w-full mt-1 hover:bg-slate-200"
+          type="button"
+          aria-label="login"
+          onClick={loginButtonClicked}
+        >
           Login
         </button>
       </form>
