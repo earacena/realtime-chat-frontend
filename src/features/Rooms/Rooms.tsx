@@ -1,5 +1,5 @@
 import React from 'react';
-import { setCurrentRoom } from '../Room';
+import { setCurrentRoom } from '.';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 
 function Rooms() {
