@@ -1,5 +1,6 @@
 import React from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
 import { FormWrapper, LabelErrorMessage } from '../../components';
 
 type Input = {
@@ -8,6 +9,8 @@ type Input = {
 };
 
 function LoginForm() {
+  const navigate = useNavigate();
+
   const {
     register,
     handleSubmit,
@@ -28,6 +31,9 @@ function LoginForm() {
       password: '',
     });
   };
+
+  const registerButtonClicked = () => navigate("/register");
+  
 
   return (
     <FormWrapper>
@@ -54,18 +60,19 @@ function LoginForm() {
         />
         <button 
           id="login-button"
-          className="rounded-md p-3 bg-slate-500 text-white w-full mt-auto hover:bg-slate-400"
+          className="rounded-md p-3 bg-slate-500 text-white w-full mt-2 hover:bg-slate-400"
           type="submit"
           aria-label="login"
         >
           Login
         </button>
-        <p className="mt-auto text-sm self-center text-slate-600">Don't have an account?</p>
+        <p className="mt-4 text-sm self-center text-slate-600">Don't have an account?</p>
         <button
           id="register-button"
           className="rounded-md p-3 outline outline-2 text-slate-600 w-full mt-1 hover:bg-slate-200"
           type="button"
           aria-label="login"
+          onClick={registerButtonClicked}
         >
           Create New Account
         </button>
