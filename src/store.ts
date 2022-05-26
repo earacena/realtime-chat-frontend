@@ -1,8 +1,8 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { chatReducer } from './features/Chat';
 import chatMiddleware from './features/Chat/middleware/chat.middleware';
-import { roomsReducer } from './features/Room';
-import { usersReducer } from './features/UserList';
+import { roomsReducer } from './features/Rooms';
+import { usersReducer } from './features/Users';
 
 const store = configureStore({ 
   reducer: {
