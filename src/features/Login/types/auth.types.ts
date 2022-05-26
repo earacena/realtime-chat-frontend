@@ -1,5 +1,12 @@
+import {
+  String as RtString,
+  Number as RtNumber,
+  Record as RtRecord,
+} from 'runtypes';
+
 export type AuthenticatedUser = {
   id: number;
+  token: string;
   username: string;
   name: string;
 };
@@ -13,6 +20,12 @@ export type AuthenticatedUserPayload = {
 };
 
 export interface AuthState {
-  token: string;
   user: AuthenticatedUser;
 };
+
+export const TokenResponse = RtRecord({
+  token: RtString,
+  id: RtNumber,
+  username: RtString,
+  name: RtString,
+});
