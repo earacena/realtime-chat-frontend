@@ -1,7 +1,11 @@
 import React from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { FormWrapper, LabelErrorMessage } from '../../components';
+import { userService } from '../Users';
+import { loginService } from '../Login';
+import { setAuthenticatedUser } from './stores/auth.slice';
 
 type Input = {
   name: string;
@@ -11,6 +15,7 @@ type Input = {
 
 function RegisterForm() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const {
     register,
@@ -25,14 +30,26 @@ function RegisterForm() {
     }
   });
 
-  const onSubmit: SubmitHandler<Input> = (formData) => {
-    console.log(formData)
+  const onSubmit: SubmitHandler<Input> = async (credentials) => {
+    try {
+      await userService.create(credentials);
+      
+      const { id, name, username, token } = await loginService.login({
+        username: credentials.username,
+        password: credentials.password,
+      });
 
-    reset({
-      name: '',
-      username: '',
-      password: '',
-    });
+      dispatch(setAuthenticatedUser({ user: { id, name, username, token } }));
+      window.localStorage.setItem('chatAppUser', JSON.stringify({id, name, username, token}));
+      reset({
+        name: '',
+        username: '',
+        password: '',
+      });
+      navigate("/");
+    } catch (error: unknown) {
+      console.error('Error registering user credentials');
+    }
   };
 
   const loginButtonClicked = () => navigate("/login");
