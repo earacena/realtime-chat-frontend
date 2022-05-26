@@ -3,8 +3,8 @@ import { AuthState, TokenPayload, AuthenticatedUserPayload } from '../types/auth
 
 
 const initialState: AuthState = {
-  token: '',
   user: {
+    token: '',
     id: 0,
     username: '',
     name: '',
