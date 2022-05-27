@@ -1,7 +1,5 @@
-import {
-  UserType as User,
-  CreateUserFields,
-} from '../types/users.types';
+import { AuthResponse } from '../../Login/types/auth.types';
+import { CreateUserFields } from '../types/users.types';
 
 const baseUrl = 'http://localhost:3001/api/users';
 
@@ -13,8 +11,12 @@ const create = async ({ name, username, password }: CreateUserFields) => {
     },
     body: JSON.stringify({ name, username, password }),
   });
-  const user = User.check(await response.json());
-  return user;
+  try {
+    const authResponse = AuthResponse.check(await response.json());
+    return authResponse;
+  } catch (error: unknown) {
+    console.error(error);
+  }
 };
 
 const userService = { create };
