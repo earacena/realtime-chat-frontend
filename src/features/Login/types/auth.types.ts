@@ -23,7 +23,7 @@ export interface AuthState {
   user: AuthenticatedUser;
 };
 
-export const TokenResponse = RtRecord({
+export const AuthResponse = RtRecord({
   token: RtString,
   id: RtNumber,
   username: RtString,
