@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { addMessage, retrieveAllMessages, sendMessage, startConnecting } from './stores/chat.slice';
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import { current } from '@reduxjs/toolkit';
+import { useNavigate } from 'react-router-dom';
 
 type Input = {
   message: string;
@@ -10,11 +10,17 @@ type Input = {
 
 function Chat() {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const user = useAppSelector((state) => state.auth.user);
   const socketId = useAppSelector((state) => state.chat.socketId);
   const messages = useAppSelector((state) => state.chat.messages);
   const currentRoom = useAppSelector((state) => state.rooms.currentRoom);
   const isConnected = useAppSelector((state) => state.chat.isConnected);
   const isConnecting = useAppSelector((state) => state.chat.isConnecting);
+
+  if (!user) {
+    navigate("/login");
+  }
 
   const {
     register,
