@@ -4,15 +4,11 @@ import store from '../../store';
 import { setNotification, resetNotification } from './stores/notification.slice';
 
 function Notification() {
-  const notification = useAppSelector((state) => state.notification);
+  const { type, message } = useAppSelector((state) => state.notification);
   
-  if (notification.message === '') {
-    return null;
-  }
-
   return (
     <div>
-      {notification.message}
+      {message}
     </div>
   );
 }
