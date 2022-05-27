@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { LoginForm, RegisterForm } from './features/Login';
 import { Chat } from './features/Chat';
 import { Route, Routes } from 'react-router-dom';
