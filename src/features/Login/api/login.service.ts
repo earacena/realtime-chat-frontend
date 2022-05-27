@@ -1,4 +1,4 @@
-import { TokenResponse } from '../types/auth.types';
+import { AuthResponse } from '../types/auth.types';
 
 const baseUrl = 'http://localhost:3001/api/login';
 
@@ -16,10 +16,11 @@ const login = async (credentials: Credentials) => {
     body: JSON.stringify(credentials),
   });
   const responseJson = await response.json();
+ 
   if (responseJson.error) {
     throw new Error(`${responseJson.error}`);
   } else {
-    const tokenResponse = TokenResponse.check(responseJson);
+    const tokenResponse = AuthResponse.check(responseJson);
     return tokenResponse;
   }
 };
