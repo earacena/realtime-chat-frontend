@@ -32,12 +32,9 @@ function LoginForm() {
     try {
       const user = await loginService.login(credentials);
       
-      if (user) {
-        dispatch(setAuthenticatedUser({ user }));
+      dispatch(setAuthenticatedUser({ user }));
 
-        window.localStorage.setItem('chatAppUser', JSON.stringify(user));
-      }
-
+      window.localStorage.setItem('chatAppUser', JSON.stringify(user));
       reset({
         username: '',
         password: '',
@@ -53,7 +50,6 @@ function LoginForm() {
 
   return (
     <div>
-      <Notification />
       <FormWrapper>
         <form className="flex flex-col" onSubmit={handleSubmit(onSubmit)}>
           <label className="mt-3" htmlFor="username-input">Username</label>
