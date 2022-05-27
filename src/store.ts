@@ -4,6 +4,7 @@ import chatMiddleware from './features/Chat/middleware/chat.middleware';
 import { roomsReducer } from './features/Rooms';
 import { usersReducer } from './features/Users';
 import { authReducer } from './features/Login/';
+import { notificationReducer } from './features/Notification';
 
 const store = configureStore({ 
   reducer: {
@@ -11,6 +12,7 @@ const store = configureStore({
     rooms: roomsReducer,
     users: usersReducer,
     auth: authReducer,
+    notification: notificationReducer,
   },
   middleware: (getDefaultMiddleware) => {
     return getDefaultMiddleware().concat([chatMiddleware]);
