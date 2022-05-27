@@ -1,7 +1,10 @@
 import React from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { useAppDispatch } from '../../hooks';
 import { useNavigate } from 'react-router-dom';
 import { FormWrapper, LabelErrorMessage } from '../../components';
+import loginService from './api/login.service';
+import { setAuthenticatedUser } from './stores/auth.slice';
 
 type Input = {
   username: string;
@@ -9,6 +12,7 @@ type Input = {
 };
 
 function LoginForm() {
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   const {
@@ -23,13 +27,24 @@ function LoginForm() {
     }
   });
 
-  const onSubmit: SubmitHandler<Input> = (formData) => {
-    console.log(formData);
+  const onSubmit: SubmitHandler<Input> = async (credentials) => {
+    try {
+      const user = await loginService.login(credentials);
+      
+      if (user) {
+        dispatch(setAuthenticatedUser({ user }));
 
-    reset({
-      username: '',
-      password: '',
-    });
+        window.localStorage.setItem('chatAppUser', JSON.stringify(user));
+      }
+
+      reset({
+        username: '',
+        password: '',
+      });
+      navigate('/chat');
+    } catch (error: unknown) {
+      console.log(error);
+    }
   };
 
   const registerButtonClicked = () => navigate("/register");
