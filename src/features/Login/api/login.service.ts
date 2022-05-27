@@ -26,5 +26,4 @@ const login = async (credentials: Credentials) => {
 };
 
 const loginService = { login };
-
 export default loginService;
