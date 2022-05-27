@@ -20,8 +20,8 @@ const login = async (credentials: Credentials) => {
   if (responseJson.error) {
     throw new Error(`${responseJson.error}`);
   } else {
-    const tokenResponse = AuthResponse.check(responseJson);
-    return tokenResponse;
+    const authResponse = AuthResponse.check(responseJson);
+    return authResponse;
   }
 };
 
