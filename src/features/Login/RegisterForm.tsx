@@ -46,7 +46,7 @@ function RegisterForm() {
         username: '',
         password: '',
       });
-      navigate("/");
+      navigate("/chat");
     } catch (error: unknown) {
       console.error('Error registering user credentials');
     }
