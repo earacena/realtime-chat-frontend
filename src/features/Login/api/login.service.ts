@@ -17,8 +17,10 @@ const login = async (credentials: Credentials) => {
   });
   const responseJson = await response.json();
  
-  if (responseJson.error) {
-    throw new Error(`${responseJson.error}`);
+  if (responseJson.error === 'invalid credentials') {
+    throw new Error(`Invalid login information. Please try again`);
+  } else if (responseJson.error) {
+    throw new Error(`${responseJson.error}`)
   } else {
     const authResponse = AuthResponse.check(responseJson);
     return authResponse;
