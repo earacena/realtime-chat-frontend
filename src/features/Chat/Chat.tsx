@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
-import { addMessage, retrieveAllMessages, sendMessage, startConnecting } from './stores/chat.slice';
+import { retrieveAllMessages, sendMessage, startConnecting } from './stores/chat.slice';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { useNavigate } from 'react-router-dom';
 
@@ -18,7 +18,7 @@ function Chat() {
   const isConnected = useAppSelector((state) => state.chat.isConnected);
   const isConnecting = useAppSelector((state) => state.chat.isConnecting);
 
-  if (!user) {
+  if (!user.token) {
     navigate("/login");
   }
 
