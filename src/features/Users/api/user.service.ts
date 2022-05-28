@@ -1,4 +1,3 @@
-import { AuthResponse } from '../../Login/types/auth.types';
 import { CreateUserFields } from '../types/users.types';
 
 const baseUrl = 'http://localhost:3001/api/users';
@@ -11,11 +10,11 @@ const create = async ({ name, username, password }: CreateUserFields) => {
     },
     body: JSON.stringify({ name, username, password }),
   });
-  try {
-    const authResponse = AuthResponse.check(await response.json());
-    return authResponse;
-  } catch (error: unknown) {
-    console.error(error);
+
+  const responseJson = await response.json();
+
+  if (responseJson.error) {
+    throw new Error(`${responseJson.error}`)
   }
 };
 
