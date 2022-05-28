@@ -1,12 +1,12 @@
 import React from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { InstanceOf as RtInstanceOf } from 'runtypes';
 import { useAppDispatch } from '../../hooks';
 import { useNavigate } from 'react-router-dom';
 import { FormWrapper, LabelErrorMessage } from '../../components';
 import loginService from './api/login.service';
 import { setAuthenticatedUser } from './stores/auth.slice';
 import { resetNotification, setNotification } from '../Notification';
-import { InstanceOf } from 'runtypes';
 
 type Input = {
   username: string;
@@ -42,7 +42,7 @@ function LoginForm() {
       });
       navigate('/chat');
     } catch (error: unknown) {
-      if (InstanceOf(Error).guard(error)) {
+      if (RtInstanceOf(Error).guard(error)) {
         const newTimeoutId = setTimeout(() => {
           dispatch(resetNotification());
         }, 4000)
