@@ -5,7 +5,8 @@ import { useNavigate } from 'react-router-dom';
 import { FormWrapper, LabelErrorMessage } from '../../components';
 import loginService from './api/login.service';
 import { setAuthenticatedUser } from './stores/auth.slice';
-import { Notification } from '../Notification';
+import { resetNotification, setNotification } from '../Notification';
+import { InstanceOf } from 'runtypes';
 
 type Input = {
   username: string;
@@ -41,12 +42,20 @@ function LoginForm() {
       });
       navigate('/chat');
     } catch (error: unknown) {
-      console.log(error);
+      if (InstanceOf(Error).guard(error)) {
+        const newTimeoutId = setTimeout(() => {
+          dispatch(resetNotification());
+        }, 4000)
+        dispatch(setNotification({ 
+          type: 'error',
+          message: error.message,
+          timeoutId: newTimeoutId,
+        }))
+      }
     }
   };
 
   const registerButtonClicked = () => navigate("/register");
-  
 
   return (
     <FormWrapper>
