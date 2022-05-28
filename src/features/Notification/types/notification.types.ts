@@ -1,4 +1,4 @@
-export interface NotificationState {
+export type NotificationState = {
   type: string;
   message: string;
   timeoutId: NodeJS.Timeout | undefined;
