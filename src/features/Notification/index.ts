@@ -1,3 +1,3 @@
 export { default as Notification } from './Notification';
 
-export { default as notificationReducer } from './stores/notification.slice';
+export { default as notificationReducer, setNotification, resetNotification } from './stores/notification.slice';
