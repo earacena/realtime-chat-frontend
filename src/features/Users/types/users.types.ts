@@ -25,16 +25,3 @@ export type ConnectedUserIdsPayload = {
 export type UserIdPayload = {
   userId: string;
 };
-
-export const UserType = RtRecord({
-  id: RtNumber,
-  name: RtString,
-  username: RtString,
-  passwordHash: RtString,
-  dateRegistered: RtUnion(
-    RtInstanceOf(Date),
-    RtString.withConstraint((x: string) => (x || x !== null || typeof x === 'string' || !Number.isNaN(Date.parse(x)))),
-  ),
-});
-
-export const UserTypeArray = RtArray(UserType);
