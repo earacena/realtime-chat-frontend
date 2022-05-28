@@ -2,10 +2,12 @@ import React from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { InstanceOf as RtInstanceOf } from 'runtypes';
 import { FormWrapper, LabelErrorMessage } from '../../components';
 import { userService } from '../Users';
 import { loginService } from '../Login';
 import { setAuthenticatedUser } from './stores/auth.slice';
+import { resetNotification, setNotification } from '../Notification';
 
 type Input = {
   name: string;
@@ -48,7 +50,17 @@ function RegisterForm() {
       });
       navigate("/chat");
     } catch (error: unknown) {
-      console.error('Error registering user credentials');
+      console.log(error)
+      if (RtInstanceOf(Error).guard(error)) {
+        const newTimeoutId = setTimeout(() => {
+          dispatch(resetNotification());
+        }, 4000)
+        dispatch(setNotification({ 
+          type: 'error',
+          message: error.message,
+          timeoutId: newTimeoutId,
+        }))
+      }
     }
   };
 
