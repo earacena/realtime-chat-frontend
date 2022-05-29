@@ -1,10 +1,10 @@
 import { Middleware } from '@reduxjs/toolkit';
 import { disconnected, setSocketId, setMessages, sendMessage, addMessage, startConnecting, connectionEstablished } from '../stores/chat.slice';
 import { io, Socket } from 'socket.io-client';
+import { String as RtString } from 'runtypes';
 import { addConnectedUserId, addUserIdToPrivateRoom, removeConnectedUserId, requestPrivateRoomWithUser, setConnectedUserIds } from '../../Users';
 import { addRoom } from '../../Rooms';
 import chatEventType from '../types/chatEvents.types';
-import { String as RtString } from 'runtypes';
 
 
 const url = 'http://localhost:3001/';
@@ -14,11 +14,11 @@ const chatMiddleware: Middleware = store => {
 
   return next => action => {
     const isConnectionEstablished = socket && store.getState().chat.isConnected;
+    const token = store.getState().auth.user.token;
 
-
-    if (startConnecting.match(action)) {
+    if (startConnecting.match(action) && token) {
       // Initialize socket connection if appropriate action received
-      socket = io(url);
+      socket = io(url, { auth: { token } });
 
       const userConnectionHandler = (payloadJSON: unknown) => {
         const payload: unknown = JSON.parse(RtString.check(payloadJSON));
