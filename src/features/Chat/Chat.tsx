@@ -12,7 +12,6 @@ function Chat() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const user = useAppSelector((state) => state.auth.user);
-  const socketId = useAppSelector((state) => state.chat.socketId);
   const messages = useAppSelector((state) => state.chat.messages);
   const currentRoom = useAppSelector((state) => state.rooms.currentRoom);
   const isConnected = useAppSelector((state) => state.chat.isConnected);
@@ -49,7 +48,7 @@ function Chat() {
     const roomId = currentRoom ? currentRoom.roomId : 'default';
     const newMessage = {
       roomId,
-      senderId: socketId,
+      senderId: user.id,
       content: message,
     }
 
@@ -64,7 +63,7 @@ function Chat() {
   return (
     <div className="flex flex-col p-3 w-full">
       <p className="bg-slate-100">
-        {`Connected as: ${socketId}`}
+        {`Connected as: ${user.name}`}
       </p>
       <p className="bg-slate-100">
         {`Room: ${currentRoom ? currentRoom.roomName : 'not in a room'}`}
