@@ -9,7 +9,7 @@ import {
 export const MessageType = RtRecord({
   id: RtNumber,
   roomId: RtString,
-  senderId: RtString,
+  senderId: RtNumber,
   content: RtString,
 });
 export type Message = RtStatic<typeof MessageType>;
@@ -30,7 +30,7 @@ export type SocketIdPayload = {
 export type NewMessagePayload = {
   newMessage: {
     roomId: string,
-    senderId: string,
+    senderId: number,
     content: string,
   }
 };
