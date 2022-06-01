@@ -17,9 +17,6 @@ function Chat() {
   const isConnected = useAppSelector((state) => state.chat.isConnected);
   const isConnecting = useAppSelector((state) => state.chat.isConnecting);
 
-  if (!user.token) {
-    navigate("/login");
-  }
 
   const {
     register,
@@ -28,6 +25,12 @@ function Chat() {
   } = useForm<Input>({
     defaultValues: {
       message: '',
+    }
+  });
+
+  useEffect(() => {
+    if (!user.token) {
+      navigate("/login");
     }
   });
 
