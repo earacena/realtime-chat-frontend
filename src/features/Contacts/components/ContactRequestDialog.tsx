@@ -1,4 +1,6 @@
 import React from 'react';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import { LabelErrorMessage } from '../../../components';
 import { Dialog, Transition } from '@headlessui/react';
 import { BsPersonPlusFill } from 'react-icons/bs';
 
@@ -7,7 +9,29 @@ type ContactFinderDialogProps = {
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>,
 }
 
+type Input = {
+  username: '',
+};
+
+type FormData = {
+  username: string;
+};
+
 function ContactFinderDialog({isOpen, setIsOpen}: ContactFinderDialogProps) {
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors }
+  } = useForm<Input>({
+    defaultValues: {
+      username: '',
+    }
+  });
+
+  const onSubmit: SubmitHandler<Input> = ({ username }: FormData) => {
+    
+  };
 
   return (
     <Transition
@@ -25,26 +49,31 @@ function ContactFinderDialog({isOpen, setIsOpen}: ContactFinderDialogProps) {
 
         <div className="fixed inset-0 flex items-center justify-center p-4">
           <Dialog.Panel className="flex flex-col w-full max-w-lg rounded bg-white p-5">
-            <Dialog.Title className="self-center text-2xl">Add a new contact</Dialog.Title>
-            <Dialog.Description className="text-md my-3 self-center">
-              Enter the username of contact
+            <Dialog.Title className="self-center text-2xl mb-1">Add a new contact</Dialog.Title>
+            <Dialog.Description className="text-md self-center text-slate-600 mb-5">
+              Send a contact request to a user
             </Dialog.Description>
-            
-            <input
-              id="contact-username-input"
-              aria-label="username"
-              className="flex-grow bg-slate-200 w-96 rounded p-2 focus:outline-slate-400 mt-4 self-center"
-            />
-            <button 
-              id="contact-request-send-button"
-              aria-label="send"
-              className="flex self-center rounded-md p-3 bg-slate-500 text-white hover:bg-slate-400 items-center mx-2 mt-10"
-            >
-              <BsPersonPlusFill size={20} />
-              <span className="mx-2">
-                Send Contact Request
-              </span>
-            </button>
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <label htmlFor="contact-username-input" className="mx-11">Username</label>
+              {errors.username && <LabelErrorMessage content="Required" />}
+              <input
+                id="contact-username-input"
+                aria-label="username"
+                className="flex-grow bg-slate-200 w-96 rounded p-2 focus:outline-slate-400 mt-4 self-center"
+                {...register('username', { required: true })}
+              />
+              <button 
+                id="contact-request-send-button"
+                type="submit"
+                aria-label="send"
+                className="flex self-center rounded-md p-3 w-96 bg-slate-500 text-white hover:bg-slate-400 items-center mx-3 mt-10"
+              >
+                <span className="flex">
+                  <BsPersonPlusFill className="ml-20 mr-2" size={20} />
+                  Send Contact Request
+                </span>
+              </button>
+            </form>
 
           </Dialog.Panel>
         </div>
