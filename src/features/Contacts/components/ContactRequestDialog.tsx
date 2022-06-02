@@ -4,7 +4,7 @@ import { LabelErrorMessage } from '../../../components';
 import { Dialog, Transition } from '@headlessui/react';
 import { BsPersonPlusFill } from 'react-icons/bs';
 
-type ContactFinderDialogProps = {
+type ContactRequestDialogProps = {
   isOpen: boolean,
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>,
 }
@@ -17,7 +17,7 @@ type FormData = {
   username: string;
 };
 
-function ContactFinderDialog({isOpen, setIsOpen}: ContactFinderDialogProps) {
+function ContactRequestDialog({isOpen, setIsOpen}: ContactRequestDialogProps) {
   const {
     register,
     handleSubmit,
@@ -30,7 +30,7 @@ function ContactFinderDialog({isOpen, setIsOpen}: ContactFinderDialogProps) {
   });
 
   const onSubmit: SubmitHandler<Input> = ({ username }: FormData) => {
-    
+
   };
 
   return (
@@ -82,4 +82,4 @@ function ContactFinderDialog({isOpen, setIsOpen}: ContactFinderDialogProps) {
   );
 }
 
-export default ContactFinderDialog;
+export default ContactRequestDialog;
