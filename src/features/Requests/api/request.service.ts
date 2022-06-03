@@ -1,31 +1,12 @@
-import { Array as RtArray, InstanceOf as RtInstanceOf, Union as RtUnion, Number as RtNumber, Record as RtRecord, String as RtString } from "runtypes";
+import { NewRequest, RequestArray, RequestResponse } from "../types/requests.types";
 
-const baseUrl = 'http://localhost:3001/api/requests';
+const baseUrl = "http://localhost:3001/api/requests";
 
-type Request = {
-  type: string,
-  toUser: number,
-  fromUser: number,
-};
-
-const RequestResponse = RtRecord({
-  id: RtNumber,
-  type: RtString,
-  dateRegistered: RtUnion(
-    RtInstanceOf(Date),
-    RtString.withConstraint((x: string) => (x && x !== null && typeof x === 'string' && !Number.isNaN(Date.parse(x)))),
-  ),
-  toUser: RtNumber,
-  status: RtString,
-});
-
-const Requests = RtArray(RequestResponse);
-
-const create = async (request: Request) => {
+const create = async (request: NewRequest) => {
   const response = await fetch(baseUrl, {
-    method: 'POST',
+    method: "POST",
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     },
     body: JSON.stringify(request),
   });
@@ -33,7 +14,7 @@ const create = async (request: Request) => {
   const responseJson = await response.json();
 
   if (responseJson.error) {
-    throw new Error(`${responseJson.error}`)
+    throw new Error(`${responseJson.error}`);
   } else {
     return RequestResponse.check(responseJson);
   }
@@ -41,7 +22,7 @@ const create = async (request: Request) => {
 
 const getRequestsOfUser = async (userId: number) => {
   const response = await fetch(`${baseUrl}/${userId}`);
-  const requests = Requests.check(await response.json());
+  const requests = RequestArray.check(await response.json());
   return requests;
 };
 
