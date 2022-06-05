@@ -1,6 +1,6 @@
 import React from 'react';
 import { ContactList } from '../Contacts';
-import Requests from '../Requests';
+import { Requests } from '../Requests';
 
 function SideBar() {
   return (
