@@ -3,6 +3,7 @@ import { useForm, SubmitHandler } from 'react-hook-form';
 import { retrieveAllMessages, sendMessage, startConnecting } from './stores/chat.slice';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { useNavigate } from 'react-router-dom';
+import { setAuthenticatedUser } from '../Login/stores/auth.slice';
 
 type Input = {
   message: string;
@@ -29,8 +30,15 @@ function Chat() {
   });
 
   useEffect(() => {
+    // Check if a user session already exists
     if (!user.token) {
-      navigate("/login");
+      const chatAppUserJSON = window.localStorage.getItem('chatAppUser');
+      if (chatAppUserJSON) {
+        const chatAppUser = JSON.parse(chatAppUserJSON);
+        dispatch(setAuthenticatedUser(chatAppUser));
+      } else {
+        navigate("/login");
+      }
     }
   });
 
