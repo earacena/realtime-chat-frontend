@@ -3,6 +3,9 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { LabelErrorMessage } from '../../../components';
 import { Dialog, Transition } from '@headlessui/react';
 import { BsPersonPlusFill } from 'react-icons/bs';
+import { requestService } from '../../Requests';
+import { resetNotification, setNotification } from '../../Notification';
+import { useAppDispatch, useAppSelector } from '../../../hooks';
 
 type ContactRequestDialogProps = {
   isOpen: boolean,
@@ -18,6 +21,9 @@ type FormData = {
 };
 
 function ContactRequestDialog({isOpen, setIsOpen}: ContactRequestDialogProps) {
+  const dispatch = useAppDispatch();
+  const user = useAppSelector((state) => state.auth.user);
+
   const {
     register,
     handleSubmit,
@@ -29,8 +35,28 @@ function ContactRequestDialog({isOpen, setIsOpen}: ContactRequestDialogProps) {
     }
   });
 
-  const onSubmit: SubmitHandler<Input> = ({ username }: FormData) => {
+  const onSubmit: SubmitHandler<Input> = async ({ username }: FormData) => {
+    try {
+      await requestService.create({
+        type: 'contact',
+        fromUserId: user.id,
+        toUser: username,
+      });
 
+      
+      const message = `Sent ${username} a contact request.`;
+
+      const newTimeoutId = setTimeout(() => {
+        dispatch(resetNotification());
+      }, 4000)
+      dispatch(setNotification({ 
+        type: 'message',
+        message,
+        timeoutId: newTimeoutId,
+      }))
+    } catch (error: unknown) {
+      
+    }
   };
 
   return (
