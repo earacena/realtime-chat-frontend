@@ -21,7 +21,7 @@ const create = async (request: NewRequest) => {
 };
 
 const getRequestsOfUser = async (userId: number) => {
-  const response = await fetch(`${baseUrl}/${userId}`);
+  const response = await fetch(`${baseUrl}/pending/to/${userId}`);
   const requests = RequestArray.check(await response.json());
   return requests;
 };
