@@ -10,18 +10,19 @@ import {
 
 export type NewRequest = {
   type: string,
-  toUser: number,
-  fromUser: number,
+  fromUserId: number,
+  toUser: string,
 };
 
 export const RequestResponse = RtRecord({
   id: RtNumber,
   type: RtString,
-  dateRegistered: RtUnion(
+  dateRequested: RtUnion(
     RtInstanceOf(Date),
     RtString.withConstraint((x: string) => (x && x !== null && typeof x === 'string' && !Number.isNaN(Date.parse(x)))),
   ),
   toUser: RtNumber,
+  fromUser: RtNumber,
   status: RtString,
 });
 
