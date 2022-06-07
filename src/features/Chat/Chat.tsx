@@ -35,7 +35,7 @@ function Chat() {
       const chatAppUserJSON = window.localStorage.getItem('chatAppUser');
       if (chatAppUserJSON) {
         const chatAppUser = JSON.parse(chatAppUserJSON);
-        dispatch(setAuthenticatedUser(chatAppUser));
+        dispatch(setAuthenticatedUser({ user: chatAppUser }));
       } else {
         navigate("/login");
       }
