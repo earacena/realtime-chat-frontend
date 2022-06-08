@@ -5,6 +5,7 @@ import {
   InstanceOf as RtInstanceOf,
   Record as RtRecord,
   Array as RtArray,
+  Static as RtStatic,
 } from 'runtypes';
 
 export interface UsersState {
@@ -25,3 +26,11 @@ export type ConnectedUserIdsPayload = {
 export type UserIdPayload = {
   userId: string;
 };
+
+export const UserDetailsType = RtRecord({
+  id: RtNumber,
+  name: RtString,
+  username: RtString,
+});
+
+export type UserDetails = RtStatic<typeof UserDetailsType>;
