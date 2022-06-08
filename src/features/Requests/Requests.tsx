@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useAppSelector } from '../../hooks';
 import requestService from './api/request.service';
 import { Requests as RequestArray } from './types/requests.types';
+import RequestCard from './components/RequestCard';
 
 function Requests() {
   const userId = useAppSelector((state) => state.auth.user.id);
@@ -25,7 +26,7 @@ function Requests() {
     <div>
       <span className="text-xl">Requests</span>
       <ul>
-        {requests.map((r) => r.id)}
+        {requests.map((r) => <RequestCard key={r.id} request={r} />)}
       </ul>
     </div>
   );
