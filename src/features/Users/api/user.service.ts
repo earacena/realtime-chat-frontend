@@ -1,4 +1,4 @@
-import { CreateUserFields } from '../types/users.types';
+import { CreateUserFields, UserDetailsType } from '../types/users.types';
 
 const baseUrl = 'http://localhost:3001/api/users';
 
@@ -18,5 +18,11 @@ const create = async ({ name, username, password }: CreateUserFields) => {
   }
 };
 
-const userService = { create };
+const retrieveUserDetails = async (userId: number) => {
+  const response = await fetch(`${baseUrl}/details/${userId}`);
+  const userDetails = UserDetailsType.check(await response.json());
+  return userDetails;
+};
+
+const userService = { create, retrieveUserDetails };
 export default userService; 
