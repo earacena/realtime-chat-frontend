@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { userService } from '../../Users';
 import { UserDetails } from '../../Users/types/users.types';
 import { Request } from '../types/requests.types';
+import { IoMdCheckmark } from 'react-icons/io';
+import { MdOutlineCancel } from 'react-icons/md';
 
 type RequestCardProps = {
   request: Request,
@@ -34,6 +36,9 @@ function RequestCard({ request }: RequestCardProps) {
   return (
     <div className="border rounded">
       {`${userDetails?.name} ${requestMessage}`}
+      <IoMdCheckmark />
+      <MdOutlineCancel />
+    
     </div>
   );
 }
