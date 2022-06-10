@@ -4,6 +4,7 @@ import { UserDetails } from '../../Users/types/users.types';
 import { Request } from '../types/requests.types';
 import { IoMdCheckmark } from 'react-icons/io';
 import { MdOutlineCancel } from 'react-icons/md';
+import requestService from '../api/request.service';
 
 type RequestCardProps = {
   request: Request,
@@ -33,11 +34,31 @@ function RequestCard({ request }: RequestCardProps) {
     fetchUserDetails();
   })
 
+  const handleRequestAccept = () => {
+    try {
+      await requestService.update({ id: request.id, status: 'accepted' });
+    } catch (error: unknown) {
+      console.error(error);
+    }
+  };
+
+  const handleRequestReject = () => {
+    try {
+      await requestService.update({ id: request.id, status: 'rejected' });
+    } catch (error: unknown) {
+      console.error(error);
+    }
+  };
+
   return (
     <div className="border rounded">
       {`${userDetails?.name} ${requestMessage}`}
-      <IoMdCheckmark />
-      <MdOutlineCancel />
+      <button onClick={handleRequestAccept}>
+        <IoMdCheckmark />
+      </button>
+      <button onClick={handleRequestReject}>
+        <MdOutlineCancel />
+      </button>
     
     </div>
   );
