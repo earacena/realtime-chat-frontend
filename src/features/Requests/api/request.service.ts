@@ -1,4 +1,4 @@
-import { NewRequest, RequestArray, RequestResponse } from "../types/requests.types";
+import { NewRequest, RequestArray, RequestResponse, Request } from "../types/requests.types";
 
 const baseUrl = "http://localhost:3001/api/requests";
 
@@ -26,5 +26,23 @@ const getRequestsOfUser = async (userId: number) => {
   return requests;
 };
 
-const requestService = { create, getRequestsOfUser };
+const update = async (updatedRequest: Request) => {
+  const response = await fetch(`${baseUrl}/${updatedRequest.id}`, {
+    method: 'PUT',
+    headers: {
+      "Content-Type": 'application/json',
+    },
+    body: JSON.stringify(updatedRequest),
+  });
+  
+  const responseJson = await response.json();
+
+  if (responseJson.error) {
+    throw new Error(`${responseJson.error}`);
+  } else {
+    return RequestResponse.check(responseJson);
+  }
+}
+
+const requestService = { create, getRequestsOfUser, update };
 export default requestService;
