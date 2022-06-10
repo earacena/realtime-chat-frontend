@@ -34,7 +34,7 @@ function RequestCard({ request }: RequestCardProps) {
     fetchUserDetails();
   })
 
-  const handleRequestAccept = () => {
+  const handleRequestAccept = async () => {
     try {
       await requestService.update({ ...request, status: 'accepted' });
     } catch (error: unknown) {
@@ -42,7 +42,7 @@ function RequestCard({ request }: RequestCardProps) {
     }
   };
 
-  const handleRequestReject = () => {
+  const handleRequestReject = async () => {
     try {
       await requestService.update({ ...request, status: 'rejected' });
     } catch (error: unknown) {
