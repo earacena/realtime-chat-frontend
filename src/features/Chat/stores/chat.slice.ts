@@ -6,6 +6,7 @@ import {
   MessagePayload,
   MessagesPayload,
   RoomIdPayload,
+  RequestPayload,
 } from "../types/chat.types";
 
 const initialState: ChatState = {
@@ -44,6 +45,9 @@ const chatSlice = createSlice({
     retrieveAllMessages: (state: ChatState, action: PayloadAction<RoomIdPayload>) => {
       return;
     },
+    sendRequestRefresh: (state: ChatState, action: PayloadAction<RequestPayload>) => {
+      return;
+    },
   },
 });
 
@@ -56,6 +60,7 @@ export const {
   addMessage,
   sendMessage,
   retrieveAllMessages,
+  sendRequestRefresh,
 } = chatSlice.actions;
 
 export default chatSlice.reducer;
