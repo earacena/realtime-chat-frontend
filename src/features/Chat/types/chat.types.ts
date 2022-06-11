@@ -46,3 +46,7 @@ export type MessagesPayload = {
 export type RoomIdPayload = {
   roomId: string,
 };
+
+export type RequestPayload = {
+  username: string,
+};
