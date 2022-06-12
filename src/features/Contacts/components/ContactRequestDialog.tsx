@@ -5,6 +5,7 @@ import { Dialog, Transition } from '@headlessui/react';
 import { BsPersonPlusFill } from 'react-icons/bs';
 import { requestService } from '../../Requests';
 import { resetNotification, setNotification } from '../../Notification';
+import { sendRequestRefresh } from '../../Chat';
 import { useAppDispatch, useAppSelector } from '../../../hooks';
 
 type ContactRequestDialogProps = {
@@ -54,8 +55,11 @@ function ContactRequestDialog({isOpen, setIsOpen}: ContactRequestDialogProps) {
         message,
         timeoutId: newTimeoutId,
       }))
+
+      dispatch(sendRequestRefresh({ username }));
+
     } catch (error: unknown) {
-      
+      console.error(error);
     }
   };
 
