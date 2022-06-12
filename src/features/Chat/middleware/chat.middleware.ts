@@ -1,18 +1,32 @@
-import { Middleware } from '@reduxjs/toolkit';
-import { disconnected, setSocketId, setMessages, sendMessage, addMessage, startConnecting, connectionEstablished } from '../stores/chat.slice';
-import { io, Socket } from 'socket.io-client';
-import { String as RtString } from 'runtypes';
-import { addConnectedUserId, addUserIdToPrivateRoom, removeConnectedUserId, requestPrivateRoomWithUser, setConnectedUserIds } from '../../Users';
-import { addRoom } from '../../Rooms';
-import chatEventType from '../types/chatEvents.types';
+import { Middleware } from "@reduxjs/toolkit";
+import {
+  disconnected,
+  setSocketId,
+  setMessages,
+  sendMessage,
+  addMessage,
+  startConnecting,
+  connectionEstablished,
+  sendRequestRefresh,
+} from "../stores/chat.slice";
+import { io, Socket } from "socket.io-client";
+import { String as RtString } from "runtypes";
+import {
+  addConnectedUserId,
+  addUserIdToPrivateRoom,
+  removeConnectedUserId,
+  requestPrivateRoomWithUser,
+  setConnectedUserIds,
+} from "../../Users";
+import { addRoom } from "../../Rooms";
+import chatEventType from "../types/chatEvents.types";
 
+const url = "http://localhost:3001/";
 
-const url = 'http://localhost:3001/';
-
-const chatMiddleware: Middleware = store => {
+const chatMiddleware: Middleware = (store) => {
   let socket: Socket;
 
-  return next => action => {
+  return (next) => (action) => {
     const isConnectionEstablished = socket && store.getState().chat.isConnected;
     const token = store.getState().auth.user.token;
 
@@ -22,20 +36,25 @@ const chatMiddleware: Middleware = store => {
 
       const userConnectionHandler = (payloadJSON: unknown) => {
         const payload: unknown = JSON.parse(RtString.check(payloadJSON));
-        const { userSocketId } = chatEventType.UserConnectedEventPayload.check(payload);
+        const { userSocketId } =
+          chatEventType.UserConnectedEventPayload.check(payload);
         store.dispatch(addConnectedUserId({ userId: userSocketId }));
       };
 
       const userDisconnectionHandler = (payloadJSON: unknown) => {
         const payload: unknown = JSON.parse(RtString.check(payloadJSON));
-        const { userSocketId } = chatEventType.UserDisconnectedEventPayload.check(payload);
+        const { userSocketId } =
+          chatEventType.UserDisconnectedEventPayload.check(payload);
         store.dispatch(removeConnectedUserId({ userId: userSocketId }));
       };
 
       const connectedUserListHandler = (payloadJSON: unknown) => {
         const payload: unknown = JSON.parse(RtString.check(payloadJSON));
-        const { allUserSocketIds } = chatEventType.ConnectedUserListPayload.check(payload);
-        store.dispatch(setConnectedUserIds({ connectedUserIds: allUserSocketIds }));
+        const { allUserSocketIds } =
+          chatEventType.ConnectedUserListPayload.check(payload);
+        store.dispatch(
+          setConnectedUserIds({ connectedUserIds: allUserSocketIds })
+        );
       };
 
       const receiveMessageHandler = (payloadJSON: unknown) => {
@@ -43,7 +62,7 @@ const chatMiddleware: Middleware = store => {
         const { message } = chatEventType.MessagePayload.check(payload);
         store.dispatch(addMessage({ message }));
       };
-      
+
       const receiveAllMessagesHandler = (payloadJSON: unknown) => {
         const payload: unknown = JSON.parse(RtString.check(payloadJSON));
         const { messages } = chatEventType.MessagesPayload.check(payload);
@@ -52,13 +71,16 @@ const chatMiddleware: Middleware = store => {
 
       const privateRoomRequestHandler = (payloadJSON: unknown) => {
         const payload: unknown = JSON.parse(RtString.check(payloadJSON));
-        const { userSocketId, roomId } = chatEventType.PrivateRoomRequestPayload.check(payload);
+        const { userSocketId, roomId } =
+          chatEventType.PrivateRoomRequestPayload.check(payload);
 
-        store.dispatch(addRoom({ room: { roomId, roomName: `chat with ${userSocketId}` } }));
+        store.dispatch(
+          addRoom({ room: { roomId, roomName: `chat with ${userSocketId}` } })
+        );
 
         const joinRoomEventPayload = JSON.stringify({ roomId });
-        socket.emit('join room', joinRoomEventPayload);
-    
+        socket.emit("join room", joinRoomEventPayload);
+
         console.log(`new room [${roomId}] initialized with ${userSocketId}`);
         store.dispatch(addUserIdToPrivateRoom({ userId: userSocketId }));
       };
@@ -66,35 +88,46 @@ const chatMiddleware: Middleware = store => {
       const connectionHandler = () => {
         store.dispatch(connectionEstablished());
         store.dispatch(setSocketId({ socketId: socket.id }));
-      };   
+      };
 
       const disconnectionHandler = () => {
         store.dispatch(disconnected());
         console.log("disconnected from socket");
       };
 
-      socket.on('connect', connectionHandler);
-      socket.on('user connected', userConnectionHandler);
-      socket.on('user disconnected', userDisconnectionHandler); 
-      socket.on('all connected users', connectedUserListHandler);
-      socket.on('receive message', receiveMessageHandler);
-      socket.on('receive all room messages', receiveAllMessagesHandler);
-      socket.on('private room request', privateRoomRequestHandler); 
-      socket.on('disconnect', disconnectionHandler);
+      socket.on("connect", connectionHandler);
+      socket.on("user connected", userConnectionHandler);
+      socket.on("user disconnected", userDisconnectionHandler);
+      socket.on("all connected users", connectedUserListHandler);
+      socket.on("receive message", receiveMessageHandler);
+      socket.on("receive all room messages", receiveAllMessagesHandler);
+      socket.on("private room request", privateRoomRequestHandler);
+      socket.on("disconnect", disconnectionHandler);
     }
 
     if (sendMessage.match(action) && isConnectionEstablished) {
-      const messagePayload: string = JSON.stringify({ message: action.payload.newMessage });
-      socket.emit('send message', messagePayload);
+      const messagePayload: string = JSON.stringify({
+        message: action.payload.newMessage,
+      });
+      socket.emit("send message", messagePayload);
     }
 
     if (requestPrivateRoomWithUser.match(action) && isConnectionEstablished) {
-      const privateRoomRequestPayload = JSON.stringify({ userId: action.payload.userId });
-      socket.emit('private room request', privateRoomRequestPayload);
+      const privateRoomRequestPayload = JSON.stringify({
+        userId: action.payload.userId,
+      });
+      socket.emit("private room request", privateRoomRequestPayload);
+    }
+
+    if (sendRequestRefresh.match(action) && isConnectionEstablished) {
+      const requestResfreshPayload = JSON.stringify({
+        username: action.payload.username,
+      });
+      socket.emit("request refresh", requestResfreshPayload);
     }
 
     next(action);
-  }
-}
+  };
+};
 
 export default chatMiddleware;
