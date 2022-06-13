@@ -29,3 +29,11 @@ export const RequestResponse = RtRecord({
 export type Request = RtStatic<typeof RequestResponse>;
 export const RequestArray = RtArray(RequestResponse);
 export type Requests = RtStatic<typeof RequestArray>;
+
+export type RequestsState = {
+  requests: Requests,
+}
+
+export type RequestsPayload = {
+  requests: Requests,
+};
