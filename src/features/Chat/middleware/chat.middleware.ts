@@ -20,6 +20,7 @@ import {
 } from "../../Users";
 import { addRoom } from "../../Rooms";
 import chatEventType from "../types/chatEvents.types";
+import { requestService, setRequests } from "../../Requests";
 
 const url = "http://localhost:3001/";
 
@@ -29,6 +30,7 @@ const chatMiddleware: Middleware = (store) => {
   return (next) => (action) => {
     const isConnectionEstablished = socket && store.getState().chat.isConnected;
     const token = store.getState().auth.user.token;
+    const userId = store.getState().auth.user.id;
 
     if (startConnecting.match(action) && token) {
       // Initialize socket connection if appropriate action received
@@ -95,6 +97,15 @@ const chatMiddleware: Middleware = (store) => {
         console.log("disconnected from socket");
       };
 
+      const requestRefreshHandler = async () => {
+        try {
+          const fetchedRequests = await requestService.getRequestsOfUser(userId);
+          store.dispatch(setRequests({ requests: fetchedRequests }));
+        } catch (error: unknown) {
+          console.error(error);
+        }
+      };
+
       socket.on("connect", connectionHandler);
       socket.on("user connected", userConnectionHandler);
       socket.on("user disconnected", userDisconnectionHandler);
@@ -102,6 +113,7 @@ const chatMiddleware: Middleware = (store) => {
       socket.on("receive message", receiveMessageHandler);
       socket.on("receive all room messages", receiveAllMessagesHandler);
       socket.on("private room request", privateRoomRequestHandler);
+      socket.on("request refresh", requestRefreshHandler);
       socket.on("disconnect", disconnectionHandler);
     }
 
