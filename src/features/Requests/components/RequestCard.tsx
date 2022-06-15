@@ -32,7 +32,7 @@ function RequestCard({ request }: RequestCardProps) {
     }
 
     fetchUserDetails();
-  })
+  }, [])
 
   const handleRequestAccept = async () => {
     try {
