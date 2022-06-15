@@ -5,12 +5,16 @@ import { Request } from '../types/requests.types';
 import { IoMdCheckmark } from 'react-icons/io';
 import { MdOutlineCancel } from 'react-icons/md';
 import requestService from '../api/request.service';
+import { setRequests } from '../stores/request.slice';
+import { useAppDispatch, useAppSelector } from '../../../hooks';
 
 type RequestCardProps = {
   request: Request,
 };
 
 function RequestCard({ request }: RequestCardProps) {
+  const dispatch = useAppDispatch();
+  const requests = useAppSelector((state) => state.requests.requests);
   const [userDetails, setUserDetails] = useState<UserDetails>();
 
   // Determine request card message
@@ -34,17 +38,12 @@ function RequestCard({ request }: RequestCardProps) {
     fetchUserDetails();
   }, [])
 
-  const handleRequestAccept = async () => {
+  const handleRequest = async (newStatus: string) => {
     try {
-      await requestService.update({ ...request, status: 'accepted' });
-    } catch (error: unknown) {
-      console.error(error);
-    }
-  };
+      await requestService.update({ ...request, status: newStatus });
 
-  const handleRequestReject = async () => {
-    try {
-      await requestService.update({ ...request, status: 'rejected' });
+      // Since request was handled, remove it from the feed
+      dispatch(setRequests({ requests: requests.filter((r) => r.id !== request.id) }));
     } catch (error: unknown) {
       console.error(error);
     }
@@ -53,10 +52,10 @@ function RequestCard({ request }: RequestCardProps) {
   return (
     <div className="border rounded">
       {`${userDetails?.name} ${requestMessage}`}
-      <button onClick={handleRequestAccept}>
+      <button onClick={() => handleRequest('accepted')}>
         <IoMdCheckmark />
       </button>
-      <button onClick={handleRequestReject}>
+      <button onClick={() => handleRequest('rejected')}>
         <MdOutlineCancel />
       </button>
     
