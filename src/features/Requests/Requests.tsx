@@ -21,7 +21,7 @@ function Requests() {
     }
 
     fetchRequests();
-  }, []);
+  }, [dispatch, userId]);
 
   return (
     <div>
