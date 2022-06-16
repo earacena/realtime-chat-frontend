@@ -15,6 +15,7 @@ type RequestCardProps = {
 function RequestCard({ request }: RequestCardProps) {
   const dispatch = useAppDispatch();
   const requests = useAppSelector((state) => state.requests.requests);
+  const user = useAppSelector((state) => state.auth.user);
   const [userDetails, setUserDetails] = useState<UserDetails>();
 
   // Determine request card message
@@ -41,9 +42,15 @@ function RequestCard({ request }: RequestCardProps) {
   const handleRequest = async (newStatus: string) => {
     try {
       await requestService.update({ ...request, status: newStatus });
+      
+      // If request was a contact request and user accepts it, update both users profile
+      if (userDetails && request.type === 'contact' && newStatus === 'accepted') {
+        await userService.makeUsersContacts({ user1: user.id, user2: userDetails.id });
+      }
 
       // Since request was handled, remove it from the feed
       dispatch(setRequests({ requests: requests.filter((r) => r.id !== request.id) }));
+
     } catch (error: unknown) {
       console.error(error);
     }
