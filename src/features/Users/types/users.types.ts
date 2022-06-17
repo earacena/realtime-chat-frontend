@@ -1,10 +1,7 @@
 import {
   Number as RtNumber,
   String as RtString,
-  Union as RtUnion,
-  InstanceOf as RtInstanceOf,
   Record as RtRecord,
-  Array as RtArray,
   Static as RtStatic,
 } from 'runtypes';
 
@@ -32,5 +29,10 @@ export const UserDetailsType = RtRecord({
   name: RtString,
   username: RtString,
 });
+
+export type MakeUserContactsProps = {
+  user1: number,
+  user2: number,
+};
 
 export type UserDetails = RtStatic<typeof UserDetailsType>;
