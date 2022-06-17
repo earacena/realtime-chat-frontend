@@ -5,12 +5,15 @@ import {
   Static as RtStatic,
 } from 'runtypes';
 
-export interface UsersState {
+export type UserDetails = RtStatic<typeof UserDetailsType>;
+
+export type UsersState = {
   connectedUserIds: string[];
   userIdsInPrivateRoom: string[];
+  contacts: UserDetails[];
 };
 
-export interface CreateUserFields {
+export type CreateUserFields = {
   name: string;
   username: string;
   password: string;
@@ -34,5 +37,3 @@ export type MakeUserContactsProps = {
   user1: number,
   user2: number,
 };
-
-export type UserDetails = RtStatic<typeof UserDetailsType>;
