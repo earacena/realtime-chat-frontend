@@ -1,4 +1,4 @@
-import { CreateUserFields, UserDetailsType } from '../types/users.types';
+import { CreateUserFields, UserDetailsType, MakeUserContactsProps } from '../types/users.types';
 
 const baseUrl = 'http://localhost:3001/api/users';
 
@@ -24,5 +24,36 @@ const retrieveUserDetails = async (userId: number) => {
   return userDetails;
 };
 
-const userService = { create, retrieveUserDetails };
+const makeUsersContacts = async ({ user1, user2 }: MakeUserContactsProps) => {
+  let response = await fetch(`${baseUrl}/${user1}/contacts`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ user2 }),
+  });
+
+  let responseJson = await response.json();
+
+  if (responseJson.error) {
+    throw new Error(`${responseJson.error}`);
+  }
+
+  response = await fetch(`${baseUrl}/${user2}/contacts`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ user1 }),
+  });
+  
+  responseJson = await response.json();
+
+  if (responseJson.error) {
+    throw new Error(`${responseJson.error}`);
+  }
+
+};
+
+const userService = { create, retrieveUserDetails, makeUsersContacts };
 export default userService; 
