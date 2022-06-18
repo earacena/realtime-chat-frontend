@@ -50,6 +50,8 @@ export const {
   addUserIdToPrivateRoom,
   resetConnectedUserIds,
   requestPrivateRoomWithUser,
+  setContacts,
+  resetContacts,
 } = usersSlice.actions;
 
 export default usersSlice.reducer;
