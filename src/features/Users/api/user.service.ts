@@ -1,6 +1,7 @@
 import {
   Array as RtArray,
   Number as RtNumber,
+  Record as RtRecord,
 } from 'runtypes';
 
 import { CreateUserFields, UserDetailsType, MakeUserContactsProps } from '../types/users.types';
@@ -35,7 +36,7 @@ const makeUsersContacts = async ({ user1, user2 }: MakeUserContactsProps) => {
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ user2 }),
+    body: JSON.stringify({ contactId: user2 }),
   });
 
   let responseJson = await response.json();
@@ -49,7 +50,7 @@ const makeUsersContacts = async ({ user1, user2 }: MakeUserContactsProps) => {
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ user1 }),
+    body: JSON.stringify({ contactId: user1 }),
   });
   
   responseJson = await response.json();
@@ -61,8 +62,8 @@ const makeUsersContacts = async ({ user1, user2 }: MakeUserContactsProps) => {
 
 const retrieveUserContacts = async (userId: number) => {
   const response = await fetch(`${baseUrl}/${userId}/contacts`);
-  const userContacts = RtArray(RtNumber).check(await response.json());
-  return userContacts;
+  const { contacts } = RtRecord({ contacts: RtArray(RtNumber) }).check(await response.json());
+  return contacts;
 };
 
 const userService = {
