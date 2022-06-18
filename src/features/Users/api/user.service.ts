@@ -1,3 +1,8 @@
+import {
+  Array as RtArray,
+  Number as RtNumber,
+} from 'runtypes';
+
 import { CreateUserFields, UserDetailsType, MakeUserContactsProps } from '../types/users.types';
 
 const baseUrl = 'http://localhost:3001/api/users';
@@ -52,8 +57,18 @@ const makeUsersContacts = async ({ user1, user2 }: MakeUserContactsProps) => {
   if (responseJson.error) {
     throw new Error(`${responseJson.error}`);
   }
-
 };
 
-const userService = { create, retrieveUserDetails, makeUsersContacts };
+const retrieveUserContacts = async (userId: number) => {
+  const response = await fetch(`${baseUrl}/${userId}/contacts`);
+  const userContacts = RtArray(RtNumber).check(await response.json());
+  return userContacts;
+};
+
+const userService = {
+  create,
+  retrieveUserDetails,
+  makeUsersContacts,
+  retrieveUserContacts,
+};
 export default userService; 
