@@ -37,3 +37,7 @@ export type MakeUserContactsProps = {
   user1: number,
   user2: number,
 };
+
+export type ContactsPayload = {
+  contacts: UserDetails[],
+};
