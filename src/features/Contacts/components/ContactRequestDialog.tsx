@@ -57,7 +57,7 @@ function ContactRequestDialog({isOpen, setIsOpen}: ContactRequestDialogProps) {
       }))
 
       dispatch(sendRequestRefresh({ username }));
-
+      setIsOpen(false);
     } catch (error: unknown) {
       console.error(error);
     }
