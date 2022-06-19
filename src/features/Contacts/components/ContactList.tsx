@@ -9,6 +9,7 @@ function ContactList() {
   const dispatch = useAppDispatch();
 
   const userId = useAppSelector((state) => state.auth.user.id);
+  const token = useAppSelector((state) => state.auth.user.token);
   const contacts = useAppSelector((state) => state.users.contacts);
   const [isContactFinderOpen, setIsContactFinderOpen] = useState(false);
 
@@ -30,7 +31,9 @@ function ContactList() {
       }
     };
 
-    fetchContacts();
+    if (token) {
+      fetchContacts();
+    }
   }, [dispatch, userId]);
 
 
