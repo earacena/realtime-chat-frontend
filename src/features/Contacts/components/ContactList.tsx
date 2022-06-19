@@ -4,6 +4,7 @@ import { useAppDispatch, useAppSelector } from '../../../hooks';
 import { setContacts, userService } from '../../Users';
 import { UserDetails } from '../../Users/types/users.types';
 import ContactRequestDialog from './ContactRequestDialog';
+import ContactCard from './ContactCard';
 
 function ContactList() {
   const dispatch = useAppDispatch();
@@ -55,7 +56,7 @@ function ContactList() {
       </button>
 
       <ul>
-        {contacts.map((c) => c.username)}
+        {contacts.map((c) => <ContactCard contactDetails={c} />)}
       </ul>
     </div>
   );
