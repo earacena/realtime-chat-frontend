@@ -8,8 +8,8 @@ import {
 
 export const MessageType = RtRecord({
   id: RtNumber,
-  roomId: RtString,
-  senderId: RtNumber,
+  senderUsername: RtString,
+  recipientUsername: RtString,
   content: RtString,
 });
 export type Message = RtStatic<typeof MessageType>;
@@ -29,8 +29,8 @@ export type SocketIdPayload = {
 
 export type NewMessagePayload = {
   newMessage: {
-    roomId: string,
-    senderId: number,
+    recipientUsername: string,
+    senderUsername: string,
     content: string,
   }
 };
@@ -43,8 +43,9 @@ export type MessagesPayload = {
   messages: Messages;
 };
 
-export type RoomIdPayload = {
-  roomId: string,
+export type SenderRecipientPayload = {
+  senderUsername: string,
+  recipientUsername: string,
 };
 
 export type RequestPayload = {
