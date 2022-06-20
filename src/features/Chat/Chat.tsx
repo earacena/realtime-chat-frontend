@@ -50,25 +50,29 @@ function Chat() {
 
   useEffect(() => {
     if (isConnected) {
-      dispatch(retrieveAllMessages({ roomId: currentRoom.roomId }));
+      dispatch(retrieveAllMessages({
+        senderUsername: user.username,
+        recipientUsername: currentRoom.roomId,
+      }));
     }
   }, []);
 
   const onSubmit: SubmitHandler<Input> = ({ message }) => {
     // Prepare and send message
-    const roomId = currentRoom ? currentRoom.roomId : 'default';
-    const newMessage = {
-      roomId,
-      senderId: user.id,
-      content: message,
+    if (currentRoom) {
+      const newMessage = {
+        senderUsername: user.username,
+        recipientUsername: currentRoom.roomId,
+        content: message,
+      }
+  
+      dispatch(sendMessage({ newMessage }));
+      console.log(`sending: ${currentRoom.roomId} | ${newMessage}`);
+  
+      reset({
+        message: '',
+      });
     }
-
-    dispatch(sendMessage({ newMessage }));
-    console.log(`sending: ${roomId} | ${newMessage}`);
-
-    reset({
-      message: '',
-    });
   };
 
   return (
@@ -81,9 +85,12 @@ function Chat() {
       </p>
       <ul>
         {messages.map((m, i) => (
-          currentRoom.roomId === m.roomId && 
+          (
+            currentRoom.roomId === m.recipientUsername ||
+            currentRoom.roomId === m.senderUsername
+          ) &&
           <li key={i} className="p-1 odd:bg-white even:bg-slate-100">
-            {`${m.roomId} | ${m.senderId} | ${m.content}`}
+            {`${m.senderUsername} | ${m.content}`}
           </li>
         ))}
       </ul>
