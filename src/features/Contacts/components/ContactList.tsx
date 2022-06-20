@@ -35,7 +35,7 @@ function ContactList() {
     if (token) {
       fetchContacts();
     }
-  }, [dispatch, userId]);
+  }, [dispatch, userId, token]);
 
 
   const addContactButtonPressed = () => setIsContactFinderOpen(true);
