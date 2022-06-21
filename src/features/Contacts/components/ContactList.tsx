@@ -5,6 +5,7 @@ import { setContacts, userService } from '../../Users';
 import { UserDetails } from '../../Users/types/users.types';
 import ContactRequestDialog from './ContactRequestDialog';
 import ContactCard from './ContactCard';
+import { setCurrentRoom } from '../../Rooms';
 
 function ContactList() {
   const dispatch = useAppDispatch();
@@ -40,6 +41,10 @@ function ContactList() {
 
   const addContactButtonPressed = () => setIsContactFinderOpen(true);
 
+  const handleContactClick = (username: string) => {
+    dispatch(setCurrentRoom({ currentRoom: { roomId: username, roomName: username } }))
+  };
+
   return (
     <div>
       <ContactRequestDialog isOpen={isContactFinderOpen} setIsOpen={setIsContactFinderOpen} />
@@ -56,7 +61,11 @@ function ContactList() {
       </button>
 
       <ul>
-        {contacts.map((c) => <ContactCard contactDetails={c} />)}
+        {contacts.map((c) => 
+          <button key={c.id} onClick={() => handleContactClick(c.username)}>
+            <ContactCard contactDetails={c} />
+          </button>
+        )}
       </ul>
     </div>
   );
