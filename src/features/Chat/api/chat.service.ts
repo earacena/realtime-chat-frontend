@@ -8,15 +8,10 @@ type RetrieveMessagesProps = {
 }
 
 const retrieveMessages = async ({ senderUsername, recipientUsername }: RetrieveMessagesProps) => {
-  const response = await fetch(baseUrl, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ senderUsername, recipientUsername }),
-  });
-
-  const messages = MessageArray.check(await response.json());
+  const response = await fetch(`${baseUrl}/?senderUsername=${senderUsername}&recipientUsername=${recipientUsername}`);
+  console.log(response);
+  const responseJson = await response.json();
+  const messages = MessageArray.check(responseJson);
   return messages;
 };
 
