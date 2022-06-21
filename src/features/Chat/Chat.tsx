@@ -1,9 +1,11 @@
 import React, { useEffect } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
-import { retrieveAllMessages, sendMessage, startConnecting } from './stores/chat.slice';
+import { sendMessage, setMessages, startConnecting } from './stores/chat.slice';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { useNavigate } from 'react-router-dom';
 import { setAuthenticatedUser } from '../Login/stores/auth.slice';
+import { Messages } from './types/chat.types';
+import chatService from './api/chat.service';
 
 type Input = {
   message: string;
@@ -49,11 +51,21 @@ function Chat() {
   }, []);
 
   useEffect(() => {
+    const fetchAllMessages = async () => {
+      try {
+        const fetchedMessages: Messages = await chatService.retrieveMessages({
+          senderUsername: user.username,
+          recipientUsername: currentRoom.roomId,
+        });
+        
+        dispatch(setMessages({ messages: fetchedMessages }));
+      } catch (error: unknown) {
+        console.error(error);
+      }
+    };
+
     if (isConnected) {
-      dispatch(retrieveAllMessages({
-        senderUsername: user.username,
-        recipientUsername: currentRoom.roomId,
-      }));
+      fetchAllMessages();
     }
   }, []);
 
