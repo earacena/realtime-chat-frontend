@@ -67,7 +67,7 @@ function Chat() {
     if (isConnected) {
       fetchAllMessages();
     }
-  }, []);
+  }, [currentRoom.roomId, dispatch]);
 
   const onSubmit: SubmitHandler<Input> = ({ message }) => {
     // Prepare and send message
@@ -79,7 +79,7 @@ function Chat() {
       }
   
       dispatch(sendMessage({ newMessage }));
-      console.log(`sending: ${currentRoom.roomId} | ${newMessage}`);
+      console.log(`sending: ${currentRoom.roomId} | ${JSON.stringify(newMessage)}`);
   
       reset({
         message: '',
