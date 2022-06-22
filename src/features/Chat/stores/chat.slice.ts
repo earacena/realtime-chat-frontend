@@ -1,11 +1,12 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSelector, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { RootState } from "../../../store";
 import {
   ChatState,
   SocketIdPayload,
   NewMessagePayload,
   MessagePayload,
   MessagesPayload,
-  RoomIdPayload,
+  SenderRecipientPayload,
   RequestPayload,
 } from "../types/chat.types";
 
@@ -42,13 +43,19 @@ const chatSlice = createSlice({
     sendMessage: (state: ChatState, action: PayloadAction<NewMessagePayload>) => {
       return;
     },
-    retrieveAllMessages: (state: ChatState, action: PayloadAction<RoomIdPayload>) => {
+    retrieveAllMessages: (state: ChatState, action: PayloadAction<SenderRecipientPayload>) => {
       return;
     },
     sendRequestRefresh: (state: ChatState, action: PayloadAction<RequestPayload>) => {
       return;
     },
   },
+});
+
+const selectMessages = (state: RootState) => state.chat.messages;
+
+export const selectSortedMessages = createSelector([selectMessages], (messages) => {
+  return [...messages].sort((a, b) => a.id - b.id);
 });
 
 export const {
