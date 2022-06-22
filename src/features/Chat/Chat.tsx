@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { setAuthenticatedUser } from '../Login/stores/auth.slice';
 import { Messages } from './types/chat.types';
 import chatService from './api/chat.service';
+import { BiSend } from 'react-icons/bi';
 
 type Input = {
   message: string;
@@ -88,7 +89,7 @@ function Chat() {
   };
 
   return (
-    <div className="flex flex-col p-3 w-full">
+    <div className="flex flex-col p-3 w-full bg-slate-100">
       <p className="bg-slate-100">
         {`Connected as: ${user.name}`}
       </p>
@@ -101,14 +102,27 @@ function Chat() {
             currentRoom.roomId === m.recipientUsername ||
             currentRoom.roomId === m.senderUsername
           ) &&
-          <li key={i} className="p-1 odd:bg-white even:bg-slate-100">
-            {`${m.senderUsername} | ${m.content}`}
+          m.content !== '' &&
+          <li key={i} className="p-1">
+            {
+              m.senderUsername === user.username ? (
+                <div className="bg-slate-600 shrink text-white p-1 px-3 rounded-md mx-auto float-right">
+                  {m.content}
+                </div>
+              ) : (
+                <div className="bg-slate-400 shrink text-white p-1 px-3 rounded-md mx-auto float-right">
+                  {m.content}
+                </div>
+              )
+            }
           </li>
         ))}
       </ul>
       <form className="flex h-12 mt-auto" onSubmit={handleSubmit(onSubmit)}>
-        <input className="grow p-1 center shadow-lg rounded-lg outline outline-1 hover:outline-2" {...register('message')} />
-        <button className="rounded-lg shadow-lg ml-1 p-1 outline outline-1 hover:outline-2" type="submit">Send</button>
+        <input className="grow p-1 center shadow-lg rounded-lg outline outline-1 hover:outline-2 outline-slate-300 hover:outline-slate-400" {...register('message')} />
+        <button className="rounded-full shadow-lg ml-2 p-3 hover:outline hover:outline-2 hover:outline-slate-600 bg-slate-500" type="submit">
+          <BiSend className="text-slate-100" size={24} />
+        </button>
       </form>
     </div>
   );
