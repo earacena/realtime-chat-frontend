@@ -46,7 +46,7 @@ function ContactList() {
   };
 
   return (
-    <div>
+    <div className="flex flex-col items-center grow">
       <ContactRequestDialog isOpen={isContactFinderOpen} setIsOpen={setIsContactFinderOpen} />
 
       <button 
@@ -59,7 +59,7 @@ function ContactList() {
         <BsFillPersonPlusFill size={20} className="mx-2"/>
         <span className="mx-7"> Add Contact </span>
       </button>
-
+      Pending
       <ul>
         {contacts.map((c) => 
           <button key={c.id} onClick={() => handleContactClick(c.username)}>
