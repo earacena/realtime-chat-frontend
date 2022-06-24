@@ -59,7 +59,6 @@ function ContactList() {
         <BsFillPersonPlusFill size={20} className="mx-2"/>
         <span className="mx-7"> Add Contact </span>
       </button>
-      Pending
       <ul>
         {contacts.map((c) => 
           <button key={c.id} onClick={() => handleContactClick(c.username)}>
