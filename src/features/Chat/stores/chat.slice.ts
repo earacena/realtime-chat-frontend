@@ -6,8 +6,7 @@ import {
   NewMessagePayload,
   MessagePayload,
   MessagesPayload,
-  SenderRecipientPayload,
-  RequestPayload,
+  RequestRefreshPayload,
 } from "../types/chat.types";
 
 const initialState: ChatState = {
