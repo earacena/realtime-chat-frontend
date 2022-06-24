@@ -43,9 +43,6 @@ const chatSlice = createSlice({
     sendMessage: (state: ChatState, action: PayloadAction<NewMessagePayload>) => {
       return;
     },
-    retrieveAllMessages: (state: ChatState, action: PayloadAction<SenderRecipientPayload>) => {
-      return;
-    },
     sendRequestRefresh: (state: ChatState, action: PayloadAction<RequestPayload>) => {
       return;
     },
