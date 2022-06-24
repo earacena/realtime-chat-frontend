@@ -38,7 +38,7 @@ function Chat() {
         navigate("/login");
       }
     }
-  });
+  }, [dispatch, navigate, user.token]);
 
   useEffect(() => {
     if (!isConnected && !isConnecting) {
@@ -63,7 +63,7 @@ function Chat() {
     if (isConnected) {
       fetchAllMessages();
     }
-  }, [currentRoom.roomId, dispatch]);
+  }, [dispatch, isConnected, user.username, currentRoom.roomId]);
 
   const onSubmit: SubmitHandler<Input> = ({ message }) => {
     // Prepare and send message
@@ -84,8 +84,6 @@ function Chat() {
       });
     }
   };
-
-  console.log(messages)
 
   return (
     <div className="flex flex-col p-3 w-full bg-slate-100">
