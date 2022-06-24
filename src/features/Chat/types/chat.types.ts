@@ -51,3 +51,7 @@ export type SenderRecipientPayload = {
 export type RequestRefreshPayload = {
   username: string,
 };
+
+export type ContactRefreshPayload = {
+  username: string,
+};
