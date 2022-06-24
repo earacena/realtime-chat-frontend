@@ -8,6 +8,7 @@ import {
   startConnecting,
   connectionEstablished,
   sendRequestRefresh,
+  sendContactRefresh,
 } from "../stores/chat.slice";
 import { io, Socket } from "socket.io-client";
 import { String as RtString } from "runtypes";
@@ -132,10 +133,17 @@ const chatMiddleware: Middleware = (store) => {
     }
 
     if (sendRequestRefresh.match(action) && isConnectionEstablished) {
-      const requestResfreshPayload = JSON.stringify({
+      const requestRefreshPayload = JSON.stringify({
         username: action.payload.username,
       });
-      socket.emit("request refresh", requestResfreshPayload);
+      socket.emit("request refresh", requestRefreshPayload);
+    }
+
+    if (sendContactRefresh.match(action) && isConnectionEstablished) {
+      const contactRefreshPayload = JSON.stringify({
+        username: action.payload.username,
+      });
+      socket.emit("contact refresh", contactRefreshPayload);
     }
 
     next(action);
