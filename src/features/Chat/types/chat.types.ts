@@ -48,6 +48,6 @@ export type SenderRecipientPayload = {
   recipientUsername: string,
 };
 
-export type RequestPayload = {
+export type RequestRefreshPayload = {
   username: string,
 };

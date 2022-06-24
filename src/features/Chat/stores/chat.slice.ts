@@ -43,7 +43,7 @@ const chatSlice = createSlice({
     sendMessage: (state: ChatState, action: PayloadAction<NewMessagePayload>) => {
       return;
     },
-    sendRequestRefresh: (state: ChatState, action: PayloadAction<RequestPayload>) => {
+    sendRequestRefresh: (state: ChatState, action: PayloadAction<RequestRefreshPayload>) => {
       return;
     },
   },
