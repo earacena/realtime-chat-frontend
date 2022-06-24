@@ -44,7 +44,7 @@ function Chat() {
     if (!isConnected && !isConnecting) {
       dispatch(startConnecting());
     }
-  }, []);
+  }, [dispatch, isConnected, isConnecting]);
 
   useEffect(() => {
     const fetchAllMessages = async () => {
