@@ -4,6 +4,7 @@ import { IoIosMail, IoMdSettings } from 'react-icons/io';
 import { ContactList } from '../Contacts';
 import { Requests } from '../Requests';
 import { Tab } from '@headlessui/react';
+import UserCard from './components/UserCard';
 
 type TabStyleProps = {
   selected: boolean,
@@ -11,7 +12,8 @@ type TabStyleProps = {
 
 function SideBar() {
   return (
-    <div className="flex flex-col outline outline-1 h-screen p-1 w-96">
+    <div className="flex flex-col h-screen p-1 w-96 border-r-2">
+      <UserCard />
       <Tab.Group>
         <Tab.List className="flex flex-row justify-evenly">
           <Tab className={({ selected }: TabStyleProps) => selected ? "bg-slate-500 text-white rounded-lg p-1" : "bg-slate-100 text-black rounded-lg p-1"}>
