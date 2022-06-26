@@ -24,8 +24,8 @@ function Requests() {
   }, [dispatch, userId]);
 
   return (
-    <div>
-      <span className="text-xl">Requests</span>
+    <div className="flex justify-center">
+      {requests.length === 0 && <span className="py-10">No pending requests</span>}
       <ul>
         {requests.map((r) => <RequestCard key={r.id} request={r} />)}
       </ul>
