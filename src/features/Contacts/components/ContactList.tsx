@@ -46,19 +46,22 @@ function ContactList() {
   };
 
   return (
-    <div className="flex flex-col items-center grow">
+    <div className="flex flex-col items-center grow py-4">
       <ContactRequestDialog isOpen={isContactFinderOpen} setIsOpen={setIsContactFinderOpen} />
 
       <button 
         id="find-contact-button"
-        className="flex rounded-md p-3 bg-slate-500 text-white w-full mt-3 hover:bg-slate-400 items-center"
+        className="flex rounded-md p-3 bg-slate-500 text-white w-full mt-3 hover:bg-slate-400 items-center justify-center"
         type="button"
         aria-label="find"
         onClick={addContactButtonPressed}
       >
-        <BsFillPersonPlusFill size={20} className="mx-2"/>
-        <span className="mx-7"> Add Contact </span>
+        <BsFillPersonPlusFill size={20}/>
+        <span className="px-4"> Add Contact </span>
       </button>
+
+      { contacts.length === 0 && <span className="py-5">No added contacts</span>}
+
       <ul>
         {contacts.map((c) => 
           <button key={c.id} onClick={() => handleContactClick(c.username)}>
