@@ -1,18 +1,31 @@
 import React from 'react';
 import { BsFillPersonLinesFill } from 'react-icons/bs';
-import { IoIosMail, IoMdSettings } from 'react-icons/io';
+import { IoIosMail, IoMdExit, IoMdSettings } from 'react-icons/io';
 import { ContactList } from '../Contacts';
 import { Requests } from '../Requests';
 import { Tab } from '@headlessui/react';
 import UserCard from './components/UserCard';
+import { useAppDispatch } from '../../hooks';
+import { clearAuthenticatedUser } from '../Login';
 
 type TabStyleProps = {
   selected: boolean,
 };
 
 function SideBar() {
+  const dispatch = useAppDispatch();
+
+  const handleLogout = () => {
+    dispatch(clearAuthenticatedUser());
+    window.localStorage.removeItem('chatAppUser');
+  };
+
   return (
     <div className="flex flex-col h-screen p-1 w-96 border-r-2">
+      <button className="flex flex-row self-end text-red-500" onClick={handleLogout}>
+        <IoMdExit size={28} />
+        Logout
+      </button>
       <UserCard />
       <Tab.Group>
         <Tab.List className="flex flex-row justify-evenly">
