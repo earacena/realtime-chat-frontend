@@ -7,6 +7,7 @@ import { MdOutlineCancel } from 'react-icons/md';
 import requestService from '../api/request.service';
 import { setRequests } from '../stores/request.slice';
 import { useAppDispatch, useAppSelector } from '../../../hooks';
+import { BsFillPersonPlusFill, BsPerson } from 'react-icons/bs';
 
 type RequestCardProps = {
   request: Request,
@@ -17,14 +18,6 @@ function RequestCard({ request }: RequestCardProps) {
   const requests = useAppSelector((state) => state.requests.requests);
   const user = useAppSelector((state) => state.auth.user);
   const [userDetails, setUserDetails] = useState<UserDetails>();
-
-  // Determine request card message
-  let requestMessage: string = "";
-  const requestContactMessage = "wants to contact you";
-  
-  if (request.type === 'contact') {
-    requestMessage = requestContactMessage;
-  }
 
   useEffect(() => {
     const fetchUserDetails = async () => {
@@ -37,7 +30,7 @@ function RequestCard({ request }: RequestCardProps) {
     }
 
     fetchUserDetails();
-  }, [])
+  }, [request.fromUser])
 
   const handleRequest = async (newStatus: string) => {
     try {
@@ -57,13 +50,14 @@ function RequestCard({ request }: RequestCardProps) {
   };
 
   return (
-    <div className="border rounded">
-      {`${userDetails?.name} ${requestMessage}`}
+    <div className="flex flex-grow flex-row border rounded items-center mt-7 p-2">
+      <BsPerson size={40} />
+      <span className="text-lg font-medium">{userDetails?.name}</span>
       <button onClick={() => handleRequest('accepted')}>
-        <IoMdCheckmark />
+        <IoMdCheckmark size={30} className="text-green-600 ml-14" />
       </button>
       <button onClick={() => handleRequest('rejected')}>
-        <MdOutlineCancel />
+        <MdOutlineCancel size={30} className="text-red-800 ml-3" />
       </button>
     
     </div>
