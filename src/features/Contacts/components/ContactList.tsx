@@ -51,7 +51,7 @@ function ContactList() {
 
       <button 
         id="find-contact-button"
-        className="flex rounded-md p-3 bg-slate-500 text-white w-full mt-3 hover:bg-slate-400 items-center justify-center"
+        className="flex rounded-md p-3 bg-slate-500 text-white w-full mb-3 mt-3 hover:bg-slate-400 items-center justify-center"
         type="button"
         aria-label="find"
         onClick={addContactButtonPressed}
