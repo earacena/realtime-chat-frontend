@@ -66,28 +66,29 @@ function Chat() {
   }, [dispatch, isConnected, user.username, currentRoom.roomId]);
 
   const onSubmit: SubmitHandler<Input> = ({ message }) => {
-    // Prepare and send message
-    if (currentRoom) {
-      const newMessage = {
-        senderUsername: user.username,
-        recipientUsername: currentRoom.roomId,
-        content: message,
-      };
-
-      dispatch(sendMessage({ newMessage }));
-      console.log(
-        `sending: ${currentRoom.roomId} | ${JSON.stringify(newMessage)}`
-      );
-
-      reset({
-        message: "",
-      });
+    if (message) {
+      // Prepare and send message
+      if (currentRoom) {
+        const newMessage = {
+          senderUsername: user.username,
+          recipientUsername: currentRoom.roomId,
+          content: message,
+        };
+  
+        dispatch(sendMessage({ newMessage }));
+        console.log(
+          `sending: ${currentRoom.roomId} | ${JSON.stringify(newMessage)}`
+        );
+  
+        reset({
+          message: "",
+        });
+      }
     }
   };
 
   return (
     <div className="flex flex-col p-3 w-full bg-slate-100">
-      <p className="bg-slate-100">{`Connected as: ${user.name}`}</p>
       <p className="bg-slate-100">
         {`Room: ${currentRoom ? currentRoom.roomName : "not in a room"}`}
       </p>
