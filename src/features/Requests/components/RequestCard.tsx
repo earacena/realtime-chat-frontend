@@ -50,16 +50,17 @@ function RequestCard({ request }: RequestCardProps) {
   };
 
   return (
-    <div className="flex flex-grow flex-row border rounded items-center mt-7 p-2">
+    <div className="flex flex-row border rounded items-center mt-7 p-2 w-64 justify-between">
       <BsPerson size={40} />
-      <span className="text-lg font-medium">{userDetails?.name}</span>
-      <button onClick={() => handleRequest('accepted')}>
-        <IoMdCheckmark size={30} className="text-green-600 ml-14" />
-      </button>
-      <button onClick={() => handleRequest('rejected')}>
-        <MdOutlineCancel size={30} className="text-red-800 ml-3" />
-      </button>
-    
+      <span className=" text-lg font-medium">{userDetails?.name}</span>
+      <div className="self-end">
+        <button onClick={() => handleRequest('accepted')}>
+          <IoMdCheckmark size={30} className="text-green-600" />
+        </button>
+        <button onClick={() => handleRequest('rejected')}>
+          <MdOutlineCancel size={30} className="text-red-800 ml-3" />
+        </button>
+      </div>
     </div>
   );
 }
