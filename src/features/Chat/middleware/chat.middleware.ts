@@ -18,6 +18,9 @@ import {
   removeConnectedUserId,
   requestPrivateRoomWithUser,
   setConnectedUserIds,
+  setContacts,
+  UserDetails,
+  userService,
 } from "../../Users";
 import { addRoom } from "../../Rooms";
 import chatEventType from "../types/chatEvents.types";
@@ -106,6 +109,21 @@ const chatMiddleware: Middleware = (store) => {
           console.error(error);
         }
       };
+      
+      const contactRefreshHandler = async () => {
+        try {
+          const fetchedContactIds = await userService.retrieveUserContacts(userId);
+          // Since fetchedContacts is a list of ids, a list of userDetails must be generated
+          let fetchedContacts: UserDetails[] = [];
+          for (const id of fetchedContactIds) {
+            fetchedContacts.push(await userService.retrieveUserDetails(id));
+          }
+
+          store.dispatch(setContacts({ contacts: fetchedContacts }));
+        } catch (error: unknown) {
+          console.error(error);
+        }
+      };
 
       socket.on("connect", connectionHandler);
       socket.on("user connected", userConnectionHandler);
@@ -115,6 +133,7 @@ const chatMiddleware: Middleware = (store) => {
       socket.on("receive all room messages", receiveAllMessagesHandler);
       socket.on("private room request", privateRoomRequestHandler);
       socket.on("request refresh", requestRefreshHandler);
+      socket.on('contact refresh', contactRefreshHandler);
       socket.on("disconnect", disconnectionHandler);
     }
 
