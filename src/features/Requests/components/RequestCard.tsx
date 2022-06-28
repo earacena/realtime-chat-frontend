@@ -7,7 +7,8 @@ import { MdOutlineCancel } from 'react-icons/md';
 import requestService from '../api/request.service';
 import { setRequests } from '../stores/request.slice';
 import { useAppDispatch, useAppSelector } from '../../../hooks';
-import { BsFillPersonPlusFill, BsPerson } from 'react-icons/bs';
+import { BsPerson } from 'react-icons/bs';
+import { sendContactRefresh } from '../../Chat';
 
 type RequestCardProps = {
   request: Request,
@@ -43,7 +44,9 @@ function RequestCard({ request }: RequestCardProps) {
 
       // Since request was handled, remove it from the feed
       dispatch(setRequests({ requests: requests.filter((r) => r.id !== request.id) }));
-
+      if (userDetails) {
+        dispatch(sendContactRefresh({ username: userDetails.username }))
+      }
     } catch (error: unknown) {
       console.error(error);
     }
