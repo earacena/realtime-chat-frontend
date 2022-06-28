@@ -38,7 +38,7 @@ const chatMiddleware: Middleware = (store) => {
 
     if (startConnecting.match(action) && token) {
       // Initialize socket connection if appropriate action received
-      socket = io(url, { auth: { token } });
+      socket = io(url, { auth: { token }, multiplex: false });
 
       const userConnectionHandler = (payloadJSON: unknown) => {
         const payload: unknown = JSON.parse(RtString.check(payloadJSON));
