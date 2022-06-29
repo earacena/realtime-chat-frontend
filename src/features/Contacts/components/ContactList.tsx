@@ -6,6 +6,7 @@ import { UserDetails } from '../../Users/types/users.types';
 import ContactRequestDialog from './ContactRequestDialog';
 import ContactCard from './ContactCard';
 import { setCurrentRoom } from '../../Rooms';
+import { Tab } from '@headlessui/react';
 
 function ContactList() {
   const dispatch = useAppDispatch();
@@ -61,14 +62,20 @@ function ContactList() {
       </button>
 
       { contacts.length === 0 && <span className="py-5">No added contacts</span>}
+      <Tab.Group
+        onChange={(index: number) => handleContactClick(contacts[index].username)}
+      >
+        <Tab.List>
+          <ul>
+            {contacts.map((c) => 
+              <Tab>
+                <ContactCard contactDetails={c} />
+              </Tab>
+            )}
+          </ul>
 
-      <ul>
-        {contacts.map((c) => 
-          <button key={c.id} onClick={() => handleContactClick(c.username)}>
-            <ContactCard contactDetails={c} />
-          </button>
-        )}
-      </ul>
+        </Tab.List>
+      </Tab.Group>
     </div>
   );
 }
