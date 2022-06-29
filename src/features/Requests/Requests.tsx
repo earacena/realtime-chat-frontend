@@ -21,7 +21,7 @@ function Requests() {
       }
     }
 
-    if (token && !requests) {
+    if (token && requests.length === 0) {
       fetchRequests();
     }
   }, [dispatch, userId, requests, token]);
