@@ -34,7 +34,7 @@ function ContactList() {
       }
     };
 
-    if (token && !contacts) {
+    if (token && contacts.length === 0) {
       fetchContacts();
     }
   }, [dispatch, userId, token, contacts]);
@@ -68,12 +68,11 @@ function ContactList() {
         <Tab.List>
           <ul>
             {contacts.map((c) => 
-              <Tab>
+              <Tab key={c.id}>
                 <ContactCard contactDetails={c} />
               </Tab>
             )}
           </ul>
-
         </Tab.List>
       </Tab.Group>
     </div>
