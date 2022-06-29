@@ -62,19 +62,13 @@ function ContactList() {
       </button>
 
       { contacts.length === 0 && <span className="py-5">No added contacts</span>}
-      <Tab.Group
-        onChange={(index: number) => handleContactClick(contacts[index].username)}
-      >
-        <Tab.List>
-          <ul>
-            {contacts.map((c) => 
-              <Tab key={c.id}>
-                <ContactCard contactDetails={c} />
-              </Tab>
-            )}
-          </ul>
-        </Tab.List>
-      </Tab.Group>
+      <ul>
+        {contacts.map((c) =>
+            <button key={c.id} onClick={() => handleContactClick(c.username)}>
+              <ContactCard key={c.id} contactDetails={c} />
+            </button>
+        )}
+      </ul>
     </div>
   );
 }
