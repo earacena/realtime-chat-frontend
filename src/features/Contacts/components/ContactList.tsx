@@ -6,7 +6,6 @@ import { UserDetails } from '../../Users/types/users.types';
 import ContactRequestDialog from './ContactRequestDialog';
 import ContactCard from './ContactCard';
 import { setCurrentRoom } from '../../Rooms';
-import { Tab } from '@headlessui/react';
 
 function ContactList() {
   const dispatch = useAppDispatch();
