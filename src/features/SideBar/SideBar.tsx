@@ -21,6 +21,9 @@ function SideBar() {
     window.localStorage.removeItem('chatAppUser');
   };
 
+  const tabStyle = "bg-slate-100 text-black rounded-lg p-1 hover:bg-slate-300";
+  const selectedTabStyle = "bg-slate-500 text-white rounded-lg p-1";
+
   return (
     <div className="flex flex-col h-screen p-1 w-96 border-r-2">
       <button className="flex flex-row self-end text-red-500" onClick={handleLogout}>
@@ -30,13 +33,13 @@ function SideBar() {
       <UserCard />
       <Tab.Group>
         <Tab.List className="flex flex-row justify-evenly">
-          <Tab className={({ selected }: TabStyleProps) => selected ? "bg-slate-500 text-white rounded-lg p-1" : "bg-slate-100 text-black rounded-lg p-1"}>
-            <IoIosMail size={40} />                                                                                                 
-          </Tab>                                                                                                                    
-          <Tab className={({ selected }: TabStyleProps) => selected ? "bg-slate-500 text-white rounded-lg p-1" : "bg-slate-100 text-black rounded-lg p-1"}>
-            <BsFillPersonLinesFill  size={40} />                                                                                    
-          </Tab>                                                                                                                    
-          <Tab className={({ selected }: TabStyleProps) => selected ? "bg-slate-500 text-white rounded-lg p-1" : "bg-slate-100 text-black rounded-lg p-1"}>
+          <Tab className={({ selected }: TabStyleProps) => selected ? selectedTabStyle : tabStyle}>
+            <IoIosMail size={40} />                                                      
+          </Tab>                                                                         
+          <Tab className={({ selected }: TabStyleProps) => selected ? selectedTabStyle : tabStyle}>
+            <BsFillPersonLinesFill  size={40} />                                         
+          </Tab>                                                                         
+          <Tab className={({ selected }: TabStyleProps) => selected ? selectedTabStyle : tabStyle}>
             <IoMdSettings size={40} />
           </Tab>
         </Tab.List>
