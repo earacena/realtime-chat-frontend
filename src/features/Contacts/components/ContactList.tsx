@@ -34,10 +34,10 @@ function ContactList() {
       }
     };
 
-    if (token) {
+    if (token && !contacts) {
       fetchContacts();
     }
-  }, [dispatch, userId, token]);
+  }, [dispatch, userId, token, contacts]);
 
 
   const addContactButtonPressed = () => setIsContactFinderOpen(true);
