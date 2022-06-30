@@ -26,7 +26,7 @@ function Requests() {
   return (
     <div className="flex justify-center">
       {requests.length === 0 && <span className="py-10">No pending requests</span>}
-      <ul>
+      <ul className="overflow-auto">
         {requests.map((r) => <RequestCard key={r.id} request={r} />)}
       </ul>
     </div>
