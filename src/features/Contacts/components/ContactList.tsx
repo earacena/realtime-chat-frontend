@@ -61,7 +61,7 @@ function ContactList() {
       </button>
 
       { contacts.length === 0 && <span className="py-5">No added contacts</span>}
-      <ul>
+      <ul className="flex flex-col justify-center">
         {contacts.map((c) =>
           <button key={c.id} onClick={() => handleContactClick(c.username)}>
             <ContactCard key={c.id} contactDetails={c} />
