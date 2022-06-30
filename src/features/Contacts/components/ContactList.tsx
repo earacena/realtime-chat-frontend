@@ -63,9 +63,9 @@ function ContactList() {
       { contacts.length === 0 && <span className="py-5">No added contacts</span>}
       <ul>
         {contacts.map((c) =>
-            <button key={c.id} onClick={() => handleContactClick(c.username)}>
-              <ContactCard key={c.id} contactDetails={c} />
-            </button>
+          <button key={c.id} onClick={() => handleContactClick(c.username)}>
+            <ContactCard key={c.id} contactDetails={c} />
+          </button>
         )}
       </ul>
     </div>
