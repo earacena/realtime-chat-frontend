@@ -7,7 +7,6 @@ import RequestCard from './components/RequestCard';
 function Requests() {
   const dispatch = useAppDispatch();
   const userId = useAppSelector((state) => state.auth.user.id);
-  const token = useAppSelector((state) => state.auth.user.token);
   const requests = useAppSelector((state) => state.requests.requests);
 
   useEffect(() => {
@@ -21,10 +20,8 @@ function Requests() {
       }
     }
 
-    if (token && requests.length === 0) {
-      fetchRequests();
-    }
-  }, [dispatch, userId, requests, token]);
+    fetchRequests();
+  }, [dispatch, userId]);
 
   return (
     <div className="flex justify-center">
