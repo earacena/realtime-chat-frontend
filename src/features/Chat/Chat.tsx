@@ -100,21 +100,21 @@ function Chat() {
           m.senderUsername === user.username ? (
             <li
               key={i}
-              className="first:mt-auto m-2 bg-slate-600 text-white p-1 px-3 rounded-md self-end"
+              className="first:mt-auto m-2 bg-slate-600 text-white p-1 px-3 rounded-lg self-end shadow"
             >
               {m.content}
             </li>
           ) : (
             <li
               key={i}
-              className="first:mt-auto m-2 bg-slate-400 text-white p-1 px-3 rounded-md self-start"
+              className="first:mt-auto m-2 bg-slate-400 text-white p-1 px-3 rounded-lg self-start shadow"
             >
               {m.content}
             </li>
           )
         )}
       </ul>
-      <form className="flex h-12 mt-auto" onSubmit={handleSubmit(onSubmit)}>
+      <form className="flex h-12 mt-4" onSubmit={handleSubmit(onSubmit)}>
         <input
           className="grow p-1 center shadow-lg rounded-lg outline outline-1 hover:outline-2 outline-slate-300 hover:outline-slate-400"
           {...register("message")}
