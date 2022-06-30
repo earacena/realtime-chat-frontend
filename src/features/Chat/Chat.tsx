@@ -7,6 +7,8 @@ import { setAuthenticatedUser } from "../Login/stores/auth.slice";
 import { Messages } from "./types/chat.types";
 import chatService from "./api/chat.service";
 import { BiSend } from "react-icons/bi";
+import { BsPerson } from "react-icons/bs";
+import { UserDetails } from "../Users";
 
 type Input = {
   message: string;
@@ -16,6 +18,7 @@ function Chat() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const user = useAppSelector((state) => state.auth.user);
+  const contacts = useAppSelector((state) => state.users.contacts);
   const messages = useAppSelector(selectSortedMessages);
   const currentRoom = useAppSelector((state) => state.rooms.currentRoom);
   const isConnected = useAppSelector((state) => state.chat.isConnected);
@@ -90,42 +93,54 @@ function Chat() {
   return (
     <div className="flex flex-col p-3 w-full bg-slate-100">
       <p className="bg-slate-100">
-        {`Room: ${currentRoom ? currentRoom.roomName : "not in a room"}`}
+        {
+          currentRoom.roomName !== 'default' &&
+          <div className="flex flex-row items-center">
+            <BsPerson className="rounded-full border-2 border-slate-500 p-1 mr-2" size={40} />
+            <p className="font-medium">{currentRoom.roomName}</p>
+          </div>
+        }
       </p>
-      <ul className="flex flex-1 flex-col overflow-y-scroll">
-        {messages.map((m, i) =>
-          (currentRoom.roomId === m.recipientUsername ||
-            currentRoom.roomId === m.senderUsername) &&
-          m.content !== "" &&
-          m.senderUsername === user.username ? (
-            <li
-              key={i}
-              className="first:mt-auto m-2 bg-slate-600 text-white p-1 px-3 rounded-lg self-end shadow"
-            >
-              {m.content}
-            </li>
-          ) : (
-            <li
-              key={i}
-              className="first:mt-auto m-2 bg-slate-400 text-white p-1 px-3 rounded-lg self-start shadow"
-            >
-              {m.content}
-            </li>
-          )
-        )}
-      </ul>
-      <form className="flex h-12 mt-4" onSubmit={handleSubmit(onSubmit)}>
-        <input
-          className="grow p-1 center shadow-lg rounded-lg outline outline-1 hover:outline-2 outline-slate-300 hover:outline-slate-400"
-          {...register("message")}
-        />
-        <button
-          className="rounded-full shadow-lg ml-2 p-3 hover:outline hover:outline-2 hover:outline-slate-600 bg-slate-500"
-          type="submit"
-        >
-          <BiSend className="text-slate-100" size={24} />
-        </button>
-      </form>
+      {
+        currentRoom.roomName !== 'default' &&
+        <ul className="flex flex-1 flex-col overflow-auto">
+          {messages.map((m, i) =>
+            (currentRoom.roomId === m.recipientUsername ||
+              currentRoom.roomId === m.senderUsername) &&
+            m.content !== "" &&
+            m.senderUsername === user.username ? (
+              <li
+                key={i}
+                className="first:mt-auto m-2 bg-slate-600 text-white p-1 px-3 rounded-lg self-end shadow"
+              >
+                {m.content}
+              </li>
+            ) : (
+              <li
+                key={i}
+                className="first:mt-auto m-2 bg-slate-400 text-white p-1 px-3 rounded-lg self-start shadow"
+              >
+                {m.content}
+              </li>
+            )
+          )}
+        </ul>
+      }
+      {
+        currentRoom.roomName !== 'default' &&
+        <form className="flex h-12 mt-4" onSubmit={handleSubmit(onSubmit)}>
+          <input
+            className="grow p-1 center shadow-lg rounded-lg outline outline-1 hover:outline-2 outline-slate-300 hover:outline-slate-400"
+            {...register("message")}
+          />
+          <button
+            className="rounded-full shadow-lg ml-2 p-3 hover:outline hover:outline-2 hover:outline-slate-600 bg-slate-500"
+            type="submit"
+          >
+            <BiSend className="text-slate-100" size={24} />
+          </button>
+        </form>
+      }
     </div>
   );
 }
