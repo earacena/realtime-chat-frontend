@@ -9,6 +9,7 @@ import {
   connectionEstablished,
   sendRequestRefresh,
   sendContactRefresh,
+  signalOnline,
 } from "../stores/chat.slice";
 import { io, Socket } from "socket.io-client";
 import { String as RtString } from "runtypes";
@@ -42,16 +43,16 @@ const chatMiddleware: Middleware = (store) => {
 
       const userConnectionHandler = (payloadJSON: unknown) => {
         const payload: unknown = JSON.parse(RtString.check(payloadJSON));
-        const { userSocketId } =
+        const { userId } =
           chatEventType.UserConnectedEventPayload.check(payload);
-        store.dispatch(addConnectedUserId({ userId: userSocketId }));
+        store.dispatch(addConnectedUserId({ userId }));
       };
 
       const userDisconnectionHandler = (payloadJSON: unknown) => {
         const payload: unknown = JSON.parse(RtString.check(payloadJSON));
-        const { userSocketId } =
+        const { userId } =
           chatEventType.UserDisconnectedEventPayload.check(payload);
-        store.dispatch(removeConnectedUserId({ userId: userSocketId }));
+        store.dispatch(removeConnectedUserId({ userId: userId }));
       };
 
       const connectedUserListHandler = (payloadJSON: unknown) => {
@@ -163,6 +164,10 @@ const chatMiddleware: Middleware = (store) => {
         username: action.payload.username,
       });
       socket.emit("contact refresh", contactRefreshPayload);
+    }
+
+    if (signalOnline.match(action) && isConnectionEstablished) {
+      socket.emit("signal online");
     }
 
     next(action);
