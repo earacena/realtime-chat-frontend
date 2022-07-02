@@ -49,6 +49,9 @@ const chatSlice = createSlice({
     sendContactRefresh: (state: ChatState, action: PayloadAction<ContactRefreshPayload>) => {
       return;
     },
+    signalOnline: (state: ChatState) => {
+      return;
+    }
   },
 });
 
@@ -68,6 +71,7 @@ export const {
   sendMessage,
   sendRequestRefresh,
   sendContactRefresh,
+  signalOnline,
 } = chatSlice.actions;
 
 export default chatSlice.reducer;
