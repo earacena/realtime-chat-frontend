@@ -91,11 +91,11 @@ function Chat() {
   };
 
   return (
-    <div className="flex flex-col p-3 w-full bg-slate-100">
+    <div className="flex flex-col p-3 w-full bg-slate-100 h-screen">
       <p className="bg-slate-100">
         {
           currentRoom.roomName !== 'default' &&
-          <div className="flex flex-row items-center">
+          <div className="flex flex-row items-center py-2">
             <BsPerson className="rounded-full border-2 border-slate-500 p-1 mr-2" size={40} />
             <p className="font-medium">{currentRoom.roomName}</p>
           </div>
