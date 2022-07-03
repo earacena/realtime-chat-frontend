@@ -8,7 +8,7 @@ import {
 export type UserDetails = RtStatic<typeof UserDetailsType>;
 
 export type UsersState = {
-  connectedUserIds: string[];
+  connectedUsers: OnlineUserInfo[];
   userIdsInPrivateRoom: string[];
   contacts: UserDetails[];
 };
@@ -19,12 +19,22 @@ export type CreateUserFields = {
   password: string;
 };
 
-export type ConnectedUserIdsPayload = {
-  connectedUserIds: string[],
+export type OnlineUserInfo = {
+  id: number;
+  username: string;
+}
+
+export type ConnectedUsersPayload = {
+  connectedUsers: OnlineUserInfo[],
+};
+
+export type OnlineUserInfoPayload = {
+  id: number;
+  username: string;
 };
 
 export type UserIdPayload = {
-  userId: string;
+  id: number;
 };
 
 export const UserDetailsType = RtRecord({
