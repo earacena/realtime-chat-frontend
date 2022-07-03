@@ -1,8 +1,8 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { UsersState, ConnectedUserIdsPayload, UserIdPayload, ContactsPayload } from '../types/users.types';
+import { UsersState, ConnectedUsersPayload, UserIdPayload, OnlineUserInfoPayload, ContactsPayload } from '../types/users.types';
 
 const initialState: UsersState = {
-  connectedUserIds: [],
+  connectedUsers: [],
   userIdsInPrivateRoom: [],
   contacts: [],
 };
@@ -11,27 +11,22 @@ const usersSlice = createSlice({
   name: 'users',
   initialState,
   reducers: {
-    setConnectedUserIds: (state: UsersState, action: PayloadAction<ConnectedUserIdsPayload>) => ({
+    setConnectedUserIds: (state: UsersState, action: PayloadAction<ConnectedUsersPayload>) => ({
       ...state,
-      connectedUserIds: action.payload.connectedUserIds,
+      connectedUserIds: action.payload.connectedUsers,
     }),
-    addConnectedUserId: (state: UsersState, action: PayloadAction<UserIdPayload>) => ({
+    addConnectedUserId: (state: UsersState, action: PayloadAction<OnlineUserInfoPayload>) => ({
       ...state,
-      connectedUserIds: state.connectedUserIds.concat(action.payload.userId),
+      connectedUserIds: state.connectedUsers.concat({ id: action.payload.id, username: action.payload.username }),
     }),
     removeConnectedUserId: (state: UsersState, action: PayloadAction<UserIdPayload>) => ({
       ...state,
-      connectedUserIds: state.connectedUserIds.filter((id) => id !== action.payload.userId),
-    }),
-    addUserIdToPrivateRoom: (state: UsersState, action: PayloadAction<UserIdPayload>) => ({
-      ...state,
-      userIdsInPrivateRoom: state.userIdsInPrivateRoom.concat(action.payload.userId),
+      connectedUserIds: state.connectedUsers.filter((user) => user.id !== action.payload.id),
     }),
     resetConnectedUserIds: (state: UsersState) => ({
       ...state,
-      connectedUserIds: initialState.connectedUserIds,
+      connectedUserIds: initialState.connectedUsers,
     }),
-    requestPrivateRoomWithUser: (state: UsersState, action: PayloadAction<UserIdPayload>) => { return; },
     setContacts: (state: UsersState, action: PayloadAction<ContactsPayload>) => ({
       ...state,
       contacts: action.payload.contacts,
@@ -47,9 +42,7 @@ export const {
   setConnectedUserIds,
   addConnectedUserId,
   removeConnectedUserId,
-  addUserIdToPrivateRoom,
   resetConnectedUserIds,
-  requestPrivateRoomWithUser,
   setContacts,
   resetContacts,
 } = usersSlice.actions;
