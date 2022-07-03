@@ -1,4 +1,5 @@
 import {
+  Number as RtNumber,
   Record as RtRecord,
   String as RtString,
   Array as RtArray,
@@ -6,11 +7,11 @@ import {
 import { MessageType } from './chat.types';
 
 const UserConnectedEventPayload = RtRecord({
-  userSocketId: RtString,
+  userId: RtString,
 });
 
 const UserDisconnectedEventPayload = RtRecord({
-  userSocketId: RtString,
+  userId: RtString,
 });
 
 const ConnectedUserListPayload = RtRecord({
@@ -30,6 +31,11 @@ const PrivateRoomRequestPayload = RtRecord({
   roomId: RtString,
 });
 
+const SignalOnlinePayload = RtRecord({
+  id: RtNumber,
+  username: RtString,
+});
+
 const chatEventType = {
   UserConnectedEventPayload,
   UserDisconnectedEventPayload,
@@ -37,6 +43,7 @@ const chatEventType = {
   MessagePayload,
   MessagesPayload,
   PrivateRoomRequestPayload,
+  SignalOnlinePayload,
 };
 
 export default chatEventType;
