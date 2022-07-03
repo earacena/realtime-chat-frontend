@@ -11,21 +11,21 @@ const usersSlice = createSlice({
   name: 'users',
   initialState,
   reducers: {
-    setConnectedUserIds: (state: UsersState, action: PayloadAction<ConnectedUsersPayload>) => ({
+    setConnectedUsers: (state: UsersState, action: PayloadAction<ConnectedUsersPayload>) => ({
       ...state,
-      connectedUserIds: action.payload.connectedUsers,
+      connectedUsers: action.payload.connectedUsers,
     }),
-    addConnectedUserId: (state: UsersState, action: PayloadAction<OnlineUserInfoPayload>) => ({
+    addConnectedUser: (state: UsersState, action: PayloadAction<OnlineUserInfoPayload>) => ({
       ...state,
-      connectedUserIds: state.connectedUsers.concat({ id: action.payload.id, username: action.payload.username }),
+      connectedUsers: state.connectedUsers.concat({ id: action.payload.id, username: action.payload.username }),
     }),
-    removeConnectedUserId: (state: UsersState, action: PayloadAction<UserIdPayload>) => ({
+    removeConnectedUser: (state: UsersState, action: PayloadAction<UserIdPayload>) => ({
       ...state,
-      connectedUserIds: state.connectedUsers.filter((user) => user.id !== action.payload.id),
+      connectedUsers: state.connectedUsers.filter((user) => user.id !== action.payload.id),
     }),
-    resetConnectedUserIds: (state: UsersState) => ({
+    resetConnectedUsers: (state: UsersState) => ({
       ...state,
-      connectedUserIds: initialState.connectedUsers,
+      connectedUsers: initialState.connectedUsers,
     }),
     setContacts: (state: UsersState, action: PayloadAction<ContactsPayload>) => ({
       ...state,
@@ -39,10 +39,10 @@ const usersSlice = createSlice({
 });
 
 export const {
-  setConnectedUserIds,
-  addConnectedUserId,
-  removeConnectedUserId,
-  resetConnectedUserIds,
+  setConnectedUsers,
+  addConnectedUser,
+  removeConnectedUser,
+  resetConnectedUsers,
   setContacts,
   resetContacts,
 } = usersSlice.actions;
