@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { selectSortedMessages, sendMessage, setMessages, startConnecting } from "./stores/chat.slice";
+import { selectSortedMessages, sendMessage, setMessages, signalOnline, startConnecting } from "./stores/chat.slice";
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import { useNavigate } from "react-router-dom";
 import { setAuthenticatedUser } from "../Login/stores/auth.slice";
@@ -50,6 +50,12 @@ function Chat() {
   }, [dispatch, isConnected, isConnecting]);
 
   useEffect(() => {
+    if (isConnected) {
+      dispatch(signalOnline());
+    }
+  }, []);
+
+  useEffect(() => {
     const fetchAllMessages = async () => {
       try {
         const fetchedMessages: Messages = await chatService.retrieveMessages({
@@ -92,15 +98,15 @@ function Chat() {
 
   return (
     <div className="flex flex-col p-3 w-full bg-slate-100 h-screen">
-      <p className="bg-slate-100">
+      <span className="bg-slate-100">
         {
           currentRoom.roomName !== 'default' &&
           <div className="flex flex-row items-center py-2">
             <BsPerson className="rounded-full border-2 border-slate-500 p-1 mr-2" size={40} />
-            <p className="font-medium">{currentRoom.roomName}</p>
+            <span className="font-medium">{currentRoom.roomName}</span>
           </div>
         }
-      </p>
+      </span>
       {
         currentRoom.roomName !== 'default' &&
         <ul className="flex flex-1 flex-col overflow-auto">
@@ -111,14 +117,14 @@ function Chat() {
             m.senderUsername === user.username ? (
               <li
                 key={i}
-                className="first:mt-auto m-2 bg-slate-600 text-white p-1 px-3 rounded-lg self-end shadow"
+                className="first:mt-auto m-2 bg-slate-600 text-white p-1 px-3 rounded-full self-end shadow"
               >
                 {m.content}
               </li>
             ) : (
               <li
                 key={i}
-                className="first:mt-auto m-2 bg-slate-400 text-white p-1 px-3 rounded-lg self-start shadow"
+                className="first:mt-auto m-2 bg-slate-400 text-white p-1 px-3 rounded-full self-start shadow"
               >
                 {m.content}
               </li>
