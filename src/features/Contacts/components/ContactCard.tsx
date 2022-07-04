@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { BsPerson } from 'react-icons/bs';
 import { useAppDispatch, useAppSelector } from '../../../hooks';
 import { ContactCardProps } from '../types/contact.types';
-import { TbPoint } from 'react-icons/tb';
+import { VscCircleFilled } from 'react-icons/vsc';
 import { signalOnline } from '../../Chat';
 
 function ContactCard({ contactDetails }: ContactCardProps) {
@@ -23,8 +23,8 @@ function ContactCard({ contactDetails }: ContactCardProps) {
       <p className="ml-3">
         {contactDetails.name}
       </p>
-      { isUserOnline && <TbPoint className="text-green-500" /> }
-      { !isUserOnline && <TbPoint className="text-red-500" /> }
+      { isUserOnline && <VscCircleFilled className="text-green-500" /> }
+      { !isUserOnline && <VscCircleFilled className="text-red-500" /> }
     </div>
   )
 }
