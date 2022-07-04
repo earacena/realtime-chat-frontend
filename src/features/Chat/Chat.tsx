@@ -8,6 +8,7 @@ import { Messages } from "./types/chat.types";
 import chatService from "./api/chat.service";
 import { BiSend } from "react-icons/bi";
 import { BsPerson } from "react-icons/bs";
+import { VscCircleFilled } from 'react-icons/vsc';
 import { UserDetails } from "../Users";
 
 type Input = {
@@ -18,7 +19,7 @@ function Chat() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const user = useAppSelector((state) => state.auth.user);
-  const contacts = useAppSelector((state) => state.users.contacts);
+  const connectedUsers = useAppSelector((state) => state.users.connectedUsers);
   const messages = useAppSelector(selectSortedMessages);
   const currentRoom = useAppSelector((state) => state.rooms.currentRoom);
   const isConnected = useAppSelector((state) => state.chat.isConnected);
@@ -95,6 +96,8 @@ function Chat() {
       }
     }
   };
+  
+  const isUserOnline = undefined !== connectedUsers.find((users) => users.username === currentRoom.roomName);
 
   return (
     <div className="flex flex-col p-3 w-full bg-slate-100 h-screen">
@@ -103,7 +106,9 @@ function Chat() {
           currentRoom.roomName !== 'default' &&
           <div className="flex flex-row items-center py-2">
             <BsPerson className="rounded-full border-2 border-slate-500 p-1 mr-2" size={40} />
-            <span className="font-medium">{currentRoom.roomName}</span>
+            <span className="font-medium">{currentRoom.roomName}</span> 
+            { isUserOnline && <VscCircleFilled className="text-green-500" /> }
+            { !isUserOnline && <VscCircleFilled className="text-red-500" /> }
           </div>
         }
       </span>
