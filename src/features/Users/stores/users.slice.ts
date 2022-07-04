@@ -15,10 +15,17 @@ const usersSlice = createSlice({
       ...state,
       connectedUsers: action.payload.connectedUsers,
     }),
-    addConnectedUser: (state: UsersState, action: PayloadAction<OnlineUserInfoPayload>) => ({
-      ...state,
-      connectedUsers: state.connectedUsers.concat({ id: action.payload.id, username: action.payload.username }),
-    }),
+    addConnectedUser: (state: UsersState, action: PayloadAction<OnlineUserInfoPayload>) => {
+      if (!state.connectedUsers.some((user) => user.id === action.payload.id)) {
+        return {
+          ...state,
+          connectedUsers: state.connectedUsers.concat({ id: action.payload.id, username: action.payload.username }),
+        };
+      } else {
+        return state;
+      }
+    }
+    ,
     removeConnectedUser: (state: UsersState, action: PayloadAction<UserIdPayload>) => ({
       ...state,
       connectedUsers: state.connectedUsers.filter((user) => user.id !== action.payload.id),
