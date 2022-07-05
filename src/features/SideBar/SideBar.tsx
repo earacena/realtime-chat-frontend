@@ -8,6 +8,7 @@ import { Tab } from '@headlessui/react';
 import UserCard from './components/UserCard';
 import { useAppDispatch } from '../../hooks';
 import { clearAuthenticatedUser } from '../Login';
+import { signalOffline } from '../Chat';
 
 type TabStyleProps = {
   selected: boolean,
@@ -18,6 +19,7 @@ function SideBar() {
 
   const handleLogout = () => {
     dispatch(clearAuthenticatedUser());
+    dispatch(signalOffline());
     window.localStorage.removeItem('chatAppUser');
   };
 
