@@ -10,6 +10,7 @@ import {
   sendRequestRefresh,
   sendContactRefresh,
   signalOnline,
+  signalOffline,
 } from "../stores/chat.slice";
 import { io, Socket } from "socket.io-client";
 import { String as RtString } from "runtypes";
@@ -180,6 +181,10 @@ const chatMiddleware: Middleware = (store) => {
 
     if (signalOnline.match(action) && isConnectionEstablished) {
       socket.emit("signal online");
+    }
+    
+    if (signalOffline.match(action) && isConnectionEstablished) {
+      socket.emit("signal offline");
     }
 
     next(action);
