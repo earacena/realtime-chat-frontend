@@ -36,6 +36,10 @@ const SignalOnlinePayload = RtRecord({
   username: RtString,
 });
 
+const SignalOfflinePayload = RtRecord({
+  id: RtNumber,
+});
+
 const chatEventType = {
   UserConnectedEventPayload,
   UserDisconnectedEventPayload,
@@ -44,6 +48,7 @@ const chatEventType = {
   MessagesPayload,
   PrivateRoomRequestPayload,
   SignalOnlinePayload,
+  SignalOfflinePayload,
 };
 
 export default chatEventType;
