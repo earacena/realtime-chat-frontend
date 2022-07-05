@@ -128,7 +128,13 @@ const chatMiddleware: Middleware = (store) => {
         const payload: unknown = JSON.parse(RtString.check(payloadJSON));
         const { id, username } = chatEventType.SignalOnlinePayload.check(payload);
         store.dispatch(addConnectedUser({ id, username }));
-      }
+      };
+
+      const signalOfflineHandler = (payloadJSON: unknown) => {
+        const payload: unknown = JSON.parse(RtString.check(payloadJSON));
+        const { id } = chatEventType.SignalOfflinePayload.check(payload);
+        store.dispatch(removeConnectedUser({ id }));
+      };
 
       socket.on('connect', connectionHandler);
       // socket.on('user connected', userConnectionHandler);
@@ -140,6 +146,7 @@ const chatMiddleware: Middleware = (store) => {
       socket.on('request refresh', requestRefreshHandler);
       socket.on('contact refresh', contactRefreshHandler);
       socket.on('signal online', signalOnlineHandler);
+      socket.on('signal offline', signalOfflineHandler);
       socket.on('disconnect', disconnectionHandler);
     }
 
