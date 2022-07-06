@@ -51,3 +51,8 @@ export type MakeUserContactsProps = {
 export type ContactsPayload = {
   contacts: UserDetails[],
 };
+
+export type RemoveContactProps = {
+  userId: number,
+  contactId: number,
+};
