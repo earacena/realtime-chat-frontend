@@ -3,12 +3,14 @@ import { BsFillPersonLinesFill } from 'react-icons/bs';
 import { IoIosMail, IoMdSettings } from 'react-icons/io';
 import { ImExit } from 'react-icons/im';
 import { ContactList } from '../Contacts';
-import { Requests } from '../Requests';
+import { Requests, resetRequests } from '../Requests';
 import { Tab } from '@headlessui/react';
 import UserCard from './components/UserCard';
 import { useAppDispatch } from '../../hooks';
 import { clearAuthenticatedUser } from '../Login';
-import { signalOffline } from '../Chat';
+import { disconnected, resetMessages, resetSocketId, signalOffline } from '../Chat';
+import { resetConnectedUsers, resetContacts } from '../Users';
+import { resetAllRooms, resetCurrentRoom } from '../Rooms';
 
 type TabStyleProps = {
   selected: boolean,
@@ -19,7 +21,16 @@ function SideBar() {
 
   const handleLogout = () => {
     dispatch(clearAuthenticatedUser());
+    dispatch(resetConnectedUsers());
+    dispatch(resetContacts());
     dispatch(signalOffline());
+    dispatch(resetAllRooms());
+    dispatch(resetCurrentRoom());
+    dispatch(resetRequests());
+    dispatch(resetMessages());
+    dispatch(resetSocketId());
+    dispatch(disconnected());
+
     window.localStorage.removeItem('chatAppUser');
   };
 
