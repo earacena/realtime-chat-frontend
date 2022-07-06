@@ -14,11 +14,16 @@ const requestsSlice = createSlice({
       ...state,
       requests: action.payload.requests,
     }),
+    resetRequests: (state: RequestsState) => ({
+      ...state,
+      requests: initialState.requests,
+    }),
   },
 });
 
 export const {
   setRequests,
+  resetRequests,
 } = requestsSlice.actions;
 
 export default requestsSlice.reducer;
