@@ -7,9 +7,9 @@ import { setAuthenticatedUser } from "../Login/stores/auth.slice";
 import { Messages } from "./types/chat.types";
 import chatService from "./api/chat.service";
 import { BiSend } from "react-icons/bi";
-import { BsPerson, BsThreeDotsVertical } from "react-icons/bs";
+import { BsPerson } from "react-icons/bs";
 import { VscCircleFilled } from 'react-icons/vsc';
-import { UserDetails } from "../Users";
+import ContactOptions from '../Contacts/components/ContactOptions';
 
 type Input = {
   message: string;
@@ -109,7 +109,7 @@ function Chat() {
             <span className="font-medium">{currentRoom.roomName}</span> 
             { isUserOnline && <VscCircleFilled className="text-green-500" /> }
             { !isUserOnline && <VscCircleFilled className="text-red-500" /> }
-            <BsThreeDotsVertical />
+            <ContactOptions />
           </div>
         }
       </span>
