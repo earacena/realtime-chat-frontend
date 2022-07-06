@@ -61,7 +61,7 @@ function Chat() {
       try {
         const fetchedMessages: Messages = await chatService.retrieveMessages({
           senderUsername: user.username,
-          recipientUsername: currentRoom.roomId,
+          recipientUsername: currentRoom.roomName,
         });
 
         dispatch(setMessages({ messages: fetchedMessages }));
@@ -73,7 +73,7 @@ function Chat() {
     if (isConnected) {
       fetchAllMessages();
     }
-  }, [dispatch, isConnected, user.username, currentRoom.roomId]);
+  }, [dispatch, isConnected, user.username, currentRoom.roomName]);
 
   const onSubmit: SubmitHandler<Input> = ({ message }) => {
     if (message) {
@@ -81,7 +81,7 @@ function Chat() {
       if (currentRoom) {
         const newMessage = {
           senderUsername: user.username,
-          recipientUsername: currentRoom.roomId,
+          recipientUsername: currentRoom.roomName,
           content: message,
         };
   
@@ -117,8 +117,8 @@ function Chat() {
         currentRoom.roomName !== 'default' &&
         <ul className="flex flex-1 flex-col overflow-auto">
           {messages.map((m, i) =>
-            (currentRoom.roomId === m.recipientUsername ||
-              currentRoom.roomId === m.senderUsername) &&
+            (currentRoom.roomName === m.recipientUsername ||
+              currentRoom.roomName === m.senderUsername) &&
             m.content !== "" &&
             m.senderUsername === user.username ? (
               <li
