@@ -4,7 +4,7 @@ import {
   Record as RtRecord,
 } from 'runtypes';
 
-import { CreateUserFields, UserDetailsType, MakeUserContactsProps } from '../types/users.types';
+import { RemoveContactProps, CreateUserFields, UserDetailsType, MakeUserContactsProps } from '../types/users.types';
 
 const baseUrl = 'http://localhost:3001/api/users';
 
@@ -66,10 +66,23 @@ const retrieveUserContacts = async (userId: number) => {
   return contacts;
 };
 
+const removeContact = async ({ userId, contactId }: RemoveContactProps) => {
+  const response = await fetch(`${baseUrl}/${userId}/contacts`, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ contactId })
+  });
+  const { contacts } = RtRecord({ contacts: RtArray(RtNumber) }).check(await response.json());
+  return contacts;
+};
+
 const userService = {
   create,
   retrieveUserDetails,
   makeUsersContacts,
   retrieveUserContacts,
+  removeContact,
 };
 export default userService; 
