@@ -6,6 +6,7 @@ import { UserDetails } from '../../Users/types/users.types';
 import ContactRequestDialog from './ContactRequestDialog';
 import ContactCard from './ContactCard';
 import { setCurrentRoom } from '../../Rooms';
+import { signalOnline } from '../../Chat';
 
 function ContactList() {
   const dispatch = useAppDispatch();
@@ -15,6 +16,9 @@ function ContactList() {
   const contacts = useAppSelector((state) => state.users.contacts);
   const [isContactFinderOpen, setIsContactFinderOpen] = useState(false);
 
+  useEffect(() => {
+    dispatch(signalOnline());
+  }, [dispatch]);
 
   useEffect(() => {
     const fetchContacts = async () => {
