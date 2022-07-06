@@ -1,4 +1,5 @@
 import {
+  Number as RtNumber,
   String as RtString,
   Static as RtStatic,
   Array as RtArray,
@@ -6,7 +7,7 @@ import {
 } from 'runtypes';
 
 export const RoomType = RtRecord({
-  roomId: RtString,
+  roomId: RtNumber,
   roomName: RtString,
 });
 export type Room = RtStatic<typeof RoomType>;
