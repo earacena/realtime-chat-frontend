@@ -8,6 +8,7 @@ import {
   MessagesPayload,
   RequestRefreshPayload,
   ContactRefreshPayload,
+  SignalOnlineReplyPayload,
 } from "../types/chat.types";
 
 const initialState: ChatState = {
@@ -62,7 +63,10 @@ const chatSlice = createSlice({
     },
     signalOffline: (state: ChatState) => {
       return;
-    }
+    },
+    signalOnlineReply: (state: ChatState, action: PayloadAction<SignalOnlineReplyPayload>) => {
+      return;
+    },
   },
 });
 
@@ -86,6 +90,7 @@ export const {
   signalOffline,
   resetMessages,
   resetSocketId,
+  signalOnlineReply,
 } = chatSlice.actions;
 
 export default chatSlice.reducer;
