@@ -11,13 +11,13 @@ import {
   sendContactRefresh,
   signalOnline,
   signalOffline,
+  signalOnlineReply,
 } from "../stores/chat.slice";
 import { io, Socket } from "socket.io-client";
 import { String as RtString } from "runtypes";
 import {
   addConnectedUser,
   removeConnectedUser,
-  setConnectedUsers,
   setContacts,
   UserDetails,
   userService,
@@ -129,6 +129,7 @@ const chatMiddleware: Middleware = (store) => {
         const payload: unknown = JSON.parse(RtString.check(payloadJSON));
         const { id, username } = chatEventType.SignalOnlinePayload.check(payload);
         store.dispatch(addConnectedUser({ id, username }));
+        store.dispatch(signalOnlineReply({ id, username }));
       };
 
       const signalOfflineHandler = (payloadJSON: unknown) => {
@@ -136,6 +137,14 @@ const chatMiddleware: Middleware = (store) => {
         const { id } = chatEventType.SignalOfflinePayload.check(payload);
         store.dispatch(removeConnectedUser({ id }));
       };
+      
+      const signalOnlineReplyHandler = (payloadJSON: unknown) => {
+        const payload: unknown = JSON.parse(RtString.check(payloadJSON));
+        const { id, username } = chatEventType.SignalOnlinePayload.check(payload);
+        console.log(`${id}, ${username}`)
+        store.dispatch(addConnectedUser({ id, username }));
+      };
+
 
       socket.on('connect', connectionHandler);
       // socket.on('user connected', userConnectionHandler);
@@ -148,6 +157,7 @@ const chatMiddleware: Middleware = (store) => {
       socket.on('contact refresh', contactRefreshHandler);
       socket.on('signal online', signalOnlineHandler);
       socket.on('signal offline', signalOfflineHandler);
+      socket.on('signal online reply', signalOnlineReplyHandler);
       socket.on('disconnect', disconnectionHandler);
     }
 
@@ -185,6 +195,12 @@ const chatMiddleware: Middleware = (store) => {
     
     if (signalOffline.match(action) && isConnectionEstablished) {
       socket.emit("signal offline");
+    }
+    
+    if (signalOnlineReply.match(action) && isConnectionEstablished) {
+      const { id, username } = action.payload;
+      const SignalOnlinePayload = JSON.stringify({ id, username });
+      socket.emit("signal online reply", SignalOnlinePayload);
     }
 
     next(action);
