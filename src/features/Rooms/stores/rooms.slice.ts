@@ -34,7 +34,7 @@ const roomsSlice = createSlice({
       ...state,
       currentRoom: action.payload.currentRoom
     }),
-    resetCurrentRoom: (state: RoomsState, action: PayloadAction<CurrentRoomPayload>) => ({
+    resetCurrentRoom: (state: RoomsState) => ({
       ...state,
       currentRoom: initialState.currentRoom,
     }),
