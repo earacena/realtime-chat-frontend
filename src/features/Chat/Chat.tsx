@@ -54,7 +54,7 @@ function Chat() {
     if (isConnected) {
       dispatch(signalOnline());
     }
-  }, []);
+  }, [dispatch, isConnected]);
 
   useEffect(() => {
     const fetchAllMessages = async () => {
@@ -123,14 +123,14 @@ function Chat() {
             m.senderUsername === user.username ? (
               <li
                 key={i}
-                className="first:mt-auto m-2 bg-slate-600 text-white p-1 px-3 rounded-full self-end shadow"
+                className="first:mt-auto m-2 bg-slate-600 text-white p-3 rounded-full self-end shadow"
               >
                 {m.content}
               </li>
             ) : (
               <li
                 key={i}
-                className="first:mt-auto m-2 bg-slate-400 text-white p-1 px-3 rounded-full self-start shadow"
+                className="first:mt-auto m-2 bg-slate-400 text-white p-3 rounded-full self-start shadow"
               >
                 {m.content}
               </li>
