@@ -10,7 +10,7 @@ import {
 
 const initialState: RoomsState = {
   allRooms: [],
-  currentRoom: { roomId: 'default', roomName: 'default' },
+  currentRoom: { roomId: 0, roomName: 'default' },
   userIdsInPrivateRoom: [],
 };
 
