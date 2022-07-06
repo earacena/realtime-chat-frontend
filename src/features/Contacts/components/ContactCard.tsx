@@ -9,13 +9,7 @@ function ContactCard({ contactDetails }: ContactCardProps) {
   const dispatch = useAppDispatch();
   const connectedUsers = useAppSelector((state) => state.users.connectedUsers);
 
-  useEffect(() => {
-    dispatch(signalOnline());
-  }, [dispatch]);
-
   const isUserOnline = undefined !== connectedUsers.find((users) => users.id === contactDetails.id);
-
-  console.log(connectedUsers);
 
   return (
     <div className="flex flex-row border border-1 border-l-0 border-t-0 border-r-0 rounded-lg border-slate-400 shadow p-2 items-center hover:bg-slate-200 w-72">
