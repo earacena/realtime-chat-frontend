@@ -15,6 +15,7 @@ function ContactList() {
   const token = useAppSelector((state) => state.auth.user.token);
   const contacts = useAppSelector((state) => state.users.contacts);
   const [isContactFinderOpen, setIsContactFinderOpen] = useState(false);
+  const isContactsListEmpty = contacts.length === 0;
 
   useEffect(() => {
     dispatch(signalOnline());
@@ -30,17 +31,17 @@ function ContactList() {
         for (const id of fetchedContactIds) {
           fetchedContacts.push(await userService.retrieveUserDetails(id));
         }
-
+        
         dispatch(setContacts({ contacts: fetchedContacts }));
       } catch (error: unknown) {
         console.error(error);
       }
     };
 
-    if (token && contacts.length === 0) {
+    if (token && isContactsListEmpty) {
       fetchContacts();
     }
-  }, [dispatch, userId, token, contacts]);
+  }, [dispatch, userId, token, isContactsListEmpty]);
 
 
   const addContactButtonPressed = () => setIsContactFinderOpen(true);
