@@ -32,6 +32,10 @@ const chatSlice = createSlice({
       state: ChatState,
       action: PayloadAction<SocketIdPayload>
     ) => ({ ...state, socketId: action.payload.socketId }),
+    resetSocketId: (state: ChatState) => ({
+      ...state,
+      socketId: initialState.socketId,
+    }),
     setMessages: (
       state: ChatState,
       action: PayloadAction<MessagesPayload>
@@ -43,6 +47,10 @@ const chatSlice = createSlice({
     sendMessage: (state: ChatState, action: PayloadAction<NewMessagePayload>) => {
       return;
     },
+    resetMessages: (state: ChatState) => ({
+      ...state,
+      messages: initialState.messages,
+    }),
     sendRequestRefresh: (state: ChatState, action: PayloadAction<RequestRefreshPayload>) => {
       return;
     },
@@ -76,6 +84,8 @@ export const {
   sendContactRefresh,
   signalOnline,
   signalOffline,
+  resetMessages,
+  resetSocketId,
 } = chatSlice.actions;
 
 export default chatSlice.reducer;
