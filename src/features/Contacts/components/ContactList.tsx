@@ -45,8 +45,8 @@ function ContactList() {
 
   const addContactButtonPressed = () => setIsContactFinderOpen(true);
 
-  const handleContactClick = (username: string) => {
-    dispatch(setCurrentRoom({ currentRoom: { roomId: username, roomName: username } }))
+  const handleContactClick = (id: number, username: string) => {
+    dispatch(setCurrentRoom({ currentRoom: { roomId: id, roomName: username } }))
   };
 
   return (
@@ -67,7 +67,7 @@ function ContactList() {
       { contacts.length === 0 && <span className="py-5">No added contacts</span>}
       <ul className="flex flex-col justify-center overflow-auto">
         {contacts.map((c) =>
-          <button key={c.id} onClick={() => handleContactClick(c.username)}>
+          <button key={c.id} onClick={() => handleContactClick(c.id, c.username)}>
             <ContactCard key={c.id} contactDetails={c} />
           </button>
         )}
