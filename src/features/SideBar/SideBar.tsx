@@ -47,10 +47,10 @@ function SideBar() {
       <Tab.Group>
         <Tab.List className="flex flex-row justify-evenly">
           <Tab className={({ selected }: TabStyleProps) => selected ? selectedTabStyle : tabStyle}>
-            <IoIosMail size={40} />                                                      
+            <BsFillPersonLinesFill  size={40} />                                         
           </Tab>                                                                         
           <Tab className={({ selected }: TabStyleProps) => selected ? selectedTabStyle : tabStyle}>
-            <BsFillPersonLinesFill  size={40} />                                         
+            <IoIosMail size={40} />                                                      
           </Tab>                                                                         
           <Tab className={({ selected }: TabStyleProps) => selected ? selectedTabStyle : tabStyle}>
             <IoMdSettings size={40} />
@@ -58,10 +58,10 @@ function SideBar() {
         </Tab.List>
         <Tab.Panels>
           <Tab.Panel>
-            <Requests />
+            <ContactList />
           </Tab.Panel>
           <Tab.Panel>
-            <ContactList />
+            <Requests />
           </Tab.Panel>
           <Tab.Panel>
             <p>Settings coming soon...</p>
