@@ -8,7 +8,7 @@ import requestService from '../api/request.service';
 import { setRequests } from '../stores/request.slice';
 import { useAppDispatch, useAppSelector } from '../../../hooks';
 import { BsPerson } from 'react-icons/bs';
-import { sendContactRefresh } from '../../Chat';
+import { sendContactRefresh, signalOnline } from '../../Chat';
 
 type RequestCardProps = {
   request: Request,
@@ -46,6 +46,7 @@ function RequestCard({ request }: RequestCardProps) {
       dispatch(setRequests({ requests: requests.filter((r) => r.id !== request.id) }));
       if (userDetails) {
         dispatch(sendContactRefresh({ username: userDetails.username }))
+        dispatch(signalOnline());
       }
     } catch (error: unknown) {
       console.error(error);
