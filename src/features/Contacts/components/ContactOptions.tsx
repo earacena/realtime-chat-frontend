@@ -1,15 +1,41 @@
 import React from 'react';
 import { Popover } from '@headlessui/react';
 import { BsThreeDotsVertical } from 'react-icons/bs';
+import { useAppDispatch, useAppSelector } from '../../../hooks';
+import { UserDetails, userService } from '../../Users';
+import { resetCurrentRoom, setCurrentRoom } from '../../Rooms';
+import { setContacts } from '../../Users';
 
 type RenderProps = {
   open: boolean;
 };
 
 function ContactOptions() {
+  const dispatch = useAppDispatch();
 
-  const handleContactDelete = () => {
+  const userId = useAppSelector((state) => state.auth.user.id);
+  const currentRoom = useAppSelector((state) => state.rooms.currentRoom);
+  const contacts = useAppSelector((state) => state.users.contacts);
 
+  const handleContactDelete = async () => {
+    try {
+      const updatedContacts = await userService.removeContact({ userId, contactId: currentRoom.roomId });
+      let fetchedContacts: UserDetails[] = [];
+      if (updatedContacts) {
+        for (const id of updatedContacts) {
+          fetchedContacts.push(await userService.retrieveUserDetails(id));
+        }
+      } 
+      dispatch(setContacts({ contacts: fetchedContacts }));
+
+      if (!fetchedContacts) {
+        dispatch(resetCurrentRoom());
+      } else {
+        dispatch(setCurrentRoom({ currentRoom: { roomId: contacts[0].id, roomName: contacts[0].username } }))
+      }
+    } catch (error: unknown) {
+      console.error(error);
+    }
   };
 
   return (
