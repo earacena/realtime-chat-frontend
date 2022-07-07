@@ -2,6 +2,7 @@ import {
   Array as RtArray,
   Number as RtNumber,
   Record as RtRecord,
+  Optional as RtOptional,
 } from 'runtypes';
 
 import { RemoveContactProps, CreateUserFields, UserDetailsType, MakeUserContactsProps } from '../types/users.types';
@@ -74,7 +75,7 @@ const removeContact = async ({ userId, contactId }: RemoveContactProps) => {
     },
     body: JSON.stringify({ contactId })
   });
-  const { contacts } = RtRecord({ contacts: RtArray(RtNumber) }).check(await response.json());
+  const { contacts } = RtRecord({ contacts: RtOptional(RtArray(RtNumber)) }).check(await response.json());
   return contacts;
 };
 
