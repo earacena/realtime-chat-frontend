@@ -60,3 +60,8 @@ export type SignalOnlineReplyPayload = {
   id: number,
   username: string,
 };
+
+export type MessageProps = {
+  message: Message,
+  isUserSender: boolean,
+};
