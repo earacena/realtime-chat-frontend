@@ -51,10 +51,10 @@ function Chat() {
   }, [dispatch, isConnected, isConnecting]);
 
   useEffect(() => {
-    if (isConnected) {
+    if (user && isConnected) {
       dispatch(signalOnline());
     }
-  }, [dispatch, isConnected]);
+  }, [dispatch, isConnected, user]);
 
   useEffect(() => {
     const fetchAllMessages = async () => {
