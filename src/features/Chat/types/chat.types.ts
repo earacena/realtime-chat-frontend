@@ -64,4 +64,6 @@ export type SignalOnlineReplyPayload = {
 export type MessageProps = {
   message: Message,
   isUserSender: boolean,
+  isFirstMessage: boolean,
+  isLastMessage: boolean,
 };
