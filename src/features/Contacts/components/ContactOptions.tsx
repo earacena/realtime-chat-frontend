@@ -5,6 +5,7 @@ import { useAppDispatch, useAppSelector } from '../../../hooks';
 import { UserDetails, userService } from '../../Users';
 import { resetCurrentRoom, setCurrentRoom } from '../../Rooms';
 import { setContacts } from '../../Users';
+import { sendContactRefresh } from '../../Chat';
 
 type RenderProps = {
   open: boolean;
@@ -27,7 +28,7 @@ function ContactOptions() {
         }
       } 
       dispatch(setContacts({ contacts: fetchedContacts }));
-
+      dispatch(sendContactRefresh({ username: currentRoom.roomName }));
       if (!fetchedContacts) {
         dispatch(resetCurrentRoom());
       } else {
