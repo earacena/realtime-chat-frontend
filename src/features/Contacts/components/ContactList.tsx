@@ -18,10 +18,6 @@ function ContactList() {
   const isContactsListEmpty = contacts.length === 0;
 
   useEffect(() => {
-    dispatch(signalOnline());
-  }, [dispatch]);
-
-  useEffect(() => {
     const fetchContacts = async () => {
       try {
         const fetchedContactIds = await userService.retrieveUserContacts(userId);
