@@ -21,7 +21,6 @@ function Chat() {
   const navigate = useNavigate();
   const user = useAppSelector((state) => state.auth.user);
   const connectedUsers = useAppSelector((state) => state.users.connectedUsers);
-  const messages = useAppSelector(selectSortedMessages);
   const currentRoom = useAppSelector((state) => state.rooms.currentRoom);
   const isConnected = useAppSelector((state) => state.chat.isConnected);
   const isConnecting = useAppSelector((state) => state.chat.isConnecting);
