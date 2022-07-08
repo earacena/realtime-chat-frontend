@@ -1,5 +1,6 @@
 import React from 'react';
 import { useAppSelector } from '../../../hooks';
+import Message from './Message';
 
 function Messages() {
   const messages = useAppSelector((state) => state.chat.messages);
@@ -8,25 +9,11 @@ function Messages() {
 
   return (
     <ul className="flex flex-1 flex-col overflow-auto">
-      {messages.map((m, i) =>
+      {messages.map((m) =>
         (currentRoom.roomName === m.recipientUsername ||
           currentRoom.roomName === m.senderUsername) &&
         m.content !== "" &&
-        m.senderUsername === user.username ? (
-          <li
-            key={i}
-            className="first:mt-auto m-2 bg-slate-600 text-white p-3 rounded-full self-end shadow"
-          >
-            {m.content}
-          </li>
-        ) : (
-          <li
-            key={i}
-            className="first:mt-auto m-2 bg-slate-400 text-white p-3 rounded-full self-start shadow"
-          >
-            {m.content}
-          </li>
-        )
+        <Message message={m} isUserSender={m.senderUsername === user.username} />
       )}
     </ul>
   );
