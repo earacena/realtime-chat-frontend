@@ -76,6 +76,15 @@ export const selectSortedMessages = createSelector([selectMessages], (messages) 
   return [...messages].sort((a, b) => a.id - b.id);
 });
 
+export const selectRoomName = (state: RootState) => state.rooms.currentRoom.roomName;
+
+export const selectMessagesByUsernames = createSelector(
+  [selectSortedMessages, selectRoomName], 
+  (sortedMessages, roomName) => (
+    sortedMessages.filter((m) => (roomName === m.recipientUsername || roomName === m.senderUsername) && m.content !== '')
+  )
+);
+
 export const {
   startConnecting,
   connectionEstablished,
