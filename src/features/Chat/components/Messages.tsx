@@ -15,8 +15,8 @@ function Messages() {
           key={m.id}
           message={m}
           isUserSender={m.senderUsername === user.username}
-          isFirstMessage={(i > 0) && (messages[i-1].senderUsername !== messages[i].senderUsername)}
-          isLastMessage={(i < messages.length - 1 ) && (messages[i+1].senderUsername !== messages[i].senderUsername)}
+          isFirstMessage={(i === 0) || ((i > 0) && (messages[i-1].senderUsername !== messages[i].senderUsername))}
+          isLastMessage={(i === messages.length-1) || ((i < messages.length-1) &&(messages[i+1].senderUsername !== messages[i].senderUsername))}
         />
       )}
     </ul>
