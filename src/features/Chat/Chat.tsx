@@ -4,12 +4,13 @@ import { selectSortedMessages, sendMessage, setMessages, signalOnline, startConn
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import { useNavigate } from "react-router-dom";
 import { setAuthenticatedUser } from "../Login/stores/auth.slice";
-import { Messages } from "./types/chat.types";
+import { Messages as MessageArray } from "./types/chat.types";
 import chatService from "./api/chat.service";
 import { BiSend } from "react-icons/bi";
 import { BsPerson } from "react-icons/bs";
 import { VscCircleFilled } from 'react-icons/vsc';
 import ContactOptions from '../Contacts/components/ContactOptions';
+import Messages from "./components/Messages";
 
 type Input = {
   message: string;
@@ -59,7 +60,7 @@ function Chat() {
   useEffect(() => {
     const fetchAllMessages = async () => {
       try {
-        const fetchedMessages: Messages = await chatService.retrieveMessages({
+        const fetchedMessages: MessageArray = await chatService.retrieveMessages({
           senderUsername: user.username,
           recipientUsername: currentRoom.roomName,
         });
@@ -114,29 +115,7 @@ function Chat() {
         }
       </span>
       {
-        currentRoom.roomName !== 'default' &&
-        <ul className="flex flex-1 flex-col overflow-auto">
-          {messages.map((m, i) =>
-            (currentRoom.roomName === m.recipientUsername ||
-              currentRoom.roomName === m.senderUsername) &&
-            m.content !== "" &&
-            m.senderUsername === user.username ? (
-              <li
-                key={i}
-                className="first:mt-auto m-2 bg-slate-600 text-white p-3 rounded-full self-end shadow"
-              >
-                {m.content}
-              </li>
-            ) : (
-              <li
-                key={i}
-                className="first:mt-auto m-2 bg-slate-400 text-white p-3 rounded-full self-start shadow"
-              >
-                {m.content}
-              </li>
-            )
-          )}
-        </ul>
+        currentRoom.roomName !== 'default' && <Messages />
       }
       {
         currentRoom.roomName !== 'default' &&
