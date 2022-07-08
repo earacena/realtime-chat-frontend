@@ -7,6 +7,7 @@ import { requestService } from '../../Requests';
 import { resetNotification, setNotification } from '../../Notification';
 import { sendRequestRefresh } from '../../Chat';
 import { useAppDispatch, useAppSelector } from '../../../hooks';
+import { InstanceOf as RtInstanceOf } from 'runtypes';
 
 type ContactRequestDialogProps = {
   isOpen: boolean,
@@ -38,6 +39,10 @@ function ContactRequestDialog({isOpen, setIsOpen}: ContactRequestDialogProps) {
 
   const onSubmit: SubmitHandler<Input> = async ({ username }: FormData) => {
     try {
+      if (username === user.username) {
+        throw new Error('Cannot send yourself a contact request. Please try a different username.');
+      }
+
       await requestService.create({
         type: 'contact',
         fromUserId: user.id,
@@ -54,12 +59,21 @@ function ContactRequestDialog({isOpen, setIsOpen}: ContactRequestDialogProps) {
         type: 'message',
         message,
         timeoutId: newTimeoutId,
-      }))
+      }));
 
       dispatch(sendRequestRefresh({ username }));
       setIsOpen(false);
     } catch (error: unknown) {
-      console.error(error);
+      if (RtInstanceOf(Error).guard(error)) {
+        const newTimeoutId = setTimeout(() => {
+          dispatch(resetNotification());
+        }, 4000)
+        dispatch(setNotification({ 
+          type: 'error',
+          message: error.message,
+          timeoutId: newTimeoutId,
+        }));
+      }
     }
   };
 
