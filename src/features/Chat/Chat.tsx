@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { selectSortedMessages, sendMessage, setMessages, signalOnline, startConnecting } from "./stores/chat.slice";
+import { sendMessage, setMessages, signalOnline, startConnecting } from "./stores/chat.slice";
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import { useNavigate } from "react-router-dom";
 import { setAuthenticatedUser } from "../Login/stores/auth.slice";
@@ -45,16 +45,16 @@ function Chat() {
   }, [dispatch, navigate, user.token]);
 
   useEffect(() => {
-    if (!isConnected && !isConnecting) {
+    if (user.token && !isConnected && !isConnecting) {
       dispatch(startConnecting());
     }
-  }, [dispatch, isConnected, isConnecting]);
+  }, [dispatch, isConnected, isConnecting, user.token]);
 
   useEffect(() => {
-    if (user && isConnected) {
+    if (user.token && isConnected) {
       dispatch(signalOnline());
     }
-  }, [dispatch, isConnected, user]);
+  }, [dispatch, isConnected, user.token]);
 
   useEffect(() => {
     const fetchAllMessages = async () => {
