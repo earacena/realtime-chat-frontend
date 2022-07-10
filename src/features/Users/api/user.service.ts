@@ -6,12 +6,12 @@ import {
 } from "runtypes";
 
 import {
-  RemoveContactProps,
-  CreateUserFields,
+  RemoveContactParams,
+  CreateUserParams,
   UserDetailsType,
-  MakeUserContactsProps,
-  RetrieveUserDetailsProps,
-  RetrieveUserContactsProps,
+  MakeUserContactsParams,
+  RetrieveUserDetailsParams,
+  RetrieveUserContactsParams,
 } from "../types/users.types";
 
 const baseUrl = "http://localhost:3001/api/users";
@@ -21,7 +21,7 @@ const create = async ({
   username,
   password,
   token,
-}: CreateUserFields) => {
+}: CreateUserParams) => {
   const response = await fetch(baseUrl, {
     method: "POST",
     headers: {
@@ -41,7 +41,7 @@ const create = async ({
 const retrieveUserDetails = async ({
   userId,
   token,
-}: RetrieveUserDetailsProps) => {
+}: RetrieveUserDetailsParams) => {
   const response = await fetch(`${baseUrl}/details/${userId}`, {
     headers: {
       Authorization: `bearer ${token}`,
@@ -56,7 +56,7 @@ const makeUsersContacts = async ({
   user1,
   user2,
   token,
-}: MakeUserContactsProps) => {
+}: MakeUserContactsParams) => {
   let response = await fetch(`${baseUrl}/${user1}/contacts`, {
     method: "PUT",
     headers: {
@@ -90,7 +90,7 @@ const makeUsersContacts = async ({
 const retrieveUserContacts = async ({
   userId,
   token,
-}: RetrieveUserContactsProps) => {
+}: RetrieveUserContactsParams) => {
   const response = await fetch(`${baseUrl}/${userId}/contacts`, {
     headers: {
       Authorization: `bearer ${token}`,
@@ -107,7 +107,7 @@ const removeContact = async ({
   userId,
   contactId,
   token,
-}: RemoveContactProps) => {
+}: RemoveContactParams) => {
   const response = await fetch(`${baseUrl}/${userId}/contacts`, {
     method: "DELETE",
     headers: {

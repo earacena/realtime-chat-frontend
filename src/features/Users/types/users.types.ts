@@ -13,7 +13,7 @@ export type UsersState = {
   contacts: UserDetails[];
 };
 
-export type CreateUserFields = {
+export type CreateUserParams = {
   name: string;
   username: string;
   password: string;
@@ -44,7 +44,7 @@ export const UserDetailsType = RtRecord({
   username: RtString,
 });
 
-export type MakeUserContactsProps = {
+export type MakeUserContactsParams = {
   user1: number,
   user2: number,
   token: string,
@@ -54,18 +54,18 @@ export type ContactsPayload = {
   contacts: UserDetails[],
 };
 
-export type RemoveContactProps = {
+export type RemoveContactParams = {
   userId: number,
   contactId: number,
   token: string
 };
 
-export type RetrieveUserDetailsProps = {
+export type RetrieveUserDetailsParams = {
   userId: number,
   token: string,
 };
 
-export type RetrieveUserContactsProps = {
+export type RetrieveUserContactsParams = {
   userId: number,
   token: string,
 };
