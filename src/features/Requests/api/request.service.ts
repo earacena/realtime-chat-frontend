@@ -35,10 +35,11 @@ const getRequestsOfUser = async (userId: number, token: string) => {
   return requests;
 };
 
-const update = async (updatedRequest: Request) => {
+const update = async (updatedRequest: Request, token: string) => {
   const response = await fetch(`${baseUrl}/${updatedRequest.id}`, {
     method: 'PUT',
     headers: {
+      Authorization: `bearer ${token}`,
       "Content-Type": 'application/json',
     },
     body: JSON.stringify(updatedRequest),
