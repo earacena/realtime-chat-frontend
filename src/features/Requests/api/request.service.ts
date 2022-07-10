@@ -21,8 +21,16 @@ const create = async (request: NewRequest, token: string) => {
   }
 };
 
-const getRequestsOfUser = async (userId: number) => {
-  const response = await fetch(`${baseUrl}/pending/to/${userId}`);
+const getRequestsOfUser = async (userId: number, token: string) => {
+  const response = await fetch(
+    `${baseUrl}/pending/to/${userId}`,
+    {
+      headers: {
+        Authorization: `bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    }
+  );
   const requests = RequestArray.check(await response.json());
   return requests;
 };
