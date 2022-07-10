@@ -1,17 +1,17 @@
-import React, { useEffect, useState } from 'react';
-import { userService } from '../../Users';
-import { UserDetails } from '../../Users/types/users.types';
-import { Request } from '../types/requests.types';
-import { IoMdCheckmark } from 'react-icons/io';
-import { MdOutlineCancel } from 'react-icons/md';
-import requestService from '../api/request.service';
-import { setRequests } from '../stores/request.slice';
-import { useAppDispatch, useAppSelector } from '../../../hooks';
-import { BsPerson } from 'react-icons/bs';
-import { sendContactRefresh, signalOnline } from '../../Chat';
+import React, { useEffect, useState } from "react";
+import { userService } from "../../Users";
+import { UserDetails } from "../../Users/types/users.types";
+import { Request } from "../types/requests.types";
+import { IoMdCheckmark } from "react-icons/io";
+import { MdOutlineCancel } from "react-icons/md";
+import requestService from "../api/request.service";
+import { setRequests } from "../stores/request.slice";
+import { useAppDispatch, useAppSelector } from "../../../hooks";
+import { BsPerson } from "react-icons/bs";
+import { sendContactRefresh, signalOnline } from "../../Chat";
 
 type RequestCardProps = {
-  request: Request,
+  request: Request;
 };
 
 function RequestCard({ request }: RequestCardProps) {
@@ -23,29 +23,45 @@ function RequestCard({ request }: RequestCardProps) {
   useEffect(() => {
     const fetchUserDetails = async () => {
       try {
-        const fetchedUserDetails = await userService.retrieveUserDetails(request.fromUser);
+        const fetchedUserDetails = await userService.retrieveUserDetails({
+          userId: request.fromUser,
+          token: user.token,
+        });
         setUserDetails(fetchedUserDetails);
       } catch (error: unknown) {
         console.error(error);
       }
-    }
+    };
 
     fetchUserDetails();
-  }, [request.fromUser])
+  }, [request.fromUser]);
 
   const handleRequest = async (newStatus: string) => {
     try {
-      await requestService.update({ ...request, status: newStatus });
-      
+      await requestService.update({
+        updatedRequest: { ...request, status: newStatus },
+        token: user.token,
+      });
+
       // If request was a contact request and user accepts it, update both users profile
-      if (userDetails && request.type === 'contact' && newStatus === 'accepted') {
-        await userService.makeUsersContacts({ user1: user.id, user2: userDetails.id });
+      if (
+        userDetails &&
+        request.type === "contact" &&
+        newStatus === "accepted"
+      ) {
+        await userService.makeUsersContacts({
+          user1: user.id,
+          user2: userDetails.id,
+          token: user.token,
+        });
       }
 
       // Since request was handled, remove it from the feed
-      dispatch(setRequests({ requests: requests.filter((r) => r.id !== request.id) }));
+      dispatch(
+        setRequests({ requests: requests.filter((r) => r.id !== request.id) })
+      );
       if (userDetails) {
-        dispatch(sendContactRefresh({ username: userDetails.username }))
+        dispatch(sendContactRefresh({ username: userDetails.username }));
         dispatch(signalOnline());
       }
     } catch (error: unknown) {
@@ -58,10 +74,10 @@ function RequestCard({ request }: RequestCardProps) {
       <BsPerson size={40} />
       <span className=" text-lg font-medium">{userDetails?.name}</span>
       <div className="self-end">
-        <button onClick={() => handleRequest('accepted')}>
+        <button onClick={() => handleRequest("accepted")}>
           <IoMdCheckmark size={30} className="text-green-600" />
         </button>
-        <button onClick={() => handleRequest('rejected')}>
+        <button onClick={() => handleRequest("rejected")}>
           <MdOutlineCancel size={30} className="text-red-800 ml-3" />
         </button>
       </div>

@@ -62,6 +62,7 @@ function Chat() {
         const fetchedMessages: MessageArray = await chatService.retrieveMessages({
           senderUsername: user.username,
           recipientUsername: currentRoom.roomName,
+          token: user.token,
         });
 
         dispatch(setMessages({ messages: fetchedMessages }));
@@ -73,7 +74,7 @@ function Chat() {
     if (isConnected) {
       fetchAllMessages();
     }
-  }, [dispatch, isConnected, user.username, currentRoom.roomName]);
+  }, [dispatch, isConnected, user.username, currentRoom.roomName, user.token]);
 
   const onSubmit: SubmitHandler<Input> = ({ message }) => {
     if (message) {

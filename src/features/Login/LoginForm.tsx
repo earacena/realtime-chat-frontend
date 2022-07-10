@@ -1,12 +1,12 @@
-import React from 'react';
-import { SubmitHandler, useForm } from 'react-hook-form';
-import { InstanceOf as RtInstanceOf } from 'runtypes';
-import { useAppDispatch } from '../../hooks';
-import { useNavigate } from 'react-router-dom';
-import { FormWrapper, LabelErrorMessage } from '../../components';
-import loginService from './api/login.service';
-import { setAuthenticatedUser } from './stores/auth.slice';
-import { resetNotification, setNotification } from '../Notification';
+import React from "react";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { InstanceOf as RtInstanceOf } from "runtypes";
+import { useAppDispatch } from "../../hooks";
+import { useNavigate } from "react-router-dom";
+import { FormWrapper, LabelErrorMessage } from "../../components";
+import loginService from "./api/login.service";
+import { setAuthenticatedUser } from "./stores/auth.slice";
+import { resetNotification, setNotification } from "../Notification";
 
 type Input = {
   username: string;
@@ -21,36 +21,38 @@ function LoginForm() {
     register,
     handleSubmit,
     reset,
-    formState: { errors }
+    formState: { errors },
   } = useForm<Input>({
     defaultValues: {
-      username: '',
-      password: '',
-    }
+      username: "",
+      password: "",
+    },
   });
 
   const onSubmit: SubmitHandler<Input> = async (credentials) => {
     try {
       const user = await loginService.login(credentials);
-      
+
       dispatch(setAuthenticatedUser({ user }));
 
-      window.localStorage.setItem('chatAppUser', JSON.stringify(user));
+      window.localStorage.setItem("chatAppUser", JSON.stringify(user));
       reset({
-        username: '',
-        password: '',
+        username: "",
+        password: "",
       });
-      navigate('/chat');
+      navigate("/chat");
     } catch (error: unknown) {
       if (RtInstanceOf(Error).guard(error)) {
         const newTimeoutId = setTimeout(() => {
           dispatch(resetNotification());
-        }, 4000)
-        dispatch(setNotification({ 
-          type: 'error',
-          message: error.message,
-          timeoutId: newTimeoutId,
-        }))
+        }, 4000);
+        dispatch(
+          setNotification({
+            type: "error",
+            message: error.message,
+            timeoutId: newTimeoutId,
+          })
+        );
       }
     }
   };
@@ -60,7 +62,9 @@ function LoginForm() {
   return (
     <FormWrapper>
       <form className="flex flex-col" onSubmit={handleSubmit(onSubmit)}>
-        <label className="mt-3" htmlFor="username-input">Username</label>
+        <label className="mt-3" htmlFor="username-input">
+          Username
+        </label>
         {errors.username && <LabelErrorMessage content="Required" />}
         <input
           id="username-input"
@@ -68,7 +72,7 @@ function LoginForm() {
           className="p-2 mt-1 mb-3 bg-slate-200 rounded-sm focus:outline-slate-400"
           type="text"
           placeholder=""
-          {...register('username', { required: true })}
+          {...register("username", { required: true })}
         />
         <label htmlFor="password-input">Password</label>
         {errors.password && <LabelErrorMessage content="Required" />}
@@ -78,9 +82,9 @@ function LoginForm() {
           className="p-2 mt-1 mb-3 bg-slate-200 rounded-sm focus:outline-slate-400"
           type="password"
           placeholder=""
-          {...register('password', { required: true })}
+          {...register("password", { required: true })}
         />
-        <button 
+        <button
           id="login-button"
           className="rounded-md p-3 bg-slate-500 text-white w-full mt-2 hover:bg-slate-400"
           type="submit"
@@ -88,7 +92,9 @@ function LoginForm() {
         >
           Login
         </button>
-        <p className="mt-4 text-sm self-center text-slate-600">Don't have an account?</p>
+        <p className="mt-4 text-sm self-center text-slate-600">
+          Don't have an account?
+        </p>
         <button
           id="register-button"
           className="rounded-md p-3 outline outline-2 text-slate-600 w-full mt-1 hover:bg-slate-200"
@@ -100,7 +106,7 @@ function LoginForm() {
         </button>
       </form>
     </FormWrapper>
-  )
+  );
 }
 
 export default LoginForm;
