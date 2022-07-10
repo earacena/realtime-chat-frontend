@@ -2,10 +2,11 @@ import { NewRequest, RequestArray, RequestResponse, Request } from "../types/req
 
 const baseUrl = "http://localhost:3001/api/requests";
 
-const create = async (request: NewRequest) => {
+const create = async (request: NewRequest, token: string) => {
   const response = await fetch(baseUrl, {
     method: "POST",
     headers: {
+      Authorization: `bearer ${token}`,
       "Content-Type": "application/json",
     },
     body: JSON.stringify(request),
