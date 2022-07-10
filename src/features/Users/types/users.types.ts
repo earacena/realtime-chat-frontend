@@ -17,6 +17,7 @@ export type CreateUserFields = {
   name: string;
   username: string;
   password: string;
+  token: string;
 };
 
 export type OnlineUserInfo = {
@@ -46,6 +47,7 @@ export const UserDetailsType = RtRecord({
 export type MakeUserContactsProps = {
   user1: number,
   user2: number,
+  token: string,
 };
 
 export type ContactsPayload = {
@@ -55,4 +57,15 @@ export type ContactsPayload = {
 export type RemoveContactProps = {
   userId: number,
   contactId: number,
+  token: string
+};
+
+export type RetrieveUserDetailsProps = {
+  userId: number,
+  token: string,
+};
+
+export type RetrieveUserContactsProps = {
+  userId: number,
+  token: string,
 };

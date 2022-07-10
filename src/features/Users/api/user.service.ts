@@ -3,17 +3,30 @@ import {
   Number as RtNumber,
   Record as RtRecord,
   Optional as RtOptional,
-} from 'runtypes';
+} from "runtypes";
 
-import { RemoveContactProps, CreateUserFields, UserDetailsType, MakeUserContactsProps } from '../types/users.types';
+import {
+  RemoveContactProps,
+  CreateUserFields,
+  UserDetailsType,
+  MakeUserContactsProps,
+  RetrieveUserDetailsProps,
+  RetrieveUserContactsProps,
+} from "../types/users.types";
 
-const baseUrl = 'http://localhost:3001/api/users';
+const baseUrl = "http://localhost:3001/api/users";
 
-const create = async ({ name, username, password }: CreateUserFields) => {
+const create = async ({
+  name,
+  username,
+  password,
+  token,
+}: CreateUserFields) => {
   const response = await fetch(baseUrl, {
-    method: 'POST',
+    method: "POST",
     headers: {
-      'Content-Type': 'application/json',
+      Authorization: `bearer ${token}`,
+      "Content-Type": "application/json",
     },
     body: JSON.stringify({ name, username, password }),
   });
@@ -21,21 +34,34 @@ const create = async ({ name, username, password }: CreateUserFields) => {
   const responseJson = await response.json();
 
   if (responseJson.error) {
-    throw new Error(`${responseJson.error}`)
+    throw new Error(`${responseJson.error}`);
   }
 };
 
-const retrieveUserDetails = async (userId: number) => {
-  const response = await fetch(`${baseUrl}/details/${userId}`);
+const retrieveUserDetails = async ({
+  userId,
+  token,
+}: RetrieveUserDetailsProps) => {
+  const response = await fetch(`${baseUrl}/details/${userId}`, {
+    headers: {
+      Authorization: `bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+  });
   const userDetails = UserDetailsType.check(await response.json());
   return userDetails;
 };
 
-const makeUsersContacts = async ({ user1, user2 }: MakeUserContactsProps) => {
+const makeUsersContacts = async ({
+  user1,
+  user2,
+  token,
+}: MakeUserContactsProps) => {
   let response = await fetch(`${baseUrl}/${user1}/contacts`, {
-    method: 'PUT',
+    method: "PUT",
     headers: {
-      'Content-Type': 'application/json',
+      Authorization: `bearer ${token}`,
+      "Content-Type": "application/json",
     },
     body: JSON.stringify({ contactId: user2 }),
   });
@@ -47,13 +73,13 @@ const makeUsersContacts = async ({ user1, user2 }: MakeUserContactsProps) => {
   }
 
   response = await fetch(`${baseUrl}/${user2}/contacts`, {
-    method: 'PUT',
+    method: "PUT",
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     },
     body: JSON.stringify({ contactId: user1 }),
   });
-  
+
   responseJson = await response.json();
 
   if (responseJson.error) {
@@ -61,21 +87,38 @@ const makeUsersContacts = async ({ user1, user2 }: MakeUserContactsProps) => {
   }
 };
 
-const retrieveUserContacts = async (userId: number) => {
-  const response = await fetch(`${baseUrl}/${userId}/contacts`);
-  const { contacts } = RtRecord({ contacts: RtArray(RtNumber) }).check(await response.json());
+const retrieveUserContacts = async ({
+  userId,
+  token,
+}: RetrieveUserContactsProps) => {
+  const response = await fetch(`${baseUrl}/${userId}/contacts`, {
+    headers: {
+      Authorization: `bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+  });
+  const { contacts } = RtRecord({ contacts: RtArray(RtNumber) }).check(
+    await response.json()
+  );
   return contacts;
 };
 
-const removeContact = async ({ userId, contactId }: RemoveContactProps) => {
+const removeContact = async ({
+  userId,
+  contactId,
+  token,
+}: RemoveContactProps) => {
   const response = await fetch(`${baseUrl}/${userId}/contacts`, {
-    method: 'DELETE',
+    method: "DELETE",
     headers: {
-      'Content-Type': 'application/json',
+      Authorization: `bearer ${token}`,
+      "Content-Type": "application/json",
     },
-    body: JSON.stringify({ contactId })
+    body: JSON.stringify({ contactId }),
   });
-  const { contacts } = RtRecord({ contacts: RtOptional(RtArray(RtNumber)) }).check(await response.json());
+  const { contacts } = RtRecord({
+    contacts: RtOptional(RtArray(RtNumber)),
+  }).check(await response.json());
   return contacts;
 };
 
@@ -86,4 +129,4 @@ const userService = {
   retrieveUserContacts,
   removeContact,
 };
-export default userService; 
+export default userService;
