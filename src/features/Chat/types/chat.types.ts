@@ -67,3 +67,9 @@ export type MessageProps = {
   isFirstMessage: boolean,
   isLastMessage: boolean,
 };
+
+export type RetrieveMessagesParams = {
+  senderUsername: string,
+  recipientUsername: string,
+  token: string,
+};

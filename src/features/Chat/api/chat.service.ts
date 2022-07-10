@@ -1,14 +1,9 @@
-import { MessageArray } from "../types/chat.types";
+import { MessageArray, RetrieveMessagesParams } from "../types/chat.types";
 
 const baseUrl = 'http://localhost:3001/api/messages';
 
-type RetrieveMessagesProps = {
-  senderUsername: string,
-  recipientUsername: string,
-  token: string,
-}
 
-const retrieveMessages = async ({ senderUsername, recipientUsername, token }: RetrieveMessagesProps) => {
+const retrieveMessages = async ({ senderUsername, recipientUsername, token }: RetrieveMessagesParams) => {
   const response = await fetch(
     `${baseUrl}/?senderUsername=${senderUsername}&recipientUsername=${recipientUsername}`,
     {
