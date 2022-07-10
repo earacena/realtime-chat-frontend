@@ -37,3 +37,18 @@ export type RequestsState = {
 export type RequestsPayload = {
   requests: Requests,
 };
+
+export type GetRequestsOfUserParams = {
+  userId: number,
+  token: string,
+};
+
+export type UpdateParams = {
+  updatedRequest: Request,
+  token: string,
+};
+
+export type CreateParams = {
+  request: NewRequest,
+  token: string,
+};

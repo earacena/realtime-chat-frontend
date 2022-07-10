@@ -1,8 +1,14 @@
-import { NewRequest, RequestArray, RequestResponse, Request } from "../types/requests.types";
+import {
+  RequestArray,
+  RequestResponse,
+  CreateParams,
+  GetRequestsOfUserParams,
+  UpdateParams,
+} from "../types/requests.types";
 
 const baseUrl = "http://localhost:3001/api/requests";
 
-const create = async (request: NewRequest, token: string) => {
+const create = async ({ request, token }: CreateParams) => {
   const response = await fetch(baseUrl, {
     method: "POST",
     headers: {
@@ -21,30 +27,30 @@ const create = async (request: NewRequest, token: string) => {
   }
 };
 
-const getRequestsOfUser = async (userId: number, token: string) => {
-  const response = await fetch(
-    `${baseUrl}/pending/to/${userId}`,
-    {
-      headers: {
-        Authorization: `bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-    }
-  );
+const getRequestsOfUser = async ({
+  userId,
+  token,
+}: GetRequestsOfUserParams) => {
+  const response = await fetch(`${baseUrl}/pending/to/${userId}`, {
+    headers: {
+      Authorization: `bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+  });
   const requests = RequestArray.check(await response.json());
   return requests;
 };
 
-const update = async (updatedRequest: Request, token: string) => {
+const update = async ({ updatedRequest, token }: UpdateParams) => {
   const response = await fetch(`${baseUrl}/${updatedRequest.id}`, {
-    method: 'PUT',
+    method: "PUT",
     headers: {
       Authorization: `bearer ${token}`,
-      "Content-Type": 'application/json',
+      "Content-Type": "application/json",
     },
     body: JSON.stringify(updatedRequest),
   });
-  
+
   const responseJson = await response.json();
 
   if (responseJson.error) {
@@ -52,7 +58,7 @@ const update = async (updatedRequest: Request, token: string) => {
   } else {
     return RequestResponse.check(responseJson);
   }
-}
+};
 
 const requestService = { create, getRequestsOfUser, update };
 export default requestService;
