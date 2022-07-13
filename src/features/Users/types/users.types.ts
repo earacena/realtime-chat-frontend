@@ -68,3 +68,9 @@ export type RetrieveUserContactsParams = {
   userId: number,
   token: string,
 };
+
+export type AddUserParams = {
+  userId: number,
+  contactId: number,
+  token: string,
+};
