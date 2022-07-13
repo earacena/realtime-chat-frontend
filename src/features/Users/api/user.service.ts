@@ -12,6 +12,7 @@ import {
   MakeUserContactsParams,
   RetrieveUserDetailsParams,
   RetrieveUserContactsParams,
+  AddUserParams,
 } from "../types/users.types";
 
 const baseUrl = "http://localhost:3001/api/users";
@@ -48,6 +49,28 @@ const retrieveUserDetails = async ({
   });
   const userDetails = UserDetailsType.check(await response.json());
   return userDetails;
+};
+
+const addContact = async ({
+  userId,
+  contactId,
+  token
+}: AddUserParams) => {
+
+  const response = await fetch(`${baseUrl}/${userId}/contacts`, {
+    method: "PUT",
+    headers: {
+      Authorization: `bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ contactId }),
+  });
+
+  let responseJson = await response.json();
+
+  if (responseJson.error) {
+    throw new Error(`${responseJson.error}`);
+  }
 };
 
 const makeUsersContacts = async ({
@@ -124,6 +147,7 @@ const userService = {
   create,
   retrieveUserDetails,
   makeUsersContacts,
+  addContact,
   retrieveUserContacts,
   removeContact,
 };
