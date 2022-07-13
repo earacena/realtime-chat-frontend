@@ -7,6 +7,7 @@ import {
   MessagePayload,
   MessagesPayload,
   RequestRefreshPayload,
+  ContactRequestPayload,
   ContactRefreshPayload,
   SignalOnlineReplyPayload,
 } from "../types/chat.types";
@@ -55,6 +56,9 @@ const chatSlice = createSlice({
     sendRequestRefresh: (state: ChatState, action: PayloadAction<RequestRefreshPayload>) => {
       return;
     },
+    sendContactRequest: (state: ChatState, action: PayloadAction<ContactRequestPayload>) => {
+      return;
+    },
     sendContactRefresh: (state: ChatState, action: PayloadAction<ContactRefreshPayload>) => {
       return;
     },
@@ -94,6 +98,7 @@ export const {
   addMessage,
   sendMessage,
   sendRequestRefresh,
+  sendContactRequest,
   sendContactRefresh,
   signalOnline,
   signalOffline,
