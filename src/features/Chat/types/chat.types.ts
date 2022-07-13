@@ -57,6 +57,7 @@ export type ContactRefreshPayload = {
 };
 
 export type ContactRequestPayload = {
+  id: number,
   username: string,
 };
 

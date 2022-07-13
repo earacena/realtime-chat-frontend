@@ -8,6 +8,7 @@ import {
   startConnecting,
   connectionEstablished,
   sendRequestRefresh,
+  sendContactRequest,
   sendContactRefresh,
   signalOnline,
   signalOffline,
@@ -22,7 +23,6 @@ import {
   UserDetails,
   userService,
 } from "../../Users";
-import { addRoom } from "../../Rooms";
 import chatEventType from "../types/chatEvents.types";
 import { requestService, setRequests } from "../../Requests";
 
@@ -116,7 +116,7 @@ const chatMiddleware: Middleware = (store) => {
           // Since fetchedContacts is a list of ids, a list of userDetails must be generated
           let fetchedContacts: UserDetails[] = [];
           for (const id of fetchedContactIds) {
-            fetchedContacts.push(await userService.retrieveUserDetails(id));
+            fetchedContacts.push(await userService.retrieveUserDetails({ userId: id, token }));
           }
 
           store.dispatch(setContacts({ contacts: fetchedContacts }));
@@ -124,6 +124,18 @@ const chatMiddleware: Middleware = (store) => {
           console.error(error);
         }
       };
+
+      const contactRequestHandler = async (payloadJSON: unknown) => {
+        try {
+          const payload: unknown = JSON.parse(RtString.check(payloadJSON));
+          const { id } = chatEventType.ContactRequestPayload.check(payload);
+
+          await userService.addContact({ userId, contactId: id, token });
+
+        } catch (error) {
+          console.error(error);
+        }
+      }
 
       const signalOnlineHandler = (payloadJSON: unknown) => {
         const payload: unknown = JSON.parse(RtString.check(payloadJSON));
@@ -154,6 +166,7 @@ const chatMiddleware: Middleware = (store) => {
       socket.on('receive all room messages', receiveAllMessagesHandler);
       // socket.on('private room request', privateRoomRequestHandler);
       socket.on('request refresh', requestRefreshHandler);
+      socket.on('contact request', contactRequestHandler);
       socket.on('contact refresh', contactRefreshHandler);
       socket.on('signal online', signalOnlineHandler);
       socket.on('signal offline', signalOfflineHandler);
@@ -180,6 +193,14 @@ const chatMiddleware: Middleware = (store) => {
         username: action.payload.username,
       });
       socket.emit("request refresh", requestRefreshPayload);
+    }
+
+    if (sendContactRequest.match(action) && isConnectionEstablished) {
+      const contactRequestPayload = JSON.stringify({
+        id: action.payload.id,
+        username: action.payload.username,
+      });
+      socket.emit("contact request", contactRequestPayload);
     }
 
     if (sendContactRefresh.match(action) && isConnectionEstablished) {
