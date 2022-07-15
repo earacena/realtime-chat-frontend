@@ -103,7 +103,7 @@ const chatMiddleware: Middleware = (store) => {
 
       const requestRefreshHandler = async () => {
         try {
-          const fetchedRequests = await requestService.getRequestsOfUser(userId);
+          const fetchedRequests = await requestService.getRequestsOfUser({ userId, token });
           store.dispatch(setRequests({ requests: fetchedRequests }));
         } catch (error: unknown) {
           console.error(error);
@@ -112,7 +112,7 @@ const chatMiddleware: Middleware = (store) => {
       
       const contactRefreshHandler = async () => {
         try {
-          const fetchedContactIds = await userService.retrieveUserContacts(userId);
+          const fetchedContactIds = await userService.retrieveUserContacts({ userId, token });
           // Since fetchedContacts is a list of ids, a list of userDetails must be generated
           let fetchedContacts: UserDetails[] = [];
           for (const id of fetchedContactIds) {
@@ -128,9 +128,9 @@ const chatMiddleware: Middleware = (store) => {
       const contactRequestHandler = async (payloadJSON: unknown) => {
         try {
           const payload: unknown = JSON.parse(RtString.check(payloadJSON));
-          const { id } = chatEventType.ContactRequestPayload.check(payload);
-
-          await userService.addContact({ userId, contactId: id, token });
+          const { fromUser } = chatEventType.ContactRequestPayload.check(payload);
+          
+          await userService.addContact({ userId, contactId: fromUser.id, token });
 
         } catch (error) {
           console.error(error);
@@ -197,8 +197,8 @@ const chatMiddleware: Middleware = (store) => {
 
     if (sendContactRequest.match(action) && isConnectionEstablished) {
       const contactRequestPayload = JSON.stringify({
-        id: action.payload.id,
-        username: action.payload.username,
+        toUser: action.payload.toUser,
+        fromUser: action.payload.fromUser,
       });
       socket.emit("contact request", contactRequestPayload);
     }
