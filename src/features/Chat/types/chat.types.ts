@@ -57,8 +57,14 @@ export type ContactRefreshPayload = {
 };
 
 export type ContactRequestPayload = {
-  id: number,
-  username: string,
+  toUser: {
+    id: number,
+    username: string,
+  },
+  fromUser: {
+    id: number,
+    username: string,
+  }
 };
 
 export type SignalOnlineReplyPayload = {
