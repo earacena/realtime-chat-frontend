@@ -8,7 +8,7 @@ import requestService from "../api/request.service";
 import { setRequests } from "../stores/request.slice";
 import { useAppDispatch, useAppSelector } from "../../../hooks";
 import { BsPerson } from "react-icons/bs";
-import { sendContactRefresh, signalOnline } from "../../Chat";
+import { sendContactRefresh, sendContactRequest, signalOnline } from "../../Chat";
 
 type RequestCardProps = {
   request: Request;
@@ -34,7 +34,7 @@ function RequestCard({ request }: RequestCardProps) {
     };
 
     fetchUserDetails();
-  }, [request.fromUser]);
+  }, [request.fromUser, user.token]);
 
   const handleRequest = async (newStatus: string) => {
     try {
@@ -44,26 +44,33 @@ function RequestCard({ request }: RequestCardProps) {
       });
 
       // If request was a contact request and user accepts it, update both users profile
-      if (
-        userDetails &&
-        request.type === "contact" &&
-        newStatus === "accepted"
-      ) {
-        await userService.makeUsersContacts({
-          user1: user.id,
-          user2: userDetails.id,
+      if (userDetails && newStatus === 'accepted') {
+        dispatch(sendContactRequest({ 
+          fromUser: {
+            id: user.id,
+            username: user.username,
+          },
+          toUser: {
+            id: userDetails.id,
+            username: userDetails.username,
+          }
+        }));
+
+        await userService.addContact({
+          userId: user.id,
+          contactId: userDetails.id,
           token: user.token,
         });
+
+        dispatch(sendContactRefresh({ username: userDetails.username }));
+        dispatch(signalOnline());
       }
 
       // Since request was handled, remove it from the feed
       dispatch(
         setRequests({ requests: requests.filter((r) => r.id !== request.id) })
       );
-      if (userDetails) {
-        dispatch(sendContactRefresh({ username: userDetails.username }));
-        dispatch(signalOnline());
-      }
+
     } catch (error: unknown) {
       console.error(error);
     }
