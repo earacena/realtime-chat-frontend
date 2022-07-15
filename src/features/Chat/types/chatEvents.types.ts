@@ -41,8 +41,14 @@ const SignalOfflinePayload = RtRecord({
 });
 
 const ContactRequestPayload = RtRecord({
-  id: RtNumber,
-  username: RtString,
+  fromUser: RtRecord({
+    id: RtNumber,
+    username: RtString,
+  }),
+  toUser: RtRecord({
+    id: RtNumber,
+    username: RtString,
+  })
 });
 
 const chatEventType = {
