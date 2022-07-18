@@ -1,6 +1,5 @@
 import React from 'react';
 import { useAppSelector } from '../../hooks';
-import { setNotification, resetNotification } from './stores/notification.slice';
 
 function Notification() {
   const { type, message } = useAppSelector((state) => state.notification);
