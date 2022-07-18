@@ -73,41 +73,6 @@ const addContact = async ({
   }
 };
 
-const makeUsersContacts = async ({
-  user1,
-  user2,
-  token,
-}: MakeUserContactsParams) => {
-  let response = await fetch(`${baseUrl}/${user1}/contacts`, {
-    method: "PUT",
-    headers: {
-      Authorization: `bearer ${token}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ contactId: user2 }),
-  });
-
-  let responseJson = await response.json();
-
-  if (responseJson.error) {
-    throw new Error(`${responseJson.error}`);
-  }
-
-  response = await fetch(`${baseUrl}/${user2}/contacts`, {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ contactId: user1 }),
-  });
-
-  responseJson = await response.json();
-
-  if (responseJson.error) {
-    throw new Error(`${responseJson.error}`);
-  }
-};
-
 const retrieveUserContacts = async ({
   userId,
   token,
