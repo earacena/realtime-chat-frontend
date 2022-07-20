@@ -9,7 +9,6 @@ import {
   RemoveContactParams,
   CreateUserParams,
   UserDetailsType,
-  MakeUserContactsParams,
   RetrieveUserDetailsParams,
   RetrieveUserContactsParams,
   AddUserParams,
@@ -111,7 +110,6 @@ const removeContact = async ({
 const userService = {
   create,
   retrieveUserDetails,
-  makeUsersContacts,
   addContact,
   retrieveUserContacts,
   removeContact,

@@ -43,12 +43,6 @@ export const UserDetailsType = RtRecord({
   username: RtString,
 });
 
-export type MakeUserContactsParams = {
-  user1: number,
-  user2: number,
-  token: string,
-};
-
 export type ContactsPayload = {
   contacts: UserDetails[],
 };
