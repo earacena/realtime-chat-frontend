@@ -40,29 +40,6 @@ const chatMiddleware: Middleware = (store) => {
       // Initialize socket connection if appropriate action received
       socket = io(url, { auth: { token }, multiplex: false });
 
-      // const userConnectionHandler = (payloadJSON: unknown) => {
-      //   const payload: unknown = JSON.parse(RtString.check(payloadJSON));
-      //   const { userId } =
-      //     chatEventType.UserConnectedEventPayload.check(payload);
-      //   store.dispatch(addConnectedUser({ userId }));
-      // };
-
-      // const userDisconnectionHandler = (payloadJSON: unknown) => {
-      //   const payload: unknown = JSON.parse(RtString.check(payloadJSON));
-      //   const { userId } =
-      //     chatEventType.UserDisconnectedEventPayload.check(payload);
-      //   store.dispatch(removeConnectedUser({ userId: userId }));
-      // };
-
-      // const connectedUserListHandler = (payloadJSON: unknown) => {
-      //   const payload: unknown = JSON.parse(RtString.check(payloadJSON));
-      //   const { allUserSocketIds } =
-      //     chatEventType.ConnectedUserListPayload.check(payload);
-      //   store.dispatch(
-      //     setConnectedUsers({ connectedUsers: allUserSocketIds })
-      //   );
-      // };
-
       const receiveMessageHandler = (payloadJSON: unknown) => {
         const payload: unknown = JSON.parse(RtString.check(payloadJSON));
         const { message } = chatEventType.MessagePayload.check(payload);
@@ -74,22 +51,6 @@ const chatMiddleware: Middleware = (store) => {
         const { messages } = chatEventType.MessagesPayload.check(payload);
         store.dispatch(setMessages({ messages }));
       };
-
-      // const privateRoomRequestHandler = (payloadJSON: unknown) => {
-      //   const payload: unknown = JSON.parse(RtString.check(payloadJSON));
-      //   const { userSocketId, roomId } =
-      //     chatEventType.PrivateRoomRequestPayload.check(payload);
-
-      //   store.dispatch(
-      //     addRoom({ room: { roomId, roomName: `chat with ${userSocketId}` } })
-      //   );
-
-      //   const joinRoomEventPayload = JSON.stringify({ roomId });
-      //   socket.emit("join room", joinRoomEventPayload);
-
-      //   console.log(`new room [${roomId}] initialized with ${userSocketId}`);
-      //   store.dispatch(addUserIdToPrivateRoom({ userId: userSocketId }));
-      // };
 
       const connectionHandler = () => {
         store.dispatch(connectionEstablished());
@@ -159,12 +120,8 @@ const chatMiddleware: Middleware = (store) => {
 
 
       socket.on('connect', connectionHandler);
-      // socket.on('user connected', userConnectionHandler);
-      // socket.on('user disconnected', userDisconnectionHandler);
-      // socket.on('all connected users', connectedUserListHandler);
       socket.on('receive message', receiveMessageHandler);
       socket.on('receive all room messages', receiveAllMessagesHandler);
-      // socket.on('private room request', privateRoomRequestHandler);
       socket.on('request refresh', requestRefreshHandler);
       socket.on('contact request', contactRequestHandler);
       socket.on('contact refresh', contactRefreshHandler);
@@ -180,13 +137,6 @@ const chatMiddleware: Middleware = (store) => {
       });
       socket.emit("send message", messagePayload);
     }
-
-    // if (requestPrivateRoomWithUser.match(action) && isConnectionEstablished) {
-    //   const privateRoomRequestPayload = JSON.stringify({
-    //     userId: action.payload.userId,
-    //   });
-    //   socket.emit("private room request", privateRoomRequestPayload);
-    // }
 
     if (sendRequestRefresh.match(action) && isConnectionEstablished) {
       const requestRefreshPayload = JSON.stringify({
