@@ -6,7 +6,7 @@ import {
   UpdateParams,
 } from "../types/requests.types";
 
-const baseUrl = "http://localhost:3001/api/requests";
+const baseUrl = `${process.env.REACT_APP_BACKEND_URL}/api/requests`;
 
 const create = async ({ request, token }: CreateParams) => {
   const response = await fetch(baseUrl, {

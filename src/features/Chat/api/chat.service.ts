@@ -1,6 +1,6 @@
 import { MessageArray, RetrieveMessagesParams } from "../types/chat.types";
 
-const baseUrl = 'http://localhost:3001/api/messages';
+const baseUrl = `${process.env.REACT_APP_BACKEND_URL}/api/messages`;
 
 
 const retrieveMessages = async ({ senderUsername, recipientUsername, token }: RetrieveMessagesParams) => {

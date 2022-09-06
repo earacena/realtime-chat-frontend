@@ -26,7 +26,7 @@ import {
 import chatEventType from "../types/chatEvents.types";
 import { requestService, setRequests } from "../../Requests";
 
-const url = "http://localhost:3001/";
+const url = `${process.env.REACT_APP_BACKEND_URL}`;
 
 const chatMiddleware: Middleware = (store) => {
   let socket: Socket;
