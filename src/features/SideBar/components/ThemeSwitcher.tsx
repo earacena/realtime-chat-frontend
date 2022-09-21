@@ -21,7 +21,7 @@ function ThemeSwitcher() {
         <div
           className="flex items-center"
         >
-          <Switch.Label className="m-1">Enable Dark Mode</Switch.Label>
+          <Switch.Label className="m-1 dark:text-white">Enable Dark Mode</Switch.Label>
           <Switch
             checked={enabled}
             onChange={setEnabled}
