@@ -101,13 +101,13 @@ function Chat() {
   const isUserOnline = undefined !== connectedUsers.find((users) => users.username === currentRoom.roomName);
 
   return (
-    <div className="flex flex-col p-3 w-full bg-slate-100 h-screen">
+    <div className="flex flex-col p-3 w-full bg-slate-100 dark:bg-slate-800 h-screen">
       <span className="bg-slate-100">
         {
           currentRoom.roomName !== 'default' &&
-          <div className="flex flex-row items-center py-2">
-            <BsPerson className="rounded-full border-2 border-slate-500 p-1 mr-2" size={40} />
-            <span className="font-medium">{currentRoom.roomName}</span> 
+          <div className="flex flex-row items-center py-2 dark:bg-slate-800">
+            <BsPerson className="rounded-full border-2 border-slate-500 p-1 mr-2 dark:border-slate-400 dark:text-slate-300" size={40} />
+            <span className="font-medium dark:text-white">{currentRoom.roomName}</span> 
             { isUserOnline && <VscCircleFilled className="text-green-500" /> }
             { !isUserOnline && <VscCircleFilled className="text-red-500" /> }
             <ContactOptions />
@@ -121,7 +121,7 @@ function Chat() {
         currentRoom.roomName !== 'default' &&
         <form className="flex h-12 mt-4" onSubmit={handleSubmit(onSubmit)}>
           <input
-            className="grow p-1 center shadow-lg rounded-lg outline outline-1 hover:outline-2 outline-slate-300 hover:outline-slate-400"
+            className="grow p-1 center shadow-lg rounded-lg outline outline-1 hover:outline-2 outline-slate-300 dark:outline-slate-500 hover:outline-slate-400 dark:bg-slate-700"
             {...register("message")}
           />
           <button
