@@ -5,7 +5,7 @@ import { ImExit } from 'react-icons/im';
 import { ContactList } from '../Contacts';
 import { Requests, resetRequests } from '../Requests';
 import { Tab } from '@headlessui/react';
-import UserCard from './components/UserCard';
+import { UserCard, Settings } from './components';
 import { useAppDispatch } from '../../hooks';
 import { clearAuthenticatedUser } from '../Login';
 import { disconnected, resetMessages, resetSocketId, signalOffline } from '../Chat';
@@ -64,7 +64,7 @@ function SideBar() {
             <Requests />
           </Tab.Panel>
           <Tab.Panel>
-            <p>Settings coming soon...</p>
+            <Settings />
           </Tab.Panel>
         </Tab.Panels>
       </Tab.Group>
