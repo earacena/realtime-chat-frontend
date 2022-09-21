@@ -33,8 +33,8 @@ function Message({ message, isUserSender, isFirstMessage, isLastMessage }: Messa
     recipientMessageStyle = middleRecipientMessageStyle;
   }
  
-  const senderStyle: string = "first:mt-auto m-2 bg-slate-600 text-white p-3 self-end shadow".concat(senderMessageStyle);
-  const recipientStyle: string = "first:mt-auto m-2 bg-slate-400 text-white p-3 self-start shadow".concat(recipientMessageStyle);
+  const senderStyle: string = "first:mt-auto m-2 bg-slate-600 dark:bg-slate-700 text-white p-3 self-end shadow animate-[fadeIn_0.1s_ease-in]".concat(senderMessageStyle);
+  const recipientStyle: string = "first:mt-auto m-2 bg-slate-400 dark:bg-slate-500 text-white p-3 self-start shadow animate-[fadeIn_0.1s_ease-in]".concat(recipientMessageStyle);
 
   return (
     <li
