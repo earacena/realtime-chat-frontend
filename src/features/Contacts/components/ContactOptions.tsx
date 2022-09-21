@@ -57,7 +57,7 @@ function ContactOptions() {
         <>
           <Popover.Button>
             <BsThreeDotsVertical
-              className={`${open ? "rotate-90 transform" : ""}`}
+              className={`${open ? "rotate-90 transform" : ""} dark:text-slate-100`}
             />
           </Popover.Button>
 
