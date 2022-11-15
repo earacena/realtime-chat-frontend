@@ -1,9 +1,16 @@
-# realtime-chat-frontend
+# Real-time Chat Web Application, Frontend
 
 ## Description
 The frontend of a realtime chat web application written in Typescript. Deployed live [here]().
 
 The backend repository of this project can be found [here](https://github.com/earacena/forum-app-backend).
+
+### Features
+  * Adding contacts through contact requests
+  * Sending messages
+  * Message history
+  * Online status indicator (updated with sockets)
+  * Light/Dark Mode
 
 ### Technologies
   * Typescript
