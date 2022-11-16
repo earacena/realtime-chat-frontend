@@ -94,6 +94,7 @@ function LoginForm() {
           className="flex items-center justify-center rounded-md p-3 bg-slate-500 text-white w-full mt-2 hover:bg-slate-400"
           type="submit"
           aria-label="login"
+          disabled={isSubmitting}
         >
           { isSubmitting ? <span className="animate-spin text-xl"><AiOutlineLoading3Quarters /></span> : 'Login' }
         </button>

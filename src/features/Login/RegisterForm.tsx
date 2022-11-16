@@ -116,6 +116,7 @@ function RegisterForm() {
           className="flex items-center justify-center rounded-md p-3 bg-slate-500 text-white w-full mt-3 hover:bg-slate-400"
           type="submit"
           aria-label="create"
+          disabled={isSubmitting}
         >
           { isSubmitting ? <span className="animate-spin text-xl"><AiOutlineLoading3Quarters /></span> : 'Create Account' }
         </button>
