@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { InstanceOf as RtInstanceOf } from "runtypes";
 import { useAppDispatch } from "../../hooks";
@@ -7,6 +7,7 @@ import { FormWrapper, LabelErrorMessage } from "../../components";
 import loginService from "./api/login.service";
 import { setAuthenticatedUser } from "./stores/auth.slice";
 import { resetNotification, setNotification } from "../Notification";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 type Input = {
   username: string;
@@ -16,6 +17,8 @@ type Input = {
 function LoginForm() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
   const {
     register,
@@ -31,6 +34,7 @@ function LoginForm() {
 
   const onSubmit: SubmitHandler<Input> = async (credentials) => {
     try {
+      setIsSubmitting(true);
       const user = await loginService.login(credentials);
 
       dispatch(setAuthenticatedUser({ user }));
@@ -42,6 +46,7 @@ function LoginForm() {
       });
       navigate("/chat");
     } catch (error: unknown) {
+      setIsSubmitting(false);
       if (RtInstanceOf(Error).guard(error)) {
         const newTimeoutId = setTimeout(() => {
           dispatch(resetNotification());
@@ -86,11 +91,11 @@ function LoginForm() {
         />
         <button
           id="login-button"
-          className="rounded-md p-3 bg-slate-500 text-white w-full mt-2 hover:bg-slate-400"
+          className="flex items-center justify-center rounded-md p-3 bg-slate-500 text-white w-full mt-2 hover:bg-slate-400"
           type="submit"
           aria-label="login"
         >
-          Login
+          { isSubmitting ? <span className="animate-spin text-xl"><AiOutlineLoading3Quarters /></span> : 'Login' }
         </button>
         <p className="mt-4 text-sm self-center text-slate-600">
           Don't have an account?
