@@ -1,4 +1,4 @@
-import React, { Dispatch, createContext, useState } from 'react';
+import React, { Dispatch, createContext, useState, useEffect } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { LoginForm, RegisterForm } from './features/Login';
 import { Chat } from './features/Chat';
@@ -15,6 +15,10 @@ export const ThemeContext = createContext<ThemeContextProps>({ theme: '', setThe
 function App() {
 
   const [theme, setTheme] = useState<string>('light');
+
+  useEffect(() => {
+    document.title = "Real-time Chat"
+  }, []);
 
   const chatWithSideBar = () => {
     return (
