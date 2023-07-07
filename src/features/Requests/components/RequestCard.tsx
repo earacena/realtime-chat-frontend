@@ -29,7 +29,7 @@ function RequestCard({ request }: RequestCardProps) {
         });
         setUserDetails(fetchedUserDetails);
       } catch (error: unknown) {
-        console.error(error);
+        // console.error(error);
       }
     };
 
@@ -72,7 +72,7 @@ function RequestCard({ request }: RequestCardProps) {
       );
 
     } catch (error: unknown) {
-      console.error(error);
+      // console.error(error);
     }
   };
 

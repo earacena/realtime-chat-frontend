@@ -57,7 +57,7 @@ function RegisterForm() {
       navigate("/chat");
     } catch (error: unknown) {
       setIsSubmitting(false);
-      console.log(error);
+      // console.log(error);
       if (RtInstanceOf(Error).guard(error)) {
         const newTimeoutId = setTimeout(() => {
           dispatch(resetNotification());

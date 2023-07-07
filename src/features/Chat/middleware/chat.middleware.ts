@@ -59,7 +59,7 @@ const chatMiddleware: Middleware = (store) => {
 
       const disconnectionHandler = () => {
         store.dispatch(disconnected());
-        console.log("disconnected from socket");
+        // console.log("disconnected from socket");
       };
 
       const requestRefreshHandler = async () => {
@@ -67,7 +67,7 @@ const chatMiddleware: Middleware = (store) => {
           const fetchedRequests = await requestService.getRequestsOfUser({ userId, token });
           store.dispatch(setRequests({ requests: fetchedRequests }));
         } catch (error: unknown) {
-          console.error(error);
+          // console.error(error);
         }
       };
       
@@ -82,7 +82,7 @@ const chatMiddleware: Middleware = (store) => {
 
           store.dispatch(setContacts({ contacts: fetchedContacts }));
         } catch (error: unknown) {
-          console.error(error);
+          // console.error(error);
         }
       };
 
@@ -94,7 +94,7 @@ const chatMiddleware: Middleware = (store) => {
           await userService.addContact({ userId, contactId: fromUser.id, token });
 
         } catch (error) {
-          console.error(error);
+          // console.error(error);
         }
       }
 
@@ -114,7 +114,7 @@ const chatMiddleware: Middleware = (store) => {
       const signalOnlineReplyHandler = (payloadJSON: unknown) => {
         const payload: unknown = JSON.parse(RtString.check(payloadJSON));
         const { id, username } = chatEventType.SignalOnlinePayload.check(payload);
-        console.log(`${id}, ${username}`)
+        // console.log(`${id}, ${username}`)
         store.dispatch(addConnectedUser({ id, username }));
       };
 

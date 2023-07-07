@@ -13,7 +13,7 @@ const retrieveMessages = async ({ senderUsername, recipientUsername, token }: Re
       },
     }
   );
-  console.log(response);
+  // console.log(response);
   const responseJson = await response.json();
   const messages = MessageArray.check(responseJson);
   return messages;

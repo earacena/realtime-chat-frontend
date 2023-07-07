@@ -87,9 +87,9 @@ function Chat() {
         };
   
         dispatch(sendMessage({ newMessage }));
-        console.log(
-          `sending: ${currentRoom.roomId} | ${JSON.stringify(newMessage)}`
-        );
+        // console.log(
+        //   `sending: ${currentRoom.roomId} | ${JSON.stringify(newMessage)}`
+        // );
   
         reset({
           message: "",
