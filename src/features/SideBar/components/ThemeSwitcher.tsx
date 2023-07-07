@@ -11,7 +11,7 @@ function ThemeSwitcher() {
     setTheme(enabled ? 'dark' : 'light');
   }, [enabled, setTheme]);
 
-  console.log(theme, enabled);
+  // console.log(theme, enabled);
 
   return (
     <div
